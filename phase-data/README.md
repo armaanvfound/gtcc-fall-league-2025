@@ -1,7 +1,7 @@
 # phase-data
 
-Over-by-over scores for a 40-match sample, used by `tools/phases.py` to build
-sections 07-09 of the report.
+Over-by-over scores for all 86 played matches, used by `tools/phases.py` to
+build sections 07-09 of the report.
 
 ## `<matchid>.json`
 
@@ -9,20 +9,21 @@ One file per match. Each innings holds `overs` as
 `[over_number, runs, wickets, bowler_type_or_null]`.
 
 Collected from the CricHeroes **commentary** tab (the free one), then reconciled
-against the match's known final total. 76 of 79 innings matched exactly; the
-other three are within a few runs and are marked in the git history.
+against the match's known final total. Most innings matched exactly; a handful
+that ended mid-over (the batting side all out or the chase won before the last
+ball) are short by the last few runs, since a truncated over has no "END OF
+OVER" summary line to read the total from - those are still excluded from
+phase averages regardless (see below), so the gap doesn't affect any number in
+the report.
 
-The 40 matches were chosen to span the full range of totals (38 to 195), both
-batting-first and chasing wins, and to cover all 30 teams at least twice.
-
-`bowler_type` is only present for about a quarter of overs, because CricHeroes
-shows it in an inline player card that does not appear for every bowler. That is
-too sparse to support a pace-vs-spin recommendation, so the report does not make
-one.
+`bowler_type` is present for roughly 60% of overs - CricHeroes shows it in an
+inline player card that appears for most but not all bowlers.
 
 ## `selection.json` / `select.py`
 
-The sampling script and its output - which 40 matches were picked and why.
+The original 40-match sampling script and its output, from before the dataset
+was expanded to all 86 played matches. Kept for reference; no longer used by
+`tools/phases.py`.
 
 ## `_weather_raw.json` / `_weather_by_date.json`
 

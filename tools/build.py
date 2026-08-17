@@ -18,7 +18,7 @@ from stats import build_payload
 
 TITLE = "GTCC Fall League — Royal Challenger Blaster Match Dashboard"
 DESC = ("Phase-by-phase targets, opponent scouting and a ten-point playbook, built from "
-        "88 matches and 40 read ball by ball. The win line is 120; the death overs decide it.")
+        "88 matches, all read ball by ball. The win line is 120; the death overs decide it.")
 
 
 def to_entities(s):
