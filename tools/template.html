@@ -168,6 +168,46 @@
   .reads li{padding:11px 0 11px 26px;border-bottom:1px solid var(--rule-2);position:relative;font-size:15px;}
   .reads li:before{content:"\25B8";position:absolute;left:6px;color:var(--bat);}
   .reads li:last-child{border-bottom:0;}
+  /* opponent phase-by-phase profile (08) */
+  .opp-head{background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+            padding:15px 18px;margin-top:24px;font-size:15.5px;line-height:1.55;color:var(--ink-2);}
+  .opp-head b{color:var(--ink);}
+  .opp-block{margin-top:22px;}
+  .opp-block h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--bat);margin:0 0 6px;}
+  .phasetbl{width:100%;border-collapse:collapse;}
+  .phasetbl td{border-top:1px solid var(--rule-2);padding:13px 12px 13px 0;vertical-align:top;}
+  .phasetbl tr:first-child td{border-top:0;}
+  .ph-name{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+           color:var(--ink-2);white-space:nowrap;width:1%;padding-left:2px;}
+  .ph-name span{display:block;color:var(--muted);font-size:9.5px;letter-spacing:.06em;margin-top:3px;}
+  .ph-num{white-space:nowrap;width:1%;font-variant-numeric:tabular-nums;}
+  .ph-num .n{font-family:var(--serif);font-size:22px;line-height:1;}
+  .ph-num .w{font-family:var(--serif);font-size:14px;color:var(--muted);}
+  .ph-num .w i{font-style:normal;font-size:10px;}
+  .ph-num .d{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.02em;}
+  .ph-badge{width:1%;white-space:nowrap;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;
+         text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+  .badge.strong{background:var(--bad);color:#fff;}   /* their strength — respect it */
+  .badge.weak{background:var(--good);color:#fff;}    /* their weakness — our opening */
+  .badge.par{background:var(--rule);color:var(--ink-2);}
+  /* the global th,td rule sets nowrap; the directive text must wrap */
+  .ph-move{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:14px;white-space:normal;}
+  .ph-src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
+  .ph-src .thin{color:var(--bat);font-weight:400;}
+  .opp-note{margin-top:18px;font-size:14px;color:var(--ink-2);border-left:3px solid var(--gold);
+            background:var(--gold-bg);padding:11px 14px;border-radius:0 3px 3px 0;}
+  @media (max-width:640px){
+    .phasetbl,.phasetbl tbody,.phasetbl tr,.phasetbl td{display:block;width:auto;}
+    .phasetbl td{border-top:0;padding:2px 0;}
+    .phasetbl tr{border-top:1px solid var(--rule-2);padding:13px 0;}
+    .phasetbl tr:first-child{border-top:0;}
+    .ph-name{display:inline-block;margin-right:12px;}
+    .ph-num{display:inline-block;}.ph-num .d{display:inline;margin-left:8px;}
+    .ph-badge{display:inline-block;margin:6px 0;}
+    .ph-move{padding-left:0;margin-top:2px;white-space:normal;}
+  }
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
   /* playbook */
@@ -383,9 +423,10 @@
 
 <section id="plan">
   <div class="sechead"><div class="n">08</div><h2>Match plan: scout your opponent</h2></div>
-  <p class="lede">Pick the side you are about to play, then say whether you are batting or
-     bowling first. The page turns their phase profile and the league's winning patterns into
-     targets and checkpoints you can call from the boundary.</p>
+  <p class="lede">Pick the side you are about to play. Below the target plan you get their
+     phase-by-phase profile &mdash; exactly where they hurt you and where they crack, with bat
+     and with ball &mdash; each read turned into the move it dictates for our powerplay, middle
+     and death.</p>
   <div class="picker">
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
@@ -394,10 +435,7 @@
       <button type="button" data-s="bowl" aria-pressed="false">We bowl first</button>
     </div>
     <div id="planbox" hidden></div>
-    <div class="tprofile" id="oppprofile" hidden>
-      <div id="oppcards"></div>
-      <ul class="reads" id="oppreads"></ul>
-    </div>
+    <div class="tprofile" id="oppprofile" hidden></div>
   </div>
 </section>
 
@@ -714,6 +752,99 @@ if (PH && PH.teams) {
 
   const phName = k => PHNAME[k].toLowerCase();
   const PHASES = ['pp','mid','death'];
+  const PHSHORT = { pp:['Powerplay','ov 1–5'], mid:['Middle','ov 6–10'], death:['Death','ov 11–15'] };
+  const phShort = k => PHSHORT[k][0].toLowerCase();
+  const signed = d => (d>=0?'+':'−')+Math.abs(d);
+
+  // our bowling move for a phase, given how far the opponent's batting sits vs par
+  // rd = their runs − par (per phase); wd = their wickets lost − par
+  function bowlMove(p, rd, wd){
+    const strong = rd>=4, soft = rd<=-4, fragile = wd>=0.7;
+    if (p==='pp')  return strong ? 'They cash the new ball — open with your two best, deny width, boundary field up early.'
+                    : soft ? 'Slow starters — attack for early wickets with catchers in; two down inside the six and their innings is on the back foot.'
+                    : fragile ? 'Ordinary powerplay scoring, but they do offer chances early — keep the slip in.'
+                    : 'Standard new-ball lines will do here.';
+    if (p==='mid') return strong ? 'Overs 6–10 are their engine — hold a strike bowler back for this window instead of spending him up top.'
+                    : soft ? 'They stall here — throttle it. Middle-over wickets are what knock sides off the 120 track: attacking fields, dry up the singles.'
+                    : 'Keep the rate flat through the middle and force the error.';
+    return strong ? 'They finish hard — take your wickets by over 10 so there is no one left to swing at the death.'
+                  : soft ? 'They rarely accelerate — hard lengths and yorkers; squeeze the last five and they fold.'
+                  : 'Standard death plan — yorkers, pace off, protect the rope.';
+  }
+  // our batting move for a phase, given how the opponent bowls it
+  // rd = runs they concede − par (positive = leaky); wd = wickets they take − par
+  function batMove(p, rd, wd){
+    const leaks = rd>=4, tight = rd<=-4, threat = wd>=0.7;
+    if (p==='pp')  return leaks ? 'Their new ball leaks — go hard in the first six, the boundaries are on.'
+                    : tight ? 'They bowl a tight powerplay — see it off, keep wickets, cash it later.'
+                    : threat ? 'They strike early — respect the new ball; wickets in hand beat a fast start.'
+                    : 'Take what is offered up front without risking wickets.';
+    if (p==='mid') return leaks ? 'Overs 6–10 are their soft spot — this is your acceleration window; get after the set bowler.'
+                    : tight ? 'They squeeze the middle — rotate strike, keep wickets, do not force it to the field.'
+                    : threat ? 'They take middle-over wickets — build the partnership, do not gift it chasing the rate.'
+                    : 'Tick the middle over at a run a ball; save the charge for the death.';
+    return leaks ? 'They leak at the death — keep wickets for overs 11–15 and cash in; this is where you beat them.'
+                 : tight ? 'They defend the death well — be ahead of the rate by over 10, do not leave it late.'
+                 : threat ? 'They take death wickets — send a proven finisher, not a gamble.'
+                 : 'Back yourself in the last five.';
+  }
+  // one phase row of the profile. mode 'bat' = their batting (we bowl); 'bowl' = their bowling (we bat)
+  function phaseRow(p, prof, mode){
+    const wkey = p+'w';
+    const runs = prof[p], wk = prof[wkey];
+    const rd = Math.round(runs - PH.all[p]);
+    const wd = wk - PH.all[wkey];
+    const [nm, ov] = PHSHORT[p];
+    let badge, cls, move, sub;
+    if (mode==='bat'){                 // their batting: strong scoring = their strength = watch out
+      badge = rd>=4 ? 'Dangerous' : rd<=-4 ? 'Soft' : 'Par';
+      cls   = rd>=4 ? 'strong'    : rd<=-4 ? 'weak' : 'par';
+      move  = bowlMove(p, rd, wd);
+      sub   = `${signed(rd)} vs ${Math.round(PH.all[p])} par`;
+    } else {                           // their bowling: fewer runs conceded = their strength
+      badge = rd<=-4 ? 'Tight' : rd>=4 ? 'Leaks' : 'Par';
+      cls   = rd<=-4 ? 'strong': rd>=4 ? 'weak'  : 'par';
+      move  = batMove(p, rd, wd);
+      sub   = `${signed(rd)} vs ${Math.round(PH.all[p])} par conceded`;
+    }
+    return `<tr>
+      <td class="ph-name">${nm}<span>${ov}</span></td>
+      <td class="ph-num"><span class="n">${Math.round(runs)}</span><span class="w">/${wk.toFixed(1)}<i>w</i></span>
+        <span class="d">${sub}</span></td>
+      <td class="ph-badge"><span class="badge ${cls}">${badge}</span></td>
+      <td class="ph-move">${move}</td></tr>`;
+  }
+  // honest magnitude word for a runs-vs-par delta
+  const grade = d => d>=8?'well above par' : d>=4?'above par' : d>-4?'around par' : d>-8?'below par' : 'well below par';
+  // headline synthesis: their identity with bat and ball, plus the resulting plan
+  function oppHeadline(t){
+    const g = (v,p)=> Math.round(v - PH.all[p]);
+    const parts = [];
+    let ourBowlP, ourBatP;
+    if (t.bat){
+      const sb = PHASES.reduce((a,b)=> g(t.bat[b],b)>g(t.bat[a],a)?b:a);
+      const wb = PHASES.reduce((a,b)=> g(t.bat[b],b)<g(t.bat[a],a)?b:a);
+      parts.push(`With the bat their engine is the <b>${phShort(sb)}</b> ` +
+        `(${Math.round(t.bat[sb])}, ${grade(g(t.bat[sb],sb))}); they fade most in the ` +
+        `<b>${phShort(wb)}</b> (${Math.round(t.bat[wb])}, ${grade(g(t.bat[wb],wb))}).`);
+      if (g(t.bat[wb],wb) <= -4) ourBowlP = wb;      // a genuinely soft phase to attack
+    }
+    if (t.bowl){
+      const sl = PHASES.reduce((a,b)=> g(t.bowl[b],b)>g(t.bowl[a],a)?b:a);
+      const st = PHASES.reduce((a,b)=> g(t.bowl[b],b)<g(t.bowl[a],a)?b:a);
+      parts.push(`With the ball they are toughest in the <b>${phShort(st)}</b> ` +
+        `(${Math.round(t.bowl[st])} conceded, ${grade(g(t.bowl[st],st))}); they leak most in the ` +
+        `<b>${phShort(sl)}</b> (${Math.round(t.bowl[sl])}, ${grade(g(t.bowl[sl],sl))}).`);
+      if (g(t.bowl[sl],sl) >= 4) ourBatP = sl;       // a genuinely leaky phase to cash
+    }
+    const edge = [];
+    if (ourBowlP) edge.push(`when we bowl, hunt wickets in their ${phShort(ourBowlP)}`);
+    if (ourBatP)  edge.push(`when we bat, cash their ${phShort(ourBatP)}`);
+    const plan = edge.length
+      ? ` <b>Our edge:</b> ${edge.join('; ')}.`
+      : ` <b>Our edge:</b> no glaring phase to exploit — win it on the 120 line and middle-over wickets, not a mismatch.`;
+    return parts.join(' ') + plan;
+  }
 
   function renderPlan(){
     const box = $('planbox');
@@ -811,51 +942,22 @@ if (PH && PH.teams) {
   osel.addEventListener('change', () => {
     renderPlan();
     const t = PH.teams[osel.value];
-    if (!t) { $('oppprofile').hidden = true; return; }
-    $('oppprofile').hidden = false;
-    const mk = (title, s, kind) => {
-      if (!s) return `<div class="stat"><div class="t">No ${kind} phase data in the sample.</div></div>`;
-      return `<div class="stat">
-        <div class="k" style="font-size:24px">${s.pp} · ${s.mid} · ${s.death}</div>
-        <div class="t">${title}<br><span style="color:var(--muted)">powerplay · middle · death
-        &mdash; from ${s.n} innings</span></div></div>`;
-    };
-    $('oppcards').innerHTML = `<div class="pair">
-      ${mk('runs <b>they score</b> per phase', t.bat, 'batting')}
-      ${mk('runs <b>they concede</b> per phase', t.bowl, 'bowling')}</div>`;
+    const box = $('oppprofile');
+    if (!t) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
 
-    const reads = [];
-    if (t.bat) {
-      const ph = ['pp','mid','death'];
-      const strongest = ph.reduce((a,b)=> t.bat[b] > t.bat[a] ? b : a);
-      const weakest  = ph.reduce((a,b)=> t.bat[b] < t.bat[a] ? b : a);
-      reads.push(`Batting, they are strongest in the <b>${PHNAME[strongest].toLowerCase()}</b> ` +
-        `(${t.bat[strongest]} runs) and weakest in the <b>${PHNAME[weakest].toLowerCase()}</b> ` +
-        `(${t.bat[weakest]}). Put your best bowling into the phase they rely on.`);
-      const vs = t.bat.death - PH.all.death;
-      reads.push(Math.abs(vs) < 4
-        ? `Their death-overs scoring (${t.bat.death}) is about league par (${PH.all.death}).`
-        : vs > 0
-          ? `They score <b>${Math.round(vs)} above par</b> at the death (${t.bat.death} vs ${PH.all.death} league). Do not leave the game to the last five overs.`
-          : `They score <b>${Math.round(-vs)} below par</b> at the death (${t.bat.death} vs ${PH.all.death} league). Squeeze them late and they rarely recover.`);
-    }
-    if (t.bowl) {
-      const ph = ['pp','mid','death'];
-      const leak = ph.reduce((a,b)=> t.bowl[b] > t.bowl[a] ? b : a);
-      const tight = ph.reduce((a,b)=> t.bowl[b] < t.bowl[a] ? b : a);
-      reads.push(`With the ball they leak most in the <b>${PHNAME[leak].toLowerCase()}</b> ` +
-        `(${t.bowl[leak]} conceded) and are tightest in the <b>${PHNAME[tight].toLowerCase()}</b> ` +
-        `(${t.bowl[tight]}). Target the ${PHNAME[leak].toLowerCase()}; bat through the ${PHNAME[tight].toLowerCase()}.`);
-    }
-    const nBat = t.bat ? t.bat.n : 0, nBowl = t.bowl ? t.bowl.n : 0;
-    if (Math.max(nBat, nBowl) < 3) {
-      const bits = [];
-      if (nBat) bits.push(`${nBat} batting`);
-      if (nBowl) bits.push(`${nBowl} bowling`);
-      reads.push(`<b>Small sample &mdash; treat as a hint, not a rule.</b> Only ${bits.join(' and ')} ` +
-        `innings of theirs made the ball-by-ball set, so these splits can swing on one good over.`);
-    }
-    $('oppreads').innerHTML = reads.map(r=>`<li>${r}</li>`).join('');
+    const block = (title, prof, mode, kind) => {
+      if (!prof) return `<div class="opp-block"><h4>${title}</h4>` +
+        `<div class="ph-src">No ${kind} innings of theirs made the ball-by-ball set.</div></div>`;
+      const thin = prof.n < 3 ? ` &middot; <b class="thin">thin — ${prof.n} innings, treat as a hint</b>` : '';
+      return `<div class="opp-block"><h4>${title}</h4>` +
+        `<table class="phasetbl"><tbody>${PHASES.map(p=>phaseRow(p,prof,mode)).join('')}</tbody></table>` +
+        `<div class="ph-src">runs${mode==='bowl'?' conceded':''}/wickets per phase, from ${prof.n} ${kind} innings${thin}</div></div>`;
+    };
+
+    box.innerHTML = `<div class="opp-head">${oppHeadline(t)}</div>`
+      + block('When they bat &mdash; how we bowl', t.bat, 'bat', 'batting')
+      + block('When they bowl &mdash; how we bat', t.bowl, 'bowl', 'bowling');
   });
 }
 
