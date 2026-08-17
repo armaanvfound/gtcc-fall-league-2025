@@ -1,0 +1,7 @@
+{"mid":"19007761","date":"2025-09-07","round":"League Matches","bat1":"Downtown Hunterz","bat2":"Taunton Titans","winner":"Downtown Hunterz",
+ "innings":[
+  {"batting":"Downtown Hunterz","bowling":"Taunton Titans","bat_order":1,"won":true,"total":"168/8",
+   "overs":[[1,0,1,null],[2,14,0,"Right-arm medium"],[3,12,1,null],[4,13,0,"Right-arm medium"],[5,6,0,"Right-arm medium"],[6,1,1,"Right-arm Leg Break"],[7,4,0,"Right-arm medium"],[8,12,0,"Right-arm Leg Break"],[9,13,0,"Right-arm medium"],[10,17,1,"Right-arm medium"],[11,21,0,"Right-arm fast"],[12,15,1,null],[13,19,0,null],[14,16,2,null],[15,5,1,"Right-arm medium"]]},
+  {"batting":"Taunton Titans","bowling":"Downtown Hunterz","bat_order":2,"won":false,"total":"134/5",
+   "overs":[[1,5,1,"Right-arm medium"],[2,9,0,"Right-arm fast"],[3,4,0,"Right-arm fast"],[4,11,0,"Right-arm medium"],[5,8,1,"Right-arm fast"],[6,6,0,null],[7,14,0,"Right-arm fast"],[8,4,0,null],[9,3,1,"Right-arm medium"],[10,2,0,"Right-arm fast"],[11,13,1,"Right-arm medium"],[12,15,0,"Right-arm fast"],[13,22,0,"Right-arm fast"],[14,13,1,"Right-arm medium"],[15,5,0,"Right-arm fast"]]}
+ ]}

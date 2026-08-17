@@ -1,0 +1,7 @@
+{"mid":"19007757","date":"2025-09-07","round":"League Matches","bat1":"Team Manjummel","bat2":"Avengers","winner":"Team Manjummel",
+ "innings":[
+  {"batting":"Team Manjummel","bowling":"Avengers","bat_order":1,"won":true,"total":"165/4",
+   "overs":[[1,5,0,"Right-arm fast"],[2,6,0,"Right-arm fast"],[3,18,0,"Right-arm fast"],[4,5,0,"Right-arm medium"],[5,7,2,"Right-arm fast"],[6,16,0,"Right-arm medium"],[7,8,0,"Right-arm medium"],[8,13,0,"Right-arm Off Break"],[9,10,0,"Right-arm medium"],[10,2,1,"Right-arm fast"],[11,15,0,"Right-arm medium"],[12,9,1,"Right-arm fast"],[13,13,0,null],[14,21,0,"Right-arm medium"],[15,17,0,"Right-arm medium"]]},
+  {"batting":"Avengers","bowling":"Team Manjummel","bat_order":2,"won":false,"total":"62/10",
+   "overs":[[1,2,0,"Right-arm medium"],[2,3,0,"Right-arm medium"],[3,11,1,"Right-arm medium"],[4,1,2,"Right-arm medium"],[5,3,1,"Right-arm medium"],[6,4,1,"Right-arm fast"],[7,14,0,"Right-arm medium"],[8,6,0,"Right-arm fast"],[9,10,1,"Slow left-arm orthodox"],[10,6,2,"Right-arm medium"],[11,2,2,"Right-arm medium"]]}
+ ]}

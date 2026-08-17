@@ -1,0 +1,7 @@
+{"mid":"19405024","date":"2025-10-03","round":"Pre Quarter Final","bat1":"Invincible Trailblazers","bat2":"DSK Friends XI","winner":"Invincible Trailblazers",
+ "innings":[
+  {"batting":"Invincible Trailblazers","bowling":"DSK Friends XI","bat_order":1,"won":true,"total":"97/10",
+   "overs":[[1,8,0,null],[2,2,0,null],[3,8,1,null],[4,2,1,null],[5,7,1,null],[6,8,0,null],[7,4,1,null],[8,7,0,null],[9,5,1,null],[10,7,1,null],[11,12,0,null],[12,9,1,null],[13,13,0,null],[14,3,0,null],[15,2,2,null]]},
+  {"batting":"DSK Friends XI","bowling":"Invincible Trailblazers","bat_order":2,"won":false,"total":"93/8",
+   "overs":[[1,11,0,null],[2,6,1,null],[3,1,2,null],[4,9,0,null],[5,8,0,null],[6,7,1,null],[7,3,1,null],[8,5,0,null],[9,5,0,null],[10,2,0,null],[11,5,1,null],[12,4,1,null],[13,6,0,null],[14,9,0,null],[15,12,1,null]]}
+ ]}

@@ -1,0 +1,7 @@
+{"mid":"19007714","date":"2025-09-21","round":"League Matches","bat1":"Nizam Royal Knights","bat2":"Bowmanville Cricket Club","winner":"Nizam Royal Knights",
+ "innings":[
+  {"batting":"Nizam Royal Knights","bowling":"Bowmanville Cricket Club","bat_order":1,"won":true,"total":"163/6",
+   "overs":[[1,4,0,null],[2,17,1,null],[3,11,0,null],[4,7,0,null],[5,12,0,null],[6,9,2,null],[7,12,0,null],[8,15,0,null],[9,11,0,null],[10,10,0,null],[11,9,0,null],[12,10,2,null],[13,7,0,null],[14,21,0,null],[15,8,1,null]]},
+  {"batting":"Bowmanville Cricket Club","bowling":"Nizam Royal Knights","bat_order":2,"won":false,"total":"66/10",
+   "overs":[[1,1,0,null],[2,9,1,null],[3,3,1,null],[4,10,1,null],[5,4,1,null],[6,8,0,null],[7,4,0,null],[8,9,1,null],[9,5,1,null],[10,4,0,null],[11,2,2,null],[12,1,0,null],[13,2,1,null],[14,4,1,null]]}
+ ]}

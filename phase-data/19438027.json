@@ -1,0 +1,7 @@
+{"mid":"19438027","date":"2025-10-05","round":"Quarter Final","bat1":"TCF","bat2":"Invincible Trailblazers","winner":"TCF",
+ "innings":[
+  {"batting":"TCF","bowling":"Invincible Trailblazers","bat_order":1,"won":true,"total":"148/8",
+   "overs":[[1,12,0,null],[2,7,1,null],[3,10,0,null],[4,6,1,null],[5,15,0,null],[6,5,0,null],[7,8,0,null],[8,8,0,null],[9,5,0,null],[10,15,0,null],[11,15,0,null],[12,11,2,null],[13,8,2,null],[14,9,0,null],[15,14,2,null]]},
+  {"batting":"Invincible Trailblazers","bowling":"TCF","bat_order":2,"won":false,"total":"111/6",
+   "overs":[[1,5,0,null],[2,6,0,null],[3,3,0,null],[4,10,0,null],[5,7,0,null],[6,12,0,null],[7,7,0,null],[8,4,1,null],[9,15,0,null],[10,6,0,null],[11,3,2,null],[12,6,0,null],[13,4,1,null],[14,5,2,null],[15,18,0,null]]}
+ ]}

@@ -1,0 +1,7 @@
+{"mid":"19007766","date":"2025-09-06","round":"League Matches","bat1":"Birthday Boys XI","bat2":"Harmony Strikers","winner":"Harmony Strikers",
+ "innings":[
+  {"batting":"Birthday Boys XI","bowling":"Harmony Strikers","bat_order":1,"won":false,"total":"71/6",
+   "overs":[[1,3,1,"Right-arm fast"],[2,6,1,"Left-arm medium"],[3,4,1,"Right-arm fast"],[4,2,0,"Left-arm medium"],[5,4,0,"Right-arm medium"],[6,5,0,"Right-arm medium"],[7,10,1,"Right-arm medium"],[8,1,0,"Right-arm medium"],[9,9,0,"Slow left-arm orthodox"],[10,6,0,"Right-arm fast"],[11,2,1,"Slow left-arm orthodox"],[12,0,1,"Right-arm medium"],[13,6,0,"Right-arm medium"],[14,7,0,"Left-arm medium"],[15,6,0,"Left-arm medium"]]},
+  {"batting":"Harmony Strikers","bowling":"Birthday Boys XI","bat_order":2,"won":true,"total":"73/4",
+   "overs":[[1,6,0,"Right-arm medium"],[2,5,2,"Right-arm medium"],[3,14,1,"Right-arm medium"],[4,4,0,"Right-arm medium"],[5,9,1,"Right-arm medium"],[6,14,0,"Right-arm medium"],[7,15,0,"Right-arm medium"],[8,6,0,"Left-arm medium"]]}
+ ]}

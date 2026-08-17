@@ -1,0 +1,7 @@
+{"mid":"19437507","date":"2025-10-05","round":"Quarter Final","bat1":"Mavericks","bat2":"Durham United","winner":"Mavericks",
+ "innings":[
+  {"batting":"Mavericks","bowling":"Durham United","bat_order":1,"won":true,"total":"191/7",
+   "overs":[[1,6,1,null],[2,3,0,null],[3,0,1,null],[4,9,0,null],[5,32,0,null],[6,11,0,null],[7,15,0,null],[8,10,0,null],[9,13,0,null],[10,19,0,null],[11,21,0,null],[12,8,1,null],[13,10,1,null],[14,25,0,null],[15,9,3,null]]},
+  {"batting":"Durham United","bowling":"Mavericks","bat_order":2,"won":false,"total":"85/10",
+   "overs":[[1,8,0,null],[2,12,1,null],[3,6,0,null],[4,10,0,null],[5,14,0,null],[6,3,1,null],[7,5,0,null],[8,4,1,null],[9,4,1,null],[10,6,0,null],[11,4,2,null],[12,9,2,null]]}
+ ]}

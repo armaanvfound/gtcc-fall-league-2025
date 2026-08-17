@@ -1,0 +1,7 @@
+{"mid":"19007748","date":"2025-09-13","round":"League Matches","bat1":"Oshawa Fighters","bat2":"Thunder Strikers","winner":"Thunder Strikers",
+ "innings":[
+  {"batting":"Oshawa Fighters","bowling":"Thunder Strikers","bat_order":1,"won":false,"total":"94/7",
+   "overs":[[1,5,0,"Right-arm fast"],[2,3,1,"Right-arm fast"],[3,2,0,"Right-arm fast"],[4,1,1,"Right-arm fast"],[5,1,0,"Right-arm fast"],[6,6,0,"Right-arm medium"],[7,5,0,"Right-arm fast"],[8,3,2,"Right-arm medium"],[9,12,0,"Right-arm medium"],[10,9,0,"Right-arm fast"],[11,10,0,"Right-arm fast"],[12,14,0,"Right-arm medium"],[13,10,1,"Slow left-arm orthodox"],[14,7,1,"Right-arm fast"],[15,6,1,"Slow left-arm orthodox"]]},
+  {"batting":"Thunder Strikers","bowling":"Oshawa Fighters","bat_order":2,"won":true,"total":"98/7",
+   "overs":[[1,9,0,"Right-arm medium"],[2,5,0,"Right-arm medium"],[3,4,1,"Right-arm medium"],[4,4,2,"Right-arm medium"],[5,7,0,"Right-arm medium"],[6,7,0,"Right-arm medium"],[7,6,1,"Right-arm medium"],[8,4,0,"Right-arm medium"],[9,3,1,"Right-arm medium"],[10,7,0,"Right-arm medium"],[11,5,0,"Right-arm medium"],[12,11,0,"Right-arm medium"],[13,11,1,"Right-arm medium"],[14,8,1,"Right-arm medium"],[15,7,0,"Right-arm medium"]]}
+ ]}

@@ -1,0 +1,7 @@
+{"mid":"19007760","date":"2025-09-07","round":"League Matches","bat1":"Maratha Warriors - GTCC","bat2":"Birthday Boys XI","winner":"Maratha Warriors - GTCC",
+ "innings":[
+  {"batting":"Maratha Warriors - GTCC","bowling":"Birthday Boys XI","bat_order":1,"won":true,"total":"195/5",
+   "overs":[[1,15,0,"Right-arm medium"],[2,14,0,null],[3,11,0,"Right-arm medium"],[4,15,1,"Right-arm medium"],[5,3,1,"Right-arm medium"],[6,5,1,"Right-arm medium"],[7,14,0,"Right-arm medium"],[8,20,0,"Right-arm medium"],[9,13,0,"Right-arm medium"],[10,7,0,"Right-arm medium"],[11,15,0,null],[12,16,1,null],[13,15,1,"Right-arm medium"],[14,17,0,"Right-arm medium"],[15,15,0,"Left-arm medium"]]},
+  {"batting":"Birthday Boys XI","bowling":"Maratha Warriors - GTCC","bat_order":2,"won":false,"total":"92/7",
+   "overs":[[1,1,0,"Right-arm medium"],[2,8,0,"Right-arm fast"],[3,1,1,"Right-arm medium"],[4,8,1,"Right-arm fast"],[5,3,1,"Right-arm medium"],[6,4,1,"Right-arm fast"],[7,7,0,"Right-arm fast"],[8,6,0,"Right-arm fast"],[9,3,0,"Right-arm fast"],[10,12,0,"Right-arm medium"],[11,9,0,"Right-arm medium"],[12,10,1,"Right-arm medium"],[13,7,1,"Right-arm medium"],[14,10,1,"Right-arm medium"],[15,3,0,"Right-arm medium"]]}
+ ]}

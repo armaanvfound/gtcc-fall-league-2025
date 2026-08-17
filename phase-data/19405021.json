@@ -1,0 +1,7 @@
+{"mid":"19405021","date":"2025-10-04","round":"Pre Quarter Final","bat1":"Mavericks","bat2":"Trailblazers","winner":"Mavericks",
+ "innings":[
+  {"batting":"Mavericks","bowling":"Trailblazers","bat_order":1,"won":true,"total":"109/10",
+   "overs":[[1,4,0,null],[2,4,1,null],[3,6,0,null],[4,2,0,null],[5,0,1,null],[6,11,0,null],[7,6,1,null],[8,17,0,null],[9,3,0,null],[10,17,0,null],[11,4,0,null],[12,10,2,null],[13,9,2,null],[14,3,2,null],[15,13,1,null]]},
+  {"batting":"Trailblazers","bowling":"Mavericks","bat_order":2,"won":false,"total":"67/10",
+   "overs":[[1,0,1,null],[2,6,0,null],[3,6,0,null],[4,1,0,null],[5,7,1,null],[6,3,2,null],[7,6,2,null],[8,5,0,null],[9,8,0,null],[10,2,1,null],[11,8,0,null],[12,5,2,null],[13,7,0,null],[14,3,1,null]]}
+ ]}

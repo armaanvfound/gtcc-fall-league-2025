@@ -16,9 +16,9 @@ sys.path.insert(0, str(HERE))
 
 from stats import build_payload
 
-TITLE = "GTCC Fall League 2025 — What the Data Says"
-DESC = ("What 88 matches say about winning this league: the 120-run win line, "
-        "the bat-first edge, group tables, full rankings and a seven-point playbook.")
+TITLE = "GTCC Fall League — Royal Challenger Blaster Match Dashboard"
+DESC = ("Phase-by-phase targets, opponent scouting and a ten-point playbook, built from "
+        "88 matches and 40 read ball by ball. The win line is 120; the death overs decide it.")
 
 
 def to_entities(s):

@@ -1,0 +1,128 @@
+[
+ {
+  "date": "2025-09-06",
+  "n_matches": 9,
+  "avg_1st_innings": 96.2,
+  "temp_c": 15.9,
+  "wind_kmh": 13.8,
+  "wind_kmh_max": 19.3,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-07",
+  "n_matches": 7,
+  "avg_1st_innings": 147.0,
+  "temp_c": 15.1,
+  "wind_kmh": 15.9,
+  "wind_kmh_max": 19.0,
+  "precip_mm": 0.4
+ },
+ {
+  "date": "2025-09-13",
+  "n_matches": 10,
+  "avg_1st_innings": 100.5,
+  "temp_c": 19.4,
+  "wind_kmh": 7.9,
+  "wind_kmh_max": 15.8,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-14",
+  "n_matches": 6,
+  "avg_1st_innings": 105.5,
+  "temp_c": 20.8,
+  "wind_kmh": 5.4,
+  "wind_kmh_max": 8.1,
+  "precip_mm": 0.6
+ },
+ {
+  "date": "2025-09-19",
+  "n_matches": 1,
+  "avg_1st_innings": 130.0,
+  "temp_c": 17.7,
+  "wind_kmh": 6.4,
+  "wind_kmh_max": 10.4,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-20",
+  "n_matches": 10,
+  "avg_1st_innings": 96.8,
+  "temp_c": 14.7,
+  "wind_kmh": 14.2,
+  "wind_kmh_max": 15.3,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-21",
+  "n_matches": 7,
+  "avg_1st_innings": 131.1,
+  "temp_c": 19.4,
+  "wind_kmh": 13.3,
+  "wind_kmh_max": 16.9,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-27",
+  "n_matches": 10,
+  "avg_1st_innings": 99.2,
+  "temp_c": 19.0,
+  "wind_kmh": 7.0,
+  "wind_kmh_max": 10.8,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-09-28",
+  "n_matches": 10,
+  "avg_1st_innings": 125.3,
+  "temp_c": 20.4,
+  "wind_kmh": 13.7,
+  "wind_kmh_max": 16.8,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-10-03",
+  "n_matches": 2,
+  "avg_1st_innings": 112.5,
+  "temp_c": 16.9,
+  "wind_kmh": 5.8,
+  "wind_kmh_max": 9.3,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-10-04",
+  "n_matches": 5,
+  "avg_1st_innings": 118.2,
+  "temp_c": 19.5,
+  "wind_kmh": 5.1,
+  "wind_kmh_max": 8.3,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-10-05",
+  "n_matches": 4,
+  "avg_1st_innings": 146.2,
+  "temp_c": 20.9,
+  "wind_kmh": 6.6,
+  "wind_kmh_max": 9.9,
+  "precip_mm": 0.0
+ },
+ {
+  "date": "2025-10-11",
+  "n_matches": 2,
+  "avg_1st_innings": 79.5,
+  "temp_c": 13.9,
+  "wind_kmh": 14.7,
+  "wind_kmh_max": 18.5,
+  "precip_mm": 4.6
+ },
+ {
+  "date": "2025-10-12",
+  "n_matches": 1,
+  "avg_1st_innings": 119.0,
+  "temp_c": 15.2,
+  "wind_kmh": 15.5,
+  "wind_kmh_max": 18.5,
+  "precip_mm": 0.0
+ }
+]

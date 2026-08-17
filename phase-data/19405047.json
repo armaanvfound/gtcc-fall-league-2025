@@ -1,0 +1,7 @@
+{"mid":"19405047","date":"2025-10-04","round":"Pre Quarter Final","bat1":"TCF","bat2":"Royal Challengers Bowmanville","winner":"TCF",
+ "innings":[
+  {"batting":"TCF","bowling":"Royal Challengers Bowmanville","bat_order":1,"won":true,"total":"185/5",
+   "overs":[[1,13,1,null],[2,16,0,null],[3,10,0,null],[4,15,0,null],[5,5,0,null],[6,17,1,null],[7,4,1,null],[8,26,0,null],[9,17,0,null],[10,5,0,null],[11,17,0,null],[12,12,0,null],[13,12,1,null],[14,5,1,null],[15,11,0,null]]},
+  {"batting":"Royal Challengers Bowmanville","bowling":"TCF","bat_order":2,"won":false,"total":"94/9",
+   "overs":[[1,21,0,null],[2,6,0,null],[3,4,1,null],[4,16,0,null],[5,6,1,null],[6,2,1,null],[7,1,0,null],[8,2,1,null],[9,2,1,null],[10,3,1,null],[11,5,0,null],[12,13,2,null],[13,7,1,null],[14,3,0,null],[15,3,0,null]]}
+ ]}

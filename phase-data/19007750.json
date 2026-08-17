@@ -1,0 +1,7 @@
+{"mid":"19007750","date":"2025-09-13","round":"League Matches","bat1":"Mavericks","bat2":"DSK Friends XI","winner":"Mavericks","quota":12,
+ "innings":[
+  {"batting":"Mavericks","bowling":"DSK Friends XI","bat_order":1,"won":true,"total":"165/3",
+   "overs":[[1,18,0,null],[2,25,0,null],[3,9,0,null],[4,19,0,null],[5,10,2,null],[6,7,0,null],[7,17,0,null],[8,13,1,null],[9,12,0,null],[10,13,0,null],[11,12,0,null],[12,10,0,null]]},
+  {"batting":"DSK Friends XI","bowling":"Mavericks","bat_order":2,"won":false,"total":"74/8",
+   "overs":[[1,9,1,null],[2,1,2,null],[3,5,0,null],[4,12,1,null],[5,4,0,null],[6,3,0,null],[7,6,0,null],[8,7,2,null],[9,6,1,null],[10,6,1,null],[11,4,0,null],[12,11,0,null]]}
+ ]}

@@ -1,0 +1,7 @@
+{"mid":"19437513","date":"2025-10-05","round":"Quarter Final","bat1":"Harmony Strikers","bat2":"Maratha Warriors - GTCC","winner":"Maratha Warriors - GTCC",
+ "innings":[
+  {"batting":"Harmony Strikers","bowling":"Maratha Warriors - GTCC","bat_order":1,"won":false,"total":"150/6",
+   "overs":[[1,6,0,null],[2,9,0,null],[3,4,0,null],[4,10,2,null],[5,1,1,null],[6,5,1,null],[7,5,0,null],[8,11,0,null],[9,9,0,null],[10,8,0,null],[11,9,1,null],[12,25,0,null],[13,6,1,null],[14,27,0,null],[15,15,0,null]]},
+  {"batting":"Maratha Warriors - GTCC","bowling":"Harmony Strikers","bat_order":2,"won":true,"total":"153/5",
+   "overs":[[1,5,0,null],[2,18,1,null],[3,9,1,null],[4,7,0,null],[5,14,0,null],[6,11,0,null],[7,20,0,null],[8,2,0,null],[9,10,1,null],[10,10,1,null],[11,8,0,null],[12,13,0,null],[13,12,0,null],[14,14,1,null]]}
+ ]}

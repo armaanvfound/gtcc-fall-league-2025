@@ -1,0 +1,7 @@
+{"mid":"19476460","date":"2025-10-11","round":"Semi Final","bat1":"TCF","bat2":"Nizam Royal Knights","winner":"Nizam Royal Knights",
+ "innings":[
+  {"batting":"TCF","bowling":"Nizam Royal Knights","bat_order":1,"won":false,"total":"89/8",
+   "overs":[[1,4,2,null],[2,7,0,null],[3,5,0,null],[4,9,0,null],[5,8,0,null],[6,3,1,null],[7,5,1,null],[8,2,0,null],[9,5,0,null],[10,11,0,null],[11,3,1,null],[12,6,0,null],[13,8,1,null],[14,6,1,null],[15,7,1,null]]},
+  {"batting":"Nizam Royal Knights","bowling":"TCF","bat_order":2,"won":true,"total":"90/4",
+   "overs":[[1,9,0,null],[2,12,0,null],[3,14,0,null],[4,6,0,null],[5,1,1,null],[6,3,1,null],[7,2,0,null],[8,2,1,null],[9,8,0,null],[10,5,1,null],[11,12,0,null],[12,8,0,null],[13,8,0,null]]}
+ ]}

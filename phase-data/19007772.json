@@ -1,0 +1,7 @@
+{"mid":"19007772","date":"2025-09-06","round":"League Matches","bat1":"Deccan Warriors","bat2":"Durham Strikers","winner":"Durham Strikers",
+ "innings":[
+  {"batting":"Deccan Warriors","bowling":"Durham Strikers","bat_order":1,"won":false,"total":"74/8",
+   "overs":[[1,5,0,"Right-arm medium"],[2,6,0,"Right-arm medium"],[3,7,1,"Right-arm medium"],[4,8,1,"Left-arm medium"],[5,6,0,"Right-arm medium"],[6,3,0,"Right-arm medium"],[7,0,1,"Right-arm medium"],[8,3,0,"Right-arm medium"],[9,3,1,"Right-arm medium"],[10,5,1,"Right-arm medium"],[11,9,1,"Right-arm medium"],[12,4,1,"Right-arm medium"],[13,1,0,"Right-arm medium"],[14,9,0,"Left-arm medium"],[15,5,1,"Right-arm medium"]]},
+  {"batting":"Durham Strikers","bowling":"Deccan Warriors","bat_order":2,"won":true,"total":"75/2",
+   "overs":[[1,11,0,"Right-arm medium"],[2,6,0,"Right-arm fast"],[3,4,0,"Right-arm medium"],[4,10,0,"Right-arm fast"],[5,7,0,"Right-arm fast"],[6,10,1,"Right-arm medium"],[7,3,0,"Right-arm Off Break"],[8,5,1,"Right-arm medium"],[9,7,0,"Right-arm Off Break"],[10,6,0,"Right-arm fast"],[11,3,0,"Right-arm Off Break"],[12,3,0,"Right-arm medium"]]}
+ ]}

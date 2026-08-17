@@ -1,0 +1,7 @@
+{"mid":"19007722","date":"2025-09-21","round":"League Matches","bat1":"Invincible Trailblazers","bat2":"Taunton Titans","winner":"Invincible Trailblazers",
+ "innings":[
+  {"batting":"Invincible Trailblazers","bowling":"Taunton Titans","bat_order":1,"won":true,"total":"165/6",
+   "overs":[[1,8,0,null],[2,8,0,null],[3,2,1,null],[4,10,1,null],[5,0,0,null],[6,15,0,null],[7,12,0,null],[8,8,1,null],[9,17,0,null],[10,6,0,null],[11,7,0,null],[12,22,0,null],[13,28,0,null],[14,13,1,null],[15,9,2,null]]},
+  {"batting":"Taunton Titans","bowling":"Invincible Trailblazers","bat_order":2,"won":false,"total":"34/10",
+   "overs":[[1,4,0,null],[2,3,1,null],[3,9,0,null],[4,0,2,null],[5,3,1,null],[6,3,0,null],[7,3,1,null],[8,2,0,null],[9,3,2,null],[10,1,1,null],[11,3,2,null]]}
+ ]}

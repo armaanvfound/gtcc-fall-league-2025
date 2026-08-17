@@ -1,0 +1,7 @@
+{"mid":"19007732","date":"2025-09-20","round":"League Matches","bat1":"Thunder Strikers","bat2":"Maratha Warriors - GTCC","winner":"Maratha Warriors - GTCC",
+ "innings":[
+  {"batting":"Thunder Strikers","bowling":"Maratha Warriors - GTCC","bat_order":1,"won":false,"total":"81/10",
+   "overs":[[1,2,0,null],[2,6,2,null],[3,2,0,null],[4,8,1,null],[5,4,0,null],[6,8,0,null],[7,6,0,null],[8,2,1,null],[9,5,0,null],[10,11,0,null],[11,18,0,null],[12,3,4,null],[13,6,1,null],[14,0,1,null]]},
+  {"batting":"Maratha Warriors - GTCC","bowling":"Thunder Strikers","bat_order":2,"won":true,"total":"82/4",
+   "overs":[[1,7,0,null],[2,8,2,null],[3,6,0,null],[4,4,1,null],[5,8,0,null],[6,7,1,null],[7,5,0,null],[8,4,0,null],[9,10,0,null],[10,3,0,null],[11,7,0,null],[12,13,0,null]]}
+ ]}

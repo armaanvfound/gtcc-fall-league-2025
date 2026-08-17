@@ -1,0 +1,7 @@
+{"mid":"19007771","date":"2025-09-06","round":"League Matches","bat1":"Redwings","bat2":"FERAL XI","winner":"FERAL XI",
+ "innings":[
+  {"batting":"Redwings","bowling":"FERAL XI","bat_order":1,"won":false,"total":"60/10",
+   "overs":[[1,2,1,"Right-arm fast"],[2,2,2,"Right-arm medium"],[3,6,0,"Right-arm fast"],[4,2,0,"Right-arm medium"],[5,5,0,null],[6,8,0,null],[7,9,0,null],[8,2,1,"Right-arm fast"],[9,4,1,"Right-arm medium"],[10,6,1,"Right-arm fast"],[11,3,1,"Right-arm medium"],[12,2,1,"Right-arm medium"],[13,2,1,"Right-arm medium"],[14,5,0,"Right-arm fast"],[15,2,1,"Right-arm medium"]]},
+  {"batting":"FERAL XI","bowling":"Redwings","bat_order":2,"won":true,"total":"61/7",
+   "overs":[[1,4,1,"Right-arm fast"],[2,0,1,"Right-arm medium"],[3,16,0,"Right-arm fast"],[4,5,0,"Right-arm medium"],[5,2,1,"Right-arm medium"],[6,2,0,"Right-arm fast"],[7,5,1,"Right-arm medium"],[8,1,1,"Right-arm fast"],[9,1,0,"Right-arm medium"],[10,2,0,"Right-arm medium"],[11,3,0,"Right-arm medium"],[12,5,1,"Right-arm fast"],[13,4,1,"Right-arm medium"],[14,7,0,"Right-arm fast"],[15,4,0,"Right-arm medium"]]}
+ ]}

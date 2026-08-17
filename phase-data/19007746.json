@@ -1,0 +1,7 @@
+{"mid":"19007746","date":"2025-09-13","round":"League Matches","bat1":"Golden City","bat2":"Toronto Nawabs","winner":"Golden City",
+ "innings":[
+  {"batting":"Golden City","bowling":"Toronto Nawabs","bat_order":1,"won":true,"total":"84/10",
+   "overs":[[1,6,0,"Right-arm fast"],[2,11,0,null],[3,6,1,"Right-arm fast"],[4,4,1,"Right-arm fast"],[5,7,0,null],[6,4,0,"Right-arm medium"],[7,3,0,null],[8,7,1,"Right-arm fast"],[9,6,0,"Right-arm medium"],[10,6,1,null],[11,1,2,"Right-arm medium"],[12,5,1,"Right-arm medium"],[13,7,0,"Right-arm medium"],[14,3,2,null],[15,8,1,"Right-arm fast"]]},
+  {"batting":"Toronto Nawabs","bowling":"Golden City","bat_order":2,"won":false,"total":"61/10",
+   "overs":[[1,5,1,"Right-arm fast"],[2,3,1,"Right-arm medium"],[3,4,0,"Right-arm fast"],[4,9,0,"Right-arm medium"],[5,0,2,"Right-arm medium"],[6,2,1,"Right-arm medium"],[7,4,1,"Right-arm fast"],[8,5,0,"Right-arm medium"],[9,5,1,"Right-arm fast"],[10,5,0,"Right-arm medium"],[11,2,0,"Right-arm fast"],[12,7,0,"Right-arm medium"],[13,3,2,"Right-arm fast"],[14,7,1,"Right-arm fast"]]}
+ ]}

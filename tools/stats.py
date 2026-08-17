@@ -11,6 +11,16 @@ ORDER = ['League Matches', 'Pre Quarter Final', 'Quarter Final', 'Semi Final', '
 SHORT = {'League Matches': 'League', 'Pre Quarter Final': 'Pre-QF', 'Quarter Final': 'QF',
          'Semi Final': 'SF', 'Final': 'Final'}
 
+# Registered squad, from the team's own public CricHeroes roster page.
+# Names only - no contact details go on a public site.
+SQUAD = dict(
+    team='Royal Challenger Blaster', city='Pickering', captain='Jemish Virendra Patel',
+    players=['Jemish Virendra Patel', 'Armaan Wadhwa', 'Jay', 'Jay Vasani',
+             'Jeetmanyu Bawra', 'Jonty Patel', 'Kalpesh Saraiya', 'Nikhil Das T',
+             'Pankhil Patel', 'Patel Happy', 'Rudresh Bhanushali', 'Sabar',
+             'Saurabh Patel', 'Yash Chauhan'],
+)
+
 
 def build_payload():
     ALL = MATCHES
@@ -154,4 +164,11 @@ def build_payload():
         h2hNote=(dict(a='Panjab XI', b='Royal Challengers Bowmanville', winner=h2h[pair])
                  if pair in h2h else None),
     )
-    return dict(league=LEAGUE, teams=TEAMS)
+    out = dict(league=LEAGUE, teams=TEAMS)
+    try:
+        from phases import build_phases
+        out['phases'] = build_phases()
+    except Exception:
+        out['phases'] = None
+    out['squad'] = SQUAD
+    return out

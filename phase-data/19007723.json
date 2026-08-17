@@ -1,0 +1,7 @@
+{"mid":"19007723","date":"2025-09-20","round":"League Matches","bat1":"Birthday Boys XI","bat2":"Oshawa Fighters","winner":"Oshawa Fighters",
+ "innings":[
+  {"batting":"Birthday Boys XI","bowling":"Oshawa Fighters","bat_order":1,"won":false,"total":"38/9",
+   "overs":[[1,8,0,null],[2,3,2,null],[3,2,1,null],[4,0,1,null],[5,7,1,null],[6,6,1,null],[7,3,1,null],[8,1,0,null],[9,8,1,null],[10,0,1,null]]},
+  {"batting":"Oshawa Fighters","bowling":"Birthday Boys XI","bat_order":2,"won":true,"total":"41/1",
+   "overs":[[1,1,1,null],[2,10,0,null],[3,17,0,null],[4,9,0,null],[5,4,0,null]]}
+ ]}

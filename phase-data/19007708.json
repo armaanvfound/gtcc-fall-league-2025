@@ -1,0 +1,7 @@
+{"mid":"19007708","date":"2025-09-27","round":"League Matches","bat1":"Avengers","bat2":"FERAL XI","winner":"FERAL XI",
+ "innings":[
+  {"batting":"Avengers","bowling":"FERAL XI","bat_order":1,"won":false,"total":"77/8",
+   "overs":[[1,1,0,null],[2,5,0,null],[3,5,1,null],[4,3,0,null],[5,11,1,null],[6,4,0,null],[7,1,2,null],[8,7,1,null],[9,6,1,null],[10,7,1,null],[11,11,0,null],[12,8,0,null],[13,6,0,null],[14,2,1,null]]},
+  {"batting":"FERAL XI","bowling":"Avengers","bat_order":2,"won":true,"total":"81/6",
+   "overs":[[1,15,1,null],[2,5,1,null],[3,7,1,null],[4,9,0,null],[5,10,0,null],[6,6,0,null],[7,12,0,null],[8,3,1,null],[9,10,2,null],[10,4,0,null]]}
+ ]}

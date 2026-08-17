@@ -1,0 +1,7 @@
+{"mid":"19405058","date":"2025-10-04","round":"Pre Quarter Final","bat1":"Friends United - Fall T15","bat2":"Downtown Hunterz","winner":"Downtown Hunterz",
+ "innings":[
+  {"batting":"Friends United - Fall T15","bowling":"Downtown Hunterz","bat_order":1,"won":false,"total":"100/10",
+   "overs":[[1,6,1,null],[2,2,0,null],[3,8,0,null],[4,10,1,null],[5,2,0,null],[6,7,1,null],[7,5,0,null],[8,19,1,null],[9,9,1,null],[10,11,1,null],[11,5,0,null],[12,5,1,null],[13,3,1,null],[14,6,0,null],[15,2,2,null]]},
+  {"batting":"Downtown Hunterz","bowling":"Friends United - Fall T15","bat_order":2,"won":true,"total":"101/6",
+   "overs":[[1,7,0,null],[2,4,0,null],[3,5,0,null],[4,10,0,null],[5,7,1,null],[6,5,0,null],[7,6,0,null],[8,10,0,null],[9,13,0,null],[10,2,2,null],[11,13,0,null],[12,5,1,null],[13,2,0,null],[14,12,2,null]]}
+ ]}

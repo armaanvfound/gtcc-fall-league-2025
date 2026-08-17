@@ -1,0 +1,7 @@
+{"mid":"19007718","date":"2025-09-21","round":"League Matches","bat1":"Whitby Thunderbolts Gtcc fall","bat2":"Redwings","winner":"Redwings",
+ "innings":[
+  {"batting":"Whitby Thunderbolts Gtcc fall","bowling":"Redwings","bat_order":1,"won":false,"total":"120/8",
+   "overs":[[1,5,0,null],[2,7,0,null],[3,14,0,null],[4,2,1,null],[5,10,1,null],[6,5,0,null],[7,7,1,null],[8,12,1,null],[9,18,0,null],[10,6,0,null],[11,3,0,null],[12,9,0,null],[13,10,1,null],[14,7,2,null],[15,5,1,null]]},
+  {"batting":"Redwings","bowling":"Whitby Thunderbolts Gtcc fall","bat_order":2,"won":true,"total":"122/9",
+   "overs":[[1,0,1,null],[2,4,0,null],[3,5,1,null],[4,7,0,null],[5,11,1,null],[6,8,0,null],[7,3,0,null],[8,14,1,null],[9,2,0,null],[10,4,1,null],[11,15,0,null],[12,9,0,null],[13,5,0,null],[14,8,3,null],[15,27,1,null]]}
+ ]}

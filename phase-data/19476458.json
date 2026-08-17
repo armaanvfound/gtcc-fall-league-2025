@@ -1,0 +1,7 @@
+{"mid":"19476458","date":"2025-10-11","round":"Semi Final","bat1":"Maratha Warriors - GTCC","bat2":"Mavericks","winner":"Mavericks",
+ "innings":[
+  {"batting":"Maratha Warriors - GTCC","bowling":"Mavericks","bat_order":1,"won":false,"total":"70/10",
+   "overs":[[1,7,2,null],[2,6,1,null],[3,7,1,null],[4,8,0,null],[5,5,0,null],[6,6,0,null],[7,0,1,null],[8,2,0,null],[9,3,0,null],[10,6,0,null],[11,5,1,null],[12,8,1,null],[13,3,1,null],[14,4,2,null]]},
+  {"batting":"Mavericks","bowling":"Maratha Warriors - GTCC","bat_order":2,"won":true,"total":"72/3",
+   "overs":[[1,10,0,null],[2,3,1,null],[3,3,0,null],[4,9,1,null],[5,4,0,null],[6,6,0,null],[7,20,0,null],[8,8,0,null],[9,9,1,null]]}
+ ]}

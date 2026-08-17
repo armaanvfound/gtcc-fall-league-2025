@@ -148,7 +148,7 @@
             color:var(--muted);margin-top:5px;}
   .reads{margin-top:20px;padding-left:0;list-style:none;}
   .reads li{padding:11px 0 11px 26px;border-bottom:1px solid var(--rule-2);position:relative;font-size:15px;}
-  .reads li:before{content:"▸";position:absolute;left:6px;color:var(--bat);}
+  .reads li:before{content:"\25B8";position:absolute;left:6px;color:var(--bat);}
   .reads li:last-child{border-bottom:0;}
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
@@ -308,13 +308,82 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">07</div><h2>The playbook</h2></div>
-  <p class="lede">Seven decisions this data supports, in the order they matter.</p>
+  <div class="sechead"><div class="n">07</div><h2>Phase by phase: where matches are won</h2></div>
+  <p class="lede" id="phase-lede"></p>
+
+  <div class="chart">
+    <h3>Average runs per phase &mdash; winning vs losing innings</h3>
+    <div class="note" id="phase-note"></div>
+    <div id="phasebars"></div>
+    <div class="legend">
+      <span><i style="background:var(--bat)"></i>Innings that won the match</span>
+      <span><i style="background:var(--muted);opacity:.55"></i>Innings that lost</span>
+    </div>
+  </div>
+
+  <div class="pair" style="margin-top:18px;">
+    <div class="stat">
+      <div class="k" id="ph-bat1"></div>
+      <div class="t">par score <b>batting first</b>, phase by phase</div>
+    </div>
+    <div class="stat">
+      <div class="k" id="ph-bat2"></div>
+      <div class="t">par score <b>chasing</b>, phase by phase</div>
+    </div>
+  </div>
+
+  <div class="chart" style="margin-top:18px;">
+    <h3>Checkpoints on the way to 120</h3>
+    <div class="note">Where innings that reached the win line actually were at each break,
+      against those that fell short.</div>
+    <div class="scroll">
+      <table><thead><tr>
+        <th>At the end of</th><th class="n">Reached 120+</th><th class="n">Fell short</th><th class="n">Gap</th>
+      </tr></thead><tbody id="milestones"></tbody></table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">08</div><h2>Scout your opponent</h2></div>
+  <p class="lede">Pick the side you are about to play. This shows when they score their runs
+     and when they concede them &mdash; so you know which phase to attack and which to survive.</p>
+  <div class="picker">
+    <label for="oppsel">Select opponent</label>
+    <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
+    <div class="tprofile" id="oppprofile" hidden>
+      <div id="oppcards"></div>
+      <ul class="reads" id="oppreads"></ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">09</div><h2>Conditions: what actually matters</h2></div>
+  <p class="lede" id="wx-lede"></p>
+  <div class="scroll">
+    <table><thead><tr>
+      <th>Match day</th><th class="n">Matches</th><th class="n">Avg 1st inns</th>
+      <th class="n">Temp</th><th class="n">Wind</th><th class="n">Rain</th>
+    </tr></thead><tbody id="wxtable"></tbody></table>
+  </div>
+  <div class="caveat" style="margin-top:18px;" id="wx-verdict"></div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">10</div><h2>The playbook</h2></div>
+  <p class="lede">Ten decisions this data supports, in the order they matter.</p>
   <div class="play" id="play"></div>
 </section>
 
 <section>
-  <div class="sechead"><div class="n">08</div><h2>Where these numbers come from</h2></div>
+  <div class="sechead"><div class="n">11</div><h2>Our squad</h2></div>
+  <p class="lede" id="squad-lede"></p>
+  <div class="tgrid" id="squadgrid"></div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">12</div><h2>Where these numbers come from</h2></div>
   <div class="caveat" id="method"></div>
 </section>
 
@@ -508,7 +577,140 @@ sel.addEventListener('change', () => {
     </tr>`).join('');
 });
 
-/* 07 — playbook */
+/* 07 — phases */
+const PH = DATA.phases;
+const PHNAME = {pp:'Powerplay (1–5)', mid:'Middle (6–10)', death:'Death (11–15)'};
+if (PH) {
+  const g = PH.gaps, dec = PH.decisive;
+  $('phase-lede').innerHTML =
+    `Across ${PH.sample.innings} complete innings from ${PH.sample.matches} matches read ball by ball, ` +
+    `the phase that separates winners from losers most is the <b>${PHNAME[dec].toLowerCase()}</b>: ` +
+    `winning sides scored <b>${PH.won[dec]}</b> there against <b>${PH.lost[dec]}</b> for losing sides, ` +
+    `a gap of <b>${g[dec]} runs</b> — wider than the powerplay gap of ${g.pp}.`;
+
+  $('phase-note').textContent =
+    `${PH.won.n} winning and ${PH.lost.n} losing innings. Innings cut short (all out, or a chase ` +
+    `finished early) are excluded, since they have no comparable death phase.`;
+
+  const maxv = Math.max(PH.won.death, PH.lost.death, PH.won.mid, PH.won.pp);
+  $('phasebars').innerHTML = ['pp','mid','death'].map(k => {
+    const w = PH.won[k], l = PH.lost[k];
+    return `<div class="bandrow" data-tip="won ${w} · lost ${l}">
+        <div class="lab">${PHNAME[k].split(' ')[0]}</div>
+        <div class="track"><div class="bar" style="width:${Math.max(w/maxv*100,1.5)}%"></div></div>
+        <div class="val">${w}</div>
+      </div>
+      <div class="bandrow" data-tip="losing innings">
+        <div class="lab" style="opacity:.6">&nbsp;</div>
+        <div class="track"><div class="bar dim" style="width:${Math.max(l/maxv*100,1.5)}%"></div></div>
+        <div class="val"><small>${l}</small></div>
+      </div>`;
+  }).join('');
+
+  const fmt = s => `${s.pp} · ${s.mid} · ${s.death}`;
+  $('ph-bat1').innerHTML = `${fmt(PH.bat1)} <span style="font-size:15px;color:var(--muted)">= ${PH.bat1.total}</span>`;
+  $('ph-bat2').innerHTML = `${fmt(PH.bat2)} <span style="font-size:15px;color:var(--muted)">= ${PH.bat2.total}</span>`;
+
+  const R = PH.milestone.reached, M = PH.milestone.missed;
+  const cum = (s,k) => k==='pp' ? s.pp : k==='mid' ? Math.round((s.pp+s.mid)*10)/10 : Math.round((s.pp+s.mid+s.death)*10)/10;
+  $('milestones').innerHTML = [['pp','5 overs'],['mid','10 overs'],['death','15 overs']].map(([k,lab]) => {
+    const r = cum(R,k), m = cum(M,k), d = Math.round((r-m)*10)/10;
+    return `<tr><td class="team">${lab}</td><td class="n">${r}</td><td class="n">${m}</td>
+      <td class="n pos">+${d}</td></tr>`;
+  }).join('');
+}
+
+/* 08 — opponent scouting */
+if (PH && PH.teams) {
+  const osel = $('oppsel');
+  Object.keys(PH.teams).sort((a,b)=>a.localeCompare(b)).forEach(name => {
+    const o = document.createElement('option');
+    o.value = name; o.textContent = name; osel.appendChild(o);
+  });
+  osel.addEventListener('change', () => {
+    const t = PH.teams[osel.value];
+    if (!t) { $('oppprofile').hidden = true; return; }
+    $('oppprofile').hidden = false;
+    const mk = (title, s, kind) => {
+      if (!s) return `<div class="stat"><div class="t">No ${kind} phase data in the sample.</div></div>`;
+      return `<div class="stat">
+        <div class="k" style="font-size:24px">${s.pp} · ${s.mid} · ${s.death}</div>
+        <div class="t">${title}<br><span style="color:var(--muted)">powerplay · middle · death
+        &mdash; from ${s.n} innings</span></div></div>`;
+    };
+    $('oppcards').innerHTML = `<div class="pair">
+      ${mk('runs <b>they score</b> per phase', t.bat, 'batting')}
+      ${mk('runs <b>they concede</b> per phase', t.bowl, 'bowling')}</div>`;
+
+    const reads = [];
+    if (t.bat) {
+      const ph = ['pp','mid','death'];
+      const strongest = ph.reduce((a,b)=> t.bat[b] > t.bat[a] ? b : a);
+      const weakest  = ph.reduce((a,b)=> t.bat[b] < t.bat[a] ? b : a);
+      reads.push(`Batting, they are strongest in the <b>${PHNAME[strongest].toLowerCase()}</b> ` +
+        `(${t.bat[strongest]} runs) and weakest in the <b>${PHNAME[weakest].toLowerCase()}</b> ` +
+        `(${t.bat[weakest]}). Put your best bowling into the phase they rely on.`);
+      const vs = t.bat.death - PH.all.death;
+      reads.push(Math.abs(vs) < 4
+        ? `Their death-overs scoring (${t.bat.death}) is about league par (${PH.all.death}).`
+        : vs > 0
+          ? `They score <b>${Math.round(vs)} above par</b> at the death (${t.bat.death} vs ${PH.all.death} league). Do not leave the game to the last five overs.`
+          : `They score <b>${Math.round(-vs)} below par</b> at the death (${t.bat.death} vs ${PH.all.death} league). Squeeze them late and they rarely recover.`);
+    }
+    if (t.bowl) {
+      const ph = ['pp','mid','death'];
+      const leak = ph.reduce((a,b)=> t.bowl[b] > t.bowl[a] ? b : a);
+      const tight = ph.reduce((a,b)=> t.bowl[b] < t.bowl[a] ? b : a);
+      reads.push(`With the ball they leak most in the <b>${PHNAME[leak].toLowerCase()}</b> ` +
+        `(${t.bowl[leak]} conceded) and are tightest in the <b>${PHNAME[tight].toLowerCase()}</b> ` +
+        `(${t.bowl[tight]}). Target the ${PHNAME[leak].toLowerCase()}; bat through the ${PHNAME[tight].toLowerCase()}.`);
+    }
+    const nBat = t.bat ? t.bat.n : 0, nBowl = t.bowl ? t.bowl.n : 0;
+    if (Math.max(nBat, nBowl) < 3) {
+      const bits = [];
+      if (nBat) bits.push(`${nBat} batting`);
+      if (nBowl) bits.push(`${nBowl} bowling`);
+      reads.push(`<b>Small sample &mdash; treat as a hint, not a rule.</b> Only ${bits.join(' and ')} ` +
+        `innings of theirs made the ball-by-ball set, so these splits can swing on one good over.`);
+    }
+    $('oppreads').innerHTML = reads.map(r=>`<li>${r}</li>`).join('');
+  });
+}
+
+/* 09 — conditions */
+if (PH && PH.weather && PH.weather.length) {
+  const W = PH.weather;
+  const n = W.length;
+  const mw = W.reduce((s,r)=>s+r.wind_kmh,0)/n, ms = W.reduce((s,r)=>s+r.avg_1st_innings,0)/n;
+  let cov=0, sw=0, ss=0;
+  W.forEach(r=>{ cov += (r.wind_kmh-mw)*(r.avg_1st_innings-ms);
+                 sw += (r.wind_kmh-mw)**2; ss += (r.avg_1st_innings-ms)**2; });
+  const corr = (sw&&ss) ? cov/Math.sqrt(sw*ss) : 0;
+
+  $('wx-lede').innerHTML =
+    `Historical wind, temperature and rainfall for all ${n} match days, pulled from the Open-Meteo ` +
+    `archive for the Durham Region. The honest answer is that none of it predicts scoring here.`;
+
+  $('wxtable').innerHTML = W.map(r => `<tr>
+      <td class="team">${fmtDate(r.date)}</td>
+      <td class="n">${r.n_matches}</td>
+      <td class="n">${r.avg_1st_innings}</td>
+      <td class="n">${r.temp_c}°C</td>
+      <td class="n">${r.wind_kmh} km/h</td>
+      <td class="n">${r.precip_mm} mm</td></tr>`).join('');
+
+  const wettest = W.reduce((a,b)=> b.precip_mm > a.precip_mm ? b : a);
+  $('wx-verdict').innerHTML =
+    `<p><b>Verdict: play the conditions you see, not the forecast.</b> Correlation between average ` +
+    `wind speed and first-innings scoring across the ${n} match days is <b>${corr.toFixed(2)}</b> ` +
+    `&mdash; effectively zero. The highest-scoring day (${fmtDate(W.reduce((a,b)=>b.avg_1st_innings>a.avg_1st_innings?b:a).date)}) ` +
+    `and one of the lowest were both windy.</p>` +
+    `<p>The one real signal is rain: the wettest day (${fmtDate(wettest.date)}, ${wettest.precip_mm}mm) ` +
+    `produced the lowest average first innings of the season at ${wettest.avg_1st_innings}. ` +
+    `On a wet day, revise the target down and prioritise batting out the overs over big shots.</p>`;
+}
+
+/* 10 — playbook */
 const V0 = L.venues[0];
 const PLAY = [
   ['Win the toss, bat.',
@@ -550,10 +752,46 @@ const PLAY = [
    `limit exactly when the matches matter most.`,
    `5 knockout rounds across 6 days`],
 ];
+if (PH) {
+  PLAY.push(
+    ['Hold wickets for the death — that is where the match is decided.',
+     `Winning innings scored ${PH.won.death} in overs 11–15 against ${PH.lost.death} for losing sides — ` +
+     `a ${PH.gaps.death}-run gap, wider than the powerplay (${PH.gaps.pp}) or middle (${PH.gaps.mid}). ` +
+     `You cannot access that phase without batters in. Getting to over 11 with wickets standing is ` +
+     `worth more than any powerplay cameo.`,
+     `death-overs gap: ${PH.gaps.death} runs · ${PH.sample.innings} innings`],
+    ['Know your checkpoints: 43 at five, 96 at ten.',
+     `Innings that reached 120+ were on ${PH.milestone.reached.pp} after five overs and ` +
+     `${Math.round((PH.milestone.reached.pp+PH.milestone.reached.mid)*10)/10} after ten. Sides that fell short were on ` +
+     `${PH.milestone.missed.pp} and ${Math.round((PH.milestone.missed.pp+PH.milestone.missed.mid)*10)/10}. ` +
+     `Call these out on the field — if you are behind at ten overs, the gap is already ` +
+     `${Math.round((PH.milestone.reached.pp+PH.milestone.reached.mid-PH.milestone.missed.pp-PH.milestone.missed.mid)*10)/10} runs and closing it needs a plan, not hope.`,
+     `from ${PH.milestone.reached.n} innings that reached 120 vs ${PH.milestone.missed.n} that did not`],
+    ['Chasing? The middle overs are where chases die.',
+     `Chasing sides scored ${PH.bat2.mid} in overs 6–10 against ${PH.bat1.mid} for sides batting first — ` +
+     `the largest phase deficit in the chase. Teams get through the powerplay fine and then stall. ` +
+     `If you are chasing, plan a specific middle-overs scoring plan rather than "keep wickets and see".`,
+     `chasing middle: ${PH.bat2.mid} · batting first: ${PH.bat1.mid}`],
+  );
+}
 $('play').innerHTML = PLAY.map(([h, p, ev]) =>
   `<article><h3>${h}</h3><p>${p}</p><span class="ev">${ev}</span></article>`).join('');
 
-/* 08 — method */
+/* 11 — squad */
+const SQ = DATA.squad;
+if (SQ) {
+  $('squad-lede').innerHTML =
+    `<b>${esc(SQ.team)}</b> (${esc(SQ.city)}) — ${SQ.players.length} registered players, ` +
+    `captained by <b>${esc(SQ.captain)}</b>. This is our first season in this league, so we have no ` +
+    `match history here yet; every number on this page is the field we are walking into, not a ` +
+    `record of us. Once we play, this section becomes our own phase log.`;
+  $('squadgrid').innerHTML = SQ.players.map(p =>
+    `<div style="padding:12px 14px"><div class="k" style="font-size:15.5px;font-family:var(--sans);line-height:1.35">${esc(p)}</div>` +
+    (p === SQ.captain ? `<div class="t" style="margin-top:4px;color:var(--bat)">captain</div>` : '') +
+    `</div>`).join('');
+}
+
+/* 12 — method */
 $('method').innerHTML =
   `<p><b>Source.</b> The fixture spreadsheet supplied the ${L.matches} fixtures, dates, grounds, ` +
   `rounds and overs. It did not contain scores or winners, so those were read from the CricHeroes ` +
@@ -564,9 +802,22 @@ $('method').innerHTML =
   `<p><b>Conventions.</b> Net run rate charges an all-out innings the full quota, as the ` +
   `competition regulations do. Two fixtures were awarded without a result being played ` +
   `(Birthday Boys XI twice) and count in records but not in run rates. Two group matches were ` +
-  `played over 12 overs rather than 15; totals from those are excluded from the win-line bands. ` +
-  `<b>Not in this data:</b> individual batting and bowling figures, tosses, and ball-by-ball ` +
-  `detail — so nothing here identifies which players to pick, only how to play.</p>`;
+  `played over 12 overs rather than 15; totals from those are excluded from the win-line bands.</p>` +
+  (PH ? `<p><b>Phase data (sections 07–08).</b> Over-by-over scores were read from the CricHeroes ` +
+    `commentary for a ${PH.sample.matches}-match sample chosen to span the full range of totals and ` +
+    `both innings types, covering every team at least twice. Each innings was reconciled against its ` +
+    `known final total — ${PH.sample.innings} complete innings passed that check and are used here. ` +
+    `Innings that ended early (all out, or a chase won inside the quota) are excluded from phase ` +
+    `averages because they have no comparable death phase; that is why the phase sample ` +
+    `(${PH.sample.innings}) is smaller than the match count.</p>` : '') +
+  `<p><b>Weather (section 09).</b> Daily temperature, wind and rainfall from the Open-Meteo public ` +
+  `archive, averaged across daytime hours for the Durham Region. Match start times are not in our ` +
+  `data, so this is a day-level reading, not a per-match one.</p>` +
+  `<p><b>What this page cannot tell you.</b> There are no individual batting or bowling figures ` +
+  `here, no toss records, and no pitch reports. Bowler type was legible for only about a quarter ` +
+  `of overs in the sample, so there is no pace-versus-spin recommendation — inventing one from that ` +
+  `coverage would be guessing. Nothing here says which players to pick; it says how the league is ` +
+  `won and where each opponent is soft. Squad selection is still your call.</p>`;
 
 $('foot').innerHTML =
   `Amiirtham · GTCC Fall league 2025 — ${L.matches} matches, ${L.teams} teams, ${SPAN}.<br>` +

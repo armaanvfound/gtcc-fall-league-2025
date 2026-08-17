@@ -1,0 +1,7 @@
+{"mid":"19007713","date":"2025-09-27","round":"League Matches","bat1":"Taunton Titans","bat2":"Panjab XI","winner":"Panjab XI",
+ "innings":[
+  {"batting":"Taunton Titans","bowling":"Panjab XI","bat_order":1,"won":false,"total":"66/10",
+   "overs":[[1,2,1,null],[2,3,2,null],[3,1,1,null],[4,2,0,null],[5,6,0,null],[6,2,1,null],[7,13,0,null],[8,9,0,null],[9,2,0,null],[10,10,0,null],[11,5,0,null],[12,1,1,null],[13,3,1,null],[14,5,1,null],[15,2,2,null]]},
+  {"batting":"Panjab XI","bowling":"Taunton Titans","bat_order":2,"won":true,"total":"68/5",
+   "overs":[[1,1,0,null],[2,7,0,null],[3,3,1,null],[4,11,0,null],[5,7,1,null],[6,18,0,null],[7,10,1,null],[8,1,2,null],[9,10,0,null]]}
+ ]}
