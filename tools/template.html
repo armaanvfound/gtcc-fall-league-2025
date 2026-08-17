@@ -196,6 +196,8 @@
   .ph-move{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:14px;white-space:normal;}
   .ph-src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
   .ph-src .thin{color:var(--bat);font-weight:400;}
+  .ph-num .thin{color:var(--bat);font-weight:400;}
+  .ph-num .nn{color:var(--muted);}
   .opp-note{margin-top:18px;font-size:14px;color:var(--ink-2);border-left:3px solid var(--gold);
             background:var(--gold-bg);padding:11px 14px;border-radius:0 3px 3px 0;}
   @media (max-width:640px){
@@ -664,14 +666,16 @@ const PHNAME = {pp:'Powerplay (1–5)', mid:'Middle (6–10)', death:'Death (11�
 if (PH) {
   const g = PH.gaps, dec = PH.decisive;
   $('phase-lede').innerHTML =
-    `Across ${PH.sample.innings} complete innings from ${PH.sample.matches} matches read ball by ball, ` +
+    `Across ${PH.sample.innings} innings from ${PH.sample.matches} matches read ball by ball, ` +
     `the phase that separates winners from losers most is the <b>${PHNAME[dec].toLowerCase()}</b>: ` +
     `winning sides scored <b>${PH.won[dec]}</b> there against <b>${PH.lost[dec]}</b> for losing sides, ` +
     `a gap of <b>${g[dec]} runs</b> — wider than the powerplay gap of ${g.pp}.`;
 
   $('phase-note').textContent =
-    `${PH.won.n} winning and ${PH.lost.n} losing innings. Innings cut short (all out, or a chase ` +
-    `finished early) are excluded, since they have no comparable death phase.`;
+    `Each phase is averaged over the innings that actually bowled it to the last ball: ` +
+    `${PH.all.ppn} for the powerplay, ${PH.all.midn} for the middle, ${PH.all.deathn} for the death. ` +
+    `An innings cut short still counts where the phase was completed — only the death figures are ` +
+    `limited to innings that got there.`;
 
   const maxv = Math.max(PH.won.death, PH.lost.death, PH.won.mid, PH.won.pp);
   $('phasebars').innerHTML = ['pp','mid','death'].map(k => {
@@ -807,10 +811,12 @@ if (PH && PH.teams) {
       move  = batMove(p, rd, wd);
       sub   = `${signed(rd)} vs ${Math.round(PH.all[p])} par conceded`;
     }
+    const np = prof[p+'n'] || 0;
+    const thin = np < 3 ? ` <b class="thin">(${np} inn — hint only)</b>` : ` <span class="nn">(${np} inn)</span>`;
     return `<tr>
       <td class="ph-name">${nm}<span>${ov}</span></td>
       <td class="ph-num"><span class="n">${Math.round(runs)}</span><span class="w">/${wk.toFixed(1)}<i>w</i></span>
-        <span class="d">${sub}</span></td>
+        <span class="d">${sub}${thin}</span></td>
       <td class="ph-badge"><span class="badge ${cls}">${badge}</span></td>
       <td class="ph-move">${move}</td></tr>`;
   }
@@ -819,23 +825,31 @@ if (PH && PH.teams) {
   // headline synthesis: their identity with bat and ball, plus the resulting plan
   function oppHeadline(t){
     const g = (v,p)=> Math.round(v - PH.all[p]);
+    // phases we have actually seen enough of to talk about; fall back to all
+    // rather than going silent when a side's whole profile is thin
+    const seen = prof => {
+      const ok = PHASES.filter(p => (prof[p+'n']||0) >= 3);
+      return ok.length ? ok : PHASES;
+    };
     const parts = [];
     let ourBowlP, ourBatP;
     if (t.bat){
-      const sb = PHASES.reduce((a,b)=> g(t.bat[b],b)>g(t.bat[a],a)?b:a);
-      const wb = PHASES.reduce((a,b)=> g(t.bat[b],b)<g(t.bat[a],a)?b:a);
+      const ph = seen(t.bat);
+      const sb = ph.reduce((a,b)=> g(t.bat[b],b)>g(t.bat[a],a)?b:a);
+      const wb = ph.reduce((a,b)=> g(t.bat[b],b)<g(t.bat[a],a)?b:a);
       parts.push(`With the bat their engine is the <b>${phShort(sb)}</b> ` +
         `(${Math.round(t.bat[sb])}, ${grade(g(t.bat[sb],sb))}); they fade most in the ` +
         `<b>${phShort(wb)}</b> (${Math.round(t.bat[wb])}, ${grade(g(t.bat[wb],wb))}).`);
-      if (g(t.bat[wb],wb) <= -4) ourBowlP = wb;      // a genuinely soft phase to attack
+      if (g(t.bat[wb],wb) <= -4 && (t.bat[wb+'n']||0) >= 3) ourBowlP = wb;
     }
     if (t.bowl){
-      const sl = PHASES.reduce((a,b)=> g(t.bowl[b],b)>g(t.bowl[a],a)?b:a);
-      const st = PHASES.reduce((a,b)=> g(t.bowl[b],b)<g(t.bowl[a],a)?b:a);
+      const ph = seen(t.bowl);
+      const sl = ph.reduce((a,b)=> g(t.bowl[b],b)>g(t.bowl[a],a)?b:a);
+      const st = ph.reduce((a,b)=> g(t.bowl[b],b)<g(t.bowl[a],a)?b:a);
       parts.push(`With the ball they are toughest in the <b>${phShort(st)}</b> ` +
         `(${Math.round(t.bowl[st])} conceded, ${grade(g(t.bowl[st],st))}); they leak most in the ` +
         `<b>${phShort(sl)}</b> (${Math.round(t.bowl[sl])}, ${grade(g(t.bowl[sl],sl))}).`);
-      if (g(t.bowl[sl],sl) >= 4) ourBatP = sl;       // a genuinely leaky phase to cash
+      if (g(t.bowl[sl],sl) >= 4 && (t.bowl[sl+'n']||0) >= 3) ourBatP = sl;
     }
     const edge = [];
     if (ourBowlP) edge.push(`when we bowl, hunt wickets in their ${phShort(ourBowlP)}`);
@@ -949,10 +963,10 @@ if (PH && PH.teams) {
     const block = (title, prof, mode, kind) => {
       if (!prof) return `<div class="opp-block"><h4>${title}</h4>` +
         `<div class="ph-src">No ${kind} innings of theirs made the ball-by-ball set.</div></div>`;
-      const thin = prof.n < 3 ? ` &middot; <b class="thin">thin — ${prof.n} innings, treat as a hint</b>` : '';
       return `<div class="opp-block"><h4>${title}</h4>` +
         `<table class="phasetbl"><tbody>${PHASES.map(p=>phaseRow(p,prof,mode)).join('')}</tbody></table>` +
-        `<div class="ph-src">runs${mode==='bowl'?' conceded':''}/wickets per phase, from ${prof.n} ${kind} innings${thin}</div></div>`;
+        `<div class="ph-src">runs${mode==='bowl'?' conceded':''}/wickets per phase, from ${prof.innings} ` +
+        `${kind} innings &middot; each phase averaged over the innings that completed it</div></div>`;
     };
 
     box.innerHTML = `<div class="opp-head">${oppHeadline(t)}</div>`

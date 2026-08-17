@@ -29,11 +29,23 @@ def load_matches():
     return out
 
 
-def innings_rows(matches):
-    """One row per innings that ran the full 15 overs.
+# A phase counts only if it was bowled to its last ball: the powerplay needs
+# 5 completed overs, the middle 10, the death all 15.
+PHASE_NEEDS = {PP: 5, MID: 10, DEATH: 15}
 
-    Innings cut short (all out, or a chase finished early) have no comparable
-    death phase, so they are excluded from phase averages.
+
+def innings_rows(matches):
+    """One row per innings, marking which phases were actually completed.
+
+    Judging completeness per phase rather than per innings matters: an innings
+    that ended at 14.3 still has a real powerplay and a real middle, and
+    throwing the whole thing away biases every profile towards the innings a
+    side survived. Sides that collapse are exactly the ones we want to scout,
+    so their short innings must still count where the phase was in fact bowled.
+
+    The death phase is the unavoidable exception - an innings that ended early
+    has no last five overs to measure, so death figures always rest on the
+    innings that got there.
     """
     rows = []
     for d in matches:
@@ -41,18 +53,27 @@ def innings_rows(matches):
             continue
         for inn in d["innings"]:
             overs = inn["overs"]
-            if len(overs) < 15:
+            if not overs:
                 continue
+            nov = len(overs)
             acc = {PP: [0, 0], MID: [0, 0], DEATH: [0, 0]}
             for o in overs:
                 p = acc[phase_of(o[0])]
                 p[0] += o[1]
                 p[1] += o[2]
+            # the scoreboard total, which is exact even when the last over was
+            # cut short mid-way and so never appeared as a completed over
+            try:
+                final = int(str(inn.get("total", "")).split("/")[0])
+            except (ValueError, IndexError):
+                final = sum(o[1] for o in overs)
             rows.append({
                 "mid": d["mid"], "round": d["round"],
                 "team": inn["batting"], "opp": inn["bowling"],
                 "bat_order": inn["bat_order"], "won": inn["won"],
-                "total": sum(o[1] for o in overs),
+                "novers": nov, "complete": nov >= 15,
+                "done": {p: nov >= PHASE_NEEDS[p] for p in (PP, MID, DEATH)},
+                "total": final,
                 "wkts": sum(o[2] for o in overs),
                 "pp_r": acc[PP][0], "pp_w": acc[PP][1],
                 "mid_r": acc[MID][0], "mid_w": acc[MID][1],
@@ -66,13 +87,22 @@ def _avg(rows, key):
 
 
 def _summary(rows):
-    return {
-        "n": len(rows),
-        "pp": _avg(rows, "pp_r"), "ppw": _avg(rows, "pp_w"),
-        "mid": _avg(rows, "mid_r"), "midw": _avg(rows, "mid_w"),
-        "death": _avg(rows, "death_r"), "deathw": _avg(rows, "death_w"),
-        "total": _avg(rows, "total"),
-    }
+    """Phase averages, each over the innings that actually completed that phase.
+
+    `n` counts complete innings (what `total` is averaged over); `ppn`/`midn`/
+    `deathn` give the real sample behind each phase.
+    """
+    out = {}
+    for p in (PP, MID, DEATH):
+        sub = [r for r in rows if r["done"][p]]
+        out[p] = _avg(sub, p + "_r")
+        out[p + "w"] = _avg(sub, p + "_w")
+        out[p + "n"] = len(sub)
+    full = [r for r in rows if r["complete"]]
+    out["n"] = len(full)
+    out["innings"] = len(rows)
+    out["total"] = _avg(full, "total")
+    return out
 
 
 def classify_type(t):
@@ -150,12 +180,14 @@ def build_phases():
     bat1 = [r for r in rows if r["bat_order"] == 1]
     bat2 = [r for r in rows if r["bat_order"] == 2]
 
-    # Which phase separates winners from losers by the most runs?
-    gaps = {
-        "pp": round(_avg(won, "pp_r") - _avg(lost, "pp_r"), 1),
-        "mid": round(_avg(won, "mid_r") - _avg(lost, "mid_r"), 1),
-        "death": round(_avg(won, "death_r") - _avg(lost, "death_r"), 1),
-    }
+    # Which phase separates winners from losers by the most runs? Each phase is
+    # compared only across the innings that actually completed it.
+    def _gap(p):
+        w = [r for r in won if r["done"][p]]
+        l = [r for r in lost if r["done"][p]]
+        return round(_avg(w, p + "_r") - _avg(l, p + "_r"), 1)
+
+    gaps = {p: _gap(p) for p in (PP, MID, DEATH)}
     decisive = max(gaps, key=lambda k: gaps[k])
 
     # Milestone: what score at the end of each phase preceded a 120+ total?
@@ -168,7 +200,8 @@ def build_phases():
         weather = json.loads(wf.read_text())
 
     return {
-        "sample": {"matches": len(matches), "innings": len(rows)},
+        "sample": {"matches": len(matches), "innings": len(rows),
+                   "complete": len([r for r in rows if r["complete"]])},
         "all": _summary(rows),
         "won": _summary(won),
         "lost": _summary(lost),
