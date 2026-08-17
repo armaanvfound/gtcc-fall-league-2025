@@ -75,6 +75,54 @@ def _summary(rows):
     }
 
 
+def classify_type(t):
+    if not t:
+        return None
+    s = t.lower()
+    if 'orthodox' in s or 'break' in s or 'spin' in s or 'googly' in s or 'chinaman' in s:
+        return 'spin'
+    if 'fast' in s or 'medium' in s:
+        return 'pace'
+    return None
+
+
+def bowl_types(matches):
+    """Pace vs spin, from the ~26% of overs whose bowler type was legible.
+
+    Pace has a real sample; spin does not - the league is overwhelmingly
+    medium/fast. Both facts are reported as such.
+    """
+    agg = defaultdict(lambda: dict(overs=0, runs=0, wkts=0))
+    typed = total = 0
+    for d in matches:
+        for inn in d["innings"]:
+            for o in inn["overs"]:
+                total += 1
+                cls = classify_type(o[3])
+                if o[3]:
+                    typed += 1
+                if not cls:
+                    continue
+                for key in (cls, cls + ":" + phase_of(o[0])):
+                    a = agg[key]
+                    a["overs"] += 1
+                    a["runs"] += o[1]
+                    a["wkts"] += o[2]
+
+    def econ(k):
+        a = agg.get(k)
+        if not a or not a["overs"]:
+            return None
+        return dict(n=a["overs"], econ=round(a["runs"] / a["overs"], 2),
+                    wpo=round(a["wkts"] / a["overs"], 2))
+
+    return {
+        "typedOvers": typed, "totalOvers": total,
+        "pace": econ("pace"), "spin": econ("spin"),
+        "pacePhases": {p: econ("pace:" + p) for p in (PP, MID, DEATH)},
+    }
+
+
 def team_phase_table(rows):
     """Per-team phase splits, batting and bowling, for the scouting cards."""
     bat = defaultdict(list)
@@ -133,6 +181,7 @@ def build_phases():
             "missed": _summary(missed),
         },
         "teams": team_phase_table(rows),
+        "bowlTypes": bowl_types(matches),
         "weather": weather,
     }
 

@@ -133,6 +133,24 @@
   .grp tr.thru td:first-child{box-shadow:inset 3px 0 0 var(--good);}
   .grp tr.miss td:first-child{box-shadow:inset 3px 0 0 var(--bat);}
 
+  /* quick nav */
+  html{scroll-behavior:smooth;}
+  .qnav{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);
+        font-size:11.5px;letter-spacing:.05em;}
+  .qnav a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:1px;}
+  .qnav a:hover{color:var(--bat);border-color:var(--bat);}
+
+  /* scenario toggle + match plan */
+  .seg{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+  .seg button{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:10px 16px;border:1px solid var(--rule);border-radius:3px;background:var(--surface-2);
+    color:var(--ink-2);cursor:pointer;}
+  .seg button.on{background:var(--bat);border-color:var(--bat);color:#fff;}
+  .plan{margin-top:18px;border:1px solid var(--rule);border-left:3px solid var(--bat);
+    border-radius:3px;background:var(--surface-2);padding:20px 22px;}
+  .plan h4{font-family:var(--serif);font-size:19px;margin:0 0 12px;}
+  .plan .hint{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;}
+
   /* team picker */
   .picker{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:22px 24px;}
   .picker label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
@@ -193,6 +211,13 @@
   <h1>How this league is actually won</h1>
   <p class="standfirst" id="standfirst"></p>
   <div class="prov" id="prov"></div>
+  <nav class="qnav" aria-label="Jump to section">
+    <a href="#plan">Match plan</a>
+    <a href="#phases">Phase targets</a>
+    <a href="#playbook">Playbook</a>
+    <a href="#ranks">Rankings</a>
+    <a href="#squad">Squad</a>
+  </nav>
 </header>
 
 <section>
@@ -229,7 +254,8 @@
 <section>
   <div class="sechead"><div class="n">02</div><h2>Bat first</h2></div>
   <p class="lede">If you win the toss, bat. The edge is real, it is consistent across the two
-     grounds that host most of the cricket, and it grows in knockout matches.</p>
+     grounds that host most of the cricket, and it grows in knockout matches.
+     Put in to field instead? The <a href="#plan">match plan</a> builds the bowling-first job.</p>
   <div class="chart">
     <h3>Who wins, across all decided matches</h3>
     <div class="note" id="split-note"></div>
@@ -294,7 +320,7 @@
   <p class="lede" style="margin-top:24px;" id="bubble-line"></p>
 </section>
 
-<section>
+<section id="ranks">
   <div class="sechead"><div class="n">06</div><h2>The field, ranked</h2></div>
   <p class="lede">Sorted by how far each side went, then by group record. Runs per over for
      and against are computed across all matches, with an all-out innings charged the full
@@ -307,7 +333,7 @@
   </div>
 </section>
 
-<section>
+<section id="phases">
   <div class="sechead"><div class="n">07</div><h2>Phase by phase: where matches are won</h2></div>
   <p class="lede" id="phase-lede"></p>
 
@@ -342,15 +368,32 @@
       </tr></thead><tbody id="milestones"></tbody></table>
     </div>
   </div>
+
+  <div class="chart" style="margin-top:18px;" id="bowltype" hidden>
+    <h3>Pace or spin?</h3>
+    <div class="note" id="bt-note"></div>
+    <div class="scroll">
+      <table><thead><tr>
+        <th>Bowling</th><th class="n">Overs seen</th><th class="n">Runs / over</th><th class="n">Wkts / over</th>
+      </tr></thead><tbody id="bt-table"></tbody></table>
+    </div>
+    <p class="lede" style="margin:16px 0 0;font-size:15px;" id="bt-read"></p>
+  </div>
 </section>
 
-<section>
-  <div class="sechead"><div class="n">08</div><h2>Scout your opponent</h2></div>
-  <p class="lede">Pick the side you are about to play. This shows when they score their runs
-     and when they concede them &mdash; so you know which phase to attack and which to survive.</p>
+<section id="plan">
+  <div class="sechead"><div class="n">08</div><h2>Match plan: scout your opponent</h2></div>
+  <p class="lede">Pick the side you are about to play, then say whether you are batting or
+     bowling first. The page turns their phase profile and the league's winning patterns into
+     targets and checkpoints you can call from the boundary.</p>
   <div class="picker">
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
+    <div class="seg" id="scenario" role="group" aria-label="Innings scenario">
+      <button type="button" data-s="bat" aria-pressed="false">We bat first</button>
+      <button type="button" data-s="bowl" aria-pressed="false">We bowl first</button>
+    </div>
+    <div id="planbox" hidden></div>
     <div class="tprofile" id="oppprofile" hidden>
       <div id="oppcards"></div>
       <ul class="reads" id="oppreads"></ul>
@@ -370,13 +413,13 @@
   <div class="caveat" style="margin-top:18px;" id="wx-verdict"></div>
 </section>
 
-<section>
+<section id="playbook">
   <div class="sechead"><div class="n">10</div><h2>The playbook</h2></div>
   <p class="lede">Ten decisions this data supports, in the order they matter.</p>
   <div class="play" id="play"></div>
 </section>
 
-<section>
+<section id="squad">
   <div class="sechead"><div class="n">11</div><h2>Our squad</h2></div>
   <p class="lede" id="squad-lede"></p>
   <div class="tgrid" id="squadgrid"></div>
@@ -618,16 +661,155 @@ if (PH) {
     return `<tr><td class="team">${lab}</td><td class="n">${r}</td><td class="n">${m}</td>
       <td class="n pos">+${d}</td></tr>`;
   }).join('');
+
+  /* pace vs spin */
+  const BT = PH.bowlTypes;
+  if (BT && BT.pace) {
+    $('bowltype').hidden = false;
+    const share = Math.round(BT.pace.n / (BT.pace.n + (BT.spin ? BT.spin.n : 0)) * 100);
+    $('bt-note').textContent =
+      `Bowler type was legible for ${BT.typedOvers} of ${BT.totalOvers} overs in the sample — ` +
+      `enough to characterise the league, not enough to grade spin. Read the sample sizes.`;
+    const rows = [
+      [`Pace / medium — powerplay`, BT.pacePhases.pp],
+      [`Pace / medium — middle`, BT.pacePhases.mid],
+      [`Pace / medium — death`, BT.pacePhases.death],
+      [`Pace / medium — overall`, BT.pace],
+      [`Spin — overall`, BT.spin],
+    ];
+    $('bt-table').innerHTML = rows.map(([lab, s]) => s ? `<tr>
+        <td class="team">${lab}</td><td class="n">${s.n}</td>
+        <td class="n">${s.econ.toFixed(2)}</td><td class="n">${s.wpo.toFixed(2)}</td></tr>` : '').join('');
+    $('bt-read').innerHTML =
+      `Two things worth acting on. First, this league is <b>${share}% medium and fast bowling</b> — ` +
+      `almost nobody bowls spin, which means almost nobody practises against it. If we carry genuine ` +
+      `spinners, they are a look opponents have barely seen; the ${BT.spin ? BT.spin.n : 0}-over spin ` +
+      `sample is far too small to measure their economy here, so treat that as an edge to test, not a ` +
+      `proven one. Second, pace gets steadily more expensive as the innings ages — ` +
+      `<b>${BT.pacePhases.pp.econ.toFixed(2)}</b> an over in the powerplay, ` +
+      `<b>${BT.pacePhases.mid.econ.toFixed(2)}</b> in the middle, ` +
+      `<b>${BT.pacePhases.death.econ.toFixed(2)}</b> at the death. Whoever closes the innings needs to ` +
+      `be our most reliable bowler, not whoever has overs left.`;
+  }
 }
 
-/* 08 — opponent scouting */
+/* 08 — match plan + opponent scouting */
 if (PH && PH.teams) {
   const osel = $('oppsel');
   Object.keys(PH.teams).sort((a,b)=>a.localeCompare(b)).forEach(name => {
     const o = document.createElement('option');
     o.value = name; o.textContent = name; osel.appendChild(o);
   });
+
+  let SCEN = null;
+  const segBtns = [...document.querySelectorAll('#scenario button')];
+  segBtns.forEach(b => b.addEventListener('click', () => {
+    SCEN = SCEN === b.dataset.s ? null : b.dataset.s;
+    segBtns.forEach(x => {
+      x.classList.toggle('on', x.dataset.s === SCEN);
+      x.setAttribute('aria-pressed', String(x.dataset.s === SCEN));
+    });
+    renderPlan();
+  }));
+
+  const phName = k => PHNAME[k].toLowerCase();
+  const PHASES = ['pp','mid','death'];
+
+  function renderPlan(){
+    const box = $('planbox');
+    if (!SCEN) { box.hidden = true; box.innerHTML = ''; return; }
+    const oppName = osel.value;
+    const t = oppName ? PH.teams[oppName] : null;
+    const bat = t && t.bat, bowl = t && t.bowl;
+    const par = PH.all;
+    const R = PH.milestone.reached, M = PH.milestone.missed;
+    const c5 = Math.round(R.pp), c10 = Math.round(R.pp + R.mid);
+    const m5 = Math.round(M.pp), m10 = Math.round(M.pp + M.mid);
+    const hiPct = Math.round(L.hi120.w / L.hi120.n * 100);
+    const chaseWinUnder = Math.round((L.lo120.n - L.lo120.w) / L.lo120.n * 100);
+    const who = oppName ? esc(oppName) : 'your opponent';
+    const notes = [];
+    let head, targets;
+
+    if (SCEN === 'bat') {
+      head = 'We bat first — post it, then close the door';
+      targets = [
+        ['130', 'the target to set'],
+        [c5, 'ours by over 5'],
+        [c10, 'ours by over 10'],
+        ['4 down', 'max at over 10'],
+      ];
+      notes.push(`Innings that reached the 120 line were on <b>${c5}</b> at five and <b>${c10}</b> at ten; ` +
+        `those that fell short were on ${m5} and ${m10}. Call these at each break — behind at ten means ` +
+        `changing gear <i>now</i>, not at thirteen.`);
+      if (bowl) {
+        const leak = PHASES.reduce((a,b)=> bowl[b] > bowl[a] ? b : a);
+        const tight = PHASES.reduce((a,b)=> bowl[b] < bowl[a] ? b : a);
+        notes.push(`${who} concede most in the <b>${phName(leak)}</b> (${bowl[leak]} against a league par ` +
+          `of ${par[leak]}) — that is where the checkpoint gets banked. They are tightest in the ` +
+          `<b>${phName(tight)}</b> (${bowl[tight]}): keep wickets there rather than forcing it.`);
+      } else if (oppName) {
+        notes.push(`No bowling innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
+      }
+      notes.push(`Winning innings add <b>${PH.won.death}</b> in the last five overs — and 120-track innings ` +
+        `add ${R.death}. That only happens with batters in hand: overs 11–15 are the whole reason to be ` +
+        `four down, not six, at ten.`);
+      if (bat) {
+        const d = Math.round(bat.death - par.death);
+        notes.push(d > 3
+          ? `Defending it: they score <b>${bat.death}</b> at the death, ${d} above par. Do not let the chase ` +
+            `reach over 11 alive — attack for wickets in their middle overs rather than containing.`
+          : d < -3
+            ? `Defending it: their death scoring is <b>${bat.death}</b>, ${-d} below par. If their chase is ` +
+              `behind at ten it is effectively over — hold your lines and give nothing soft.`
+            : `Defending it: their death scoring (${bat.death}) is about league par. The ${c5}/${c10} ` +
+              `checkpoints work in reverse — keep their chase behind them at each break.`);
+      }
+    } else {
+      head = 'We bowl first — keep them under 120, then chase calm';
+      targets = [
+        ['120', 'keep them under it'],
+        [c5, 'their cap at over 5'],
+        [c10, 'their cap at over 10'],
+        ['5 wkts', 'taken by over 10'],
+      ];
+      notes.push(`This number is the match: totals of 120+ were defended <b>${hiPct}%</b> of the time, but ` +
+        `keep them under 120 and the chase wins <b>${chaseWinUnder}%</b>. Everything below serves that line.`);
+      notes.push(`Winning sides reach over eleven three or four down; losing sides about five. The separation ` +
+        `is <b>middle-overs wickets</b> (winners lose ${PH.won.midw} in overs 6–10, losers ${PH.lost.midw}) — ` +
+        `a strike bowler in the middle does more than dot balls in the powerplay.`);
+      if (PH.bowlTypes && PH.bowlTypes.pace) {
+        notes.push(`This league is almost all medium and fast bowling — spin is a look few sides here have ` +
+          `practised against. If we bowl our spinners, the middle overs are the natural slot: it is where ` +
+          `wickets decide innings, and where a change of pace bites hardest. (Spin's own economy here is ` +
+          `unmeasured — ${PH.bowlTypes.spin ? PH.bowlTypes.spin.n : 0} sampled overs — so treat this as an ` +
+          `edge to test, not a rule.)`);
+      }
+      if (bat) {
+        const strong = PHASES.reduce((a,b)=> bat[b] > bat[a] ? b : a);
+        const weak = PHASES.reduce((a,b)=> bat[b] < bat[a] ? b : a);
+        notes.push(`${who} score most in the <b>${phName(strong)}</b> (${bat[strong]} against a par of ` +
+          `${par[strong]}) — save your best two bowlers for it. Their thinnest phase is the ` +
+          `<b>${phName(weak)}</b> (${bat[weak]}): attack there for the wickets that knock them off the 120 track.`);
+      } else if (oppName) {
+        notes.push(`No batting innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
+      }
+      notes.push(`Then the chase. Chases in this league stall in the middle: <b>${PH.bat2.mid}</b> in ` +
+        `overs 6–10 against ${PH.bat1.mid} for sides batting first — the biggest deficit anywhere. Name who ` +
+        `attacks overs 6–10 before the innings starts; the ${c5}/${c10} checkpoints apply to your chase too.`);
+    }
+
+    box.hidden = false;
+    box.innerHTML = `<div class="plan"><h4>${head}</h4>` +
+      `<div class="tgrid">` + targets.map(([k, v]) =>
+        `<div><div class="k" style="font-size:22px">${k}</div><div class="t">${v}</div></div>`).join('') +
+      `</div><ul class="reads">` + notes.map(n => `<li>${n}</li>`).join('') + `</ul>` +
+      (oppName ? '' : `<div class="hint">Pick an opponent above to sharpen this with their phase profile.</div>`) +
+      `</div>`;
+  }
+
   osel.addEventListener('change', () => {
+    renderPlan();
     const t = PH.teams[osel.value];
     if (!t) { $('oppprofile').hidden = true; return; }
     $('oppprofile').hidden = false;
@@ -814,9 +996,10 @@ $('method').innerHTML =
   `archive, averaged across daytime hours for the Durham Region. Match start times are not in our ` +
   `data, so this is a day-level reading, not a per-match one.</p>` +
   `<p><b>What this page cannot tell you.</b> There are no individual batting or bowling figures ` +
-  `here, no toss records, and no pitch reports. Bowler type was legible for only about a quarter ` +
-  `of overs in the sample, so there is no pace-versus-spin recommendation — inventing one from that ` +
-  `coverage would be guessing. Nothing here says which players to pick; it says how the league is ` +
+  `here, no toss records, and no pitch reports. Bowler type was legible for about a quarter of ` +
+  `overs: enough to show the league is almost entirely pace and to price pace by phase, but the ` +
+  `spin sample is a handful of overs — so the pace-or-spin section characterises the league and ` +
+  `stops short of grading spin. Nothing here says which players to pick; it says how the league is ` +
   `won and where each opponent is soft. Squad selection is still your call.</p>`;
 
 $('foot').innerHTML =
