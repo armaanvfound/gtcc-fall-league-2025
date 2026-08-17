@@ -212,6 +212,29 @@
   }
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
+  /* playbook — phase-by-phase operating plan */
+  .pplan{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin-bottom:14px;
+         background:var(--surface);}
+  .pplan-h{display:flex;align-items:baseline;gap:12px;padding:12px 18px;background:var(--surface-2);
+           border-bottom:1px solid var(--rule);flex-wrap:wrap;}
+  .pplan-h .pp-t{font-family:var(--serif);font-size:20px;line-height:1;}
+  .pplan-h .pp-o{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+                 color:var(--muted);}
+  .pplan-h .pp-n{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto;}
+  .pplan-b{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);}
+  .pp-side{background:var(--surface);padding:16px 18px;}
+  .pp-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          margin-bottom:8px;}
+  .pp-bat .pp-lab{color:var(--bat);} .pp-ball .pp-lab{color:var(--chase);}
+  .pp-tgt{font-family:var(--serif);font-size:24px;line-height:1.1;margin-bottom:9px;
+          font-variant-numeric:tabular-nums;}
+  .pp-bat .pp-tgt{color:var(--bat);} .pp-ball .pp-tgt{color:var(--chase);}
+  .pp-ev{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0 0 9px;}
+  .pp-rule{font-size:14px;line-height:1.55;color:var(--ink);margin:0;padding-left:12px;
+           border-left:2px solid var(--rule);}
+  .subh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+        color:var(--muted);margin:30px 0 12px;}
+  @media (max-width:640px){ .pplan-b{grid-template-columns:1fr;} }
   /* playbook */
   .play{counter-reset:pb;display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
   .play article{background:var(--surface);padding:22px 24px;counter-increment:pb;}
@@ -455,7 +478,11 @@
 
 <section id="playbook">
   <div class="sechead"><div class="n">10</div><h2>The playbook</h2></div>
-  <p class="lede">Ten decisions this data supports, in the order they matter.</p>
+  <p class="lede">Section 08 is who we are playing. This is how <i>we</i> play, whoever it is:
+     what winning sides in this league actually do in each phase, with bat and with ball, and
+     the number to call from the boundary at every break.</p>
+  <div id="phaseplay"></div>
+  <h3 class="subh">Match-level calls</h3>
   <div class="play" id="play"></div>
 </section>
 
@@ -1008,7 +1035,68 @@ if (PH && PH.weather && PH.weather.length) {
     `On a wet day, revise the target down and prioritise batting out the overs over big shots.</p>`;
 }
 
-/* 10 — playbook */
+/* 10 — playbook: phase-by-phase operating plan, then match-level calls */
+if (PH) {
+  const W = PH.won, LS = PH.lost, R = PH.milestone.reached, MS = PH.milestone.missed;
+  const r = x => Math.round(x);
+  const cum = (s, p) => p==='pp' ? r(s.pp) : p==='mid' ? r(s.pp+s.mid) : r(s.pp+s.mid+s.death);
+
+  // For each phase: what winners do with the bat, and what they allow with the ball.
+  // Winners concede what losing sides scored, so LS[p] doubles as our bowling target.
+  const PP_PLAN = [
+    { key:'pp', title:'Powerplay', ov:'overs 1–5',
+      bat:{ tgt:`${r(W.pp)} for ${W.ppw.toFixed(1)}`,
+        ev:`Winning innings reach <b>${r(W.pp)}</b> at five for ${W.ppw.toFixed(1)} down; losing innings ` +
+           `${r(LS.pp)} for ${LS.ppw.toFixed(1)}. Innings that went on to 120+ were on <b>${r(R.pp)}</b>.`,
+        rule:`An intact start beats a fast one — ${r(W.pp)} for 2 is worth more than ${r(R.pp)+5} for 4. ` +
+             `Take the boundary balls, refuse the risk ones.` },
+      ball:{ tgt:`under ${r(LS.pp)}, 2 down`,
+        ev:`Sides that lost were held to <b>${r(LS.pp)}</b> in the first five and were ` +
+           `<b>${LS.ppw.toFixed(1)}</b> down; winners conceded that while taking them.`,
+        rule:`Two wickets in the powerplay is the marker. Attacking fields early: this league's chases ` +
+             `rarely recover from 2 down inside six.` } },
+    { key:'mid', title:'Middle', ov:'overs 6–10',
+      bat:{ tgt:`${cum(W,'mid')} at ten, max 4 down`,
+        ev:`Winners add <b>${r(W.mid)}</b> here to reach <b>${cum(W,'mid')}</b> at ten; the 120-track ` +
+           `innings are on <b>${cum(R,'mid')}</b>. Chasing sides manage only ${PH.bat2.mid} in this ` +
+           `window against ${PH.bat1.mid} batting first — the biggest deficit anywhere in a chase.`,
+        rule:`This is the phase teams drift. Name who attacks overs 6–10 <i>before</i> the innings starts, ` +
+             `and call the score at ten out loud — behind means changing gear now, not at thirteen.` },
+      ball:{ tgt:`${LS.midw.toFixed(1)} wickets`,
+        ev:`The separator is wickets, not runs: losing sides lost <b>${LS.midw.toFixed(1)}</b> in overs ` +
+           `6–10 against ${W.midw.toFixed(1)} for winners. Winners conceded ${r(LS.mid)} here.`,
+        rule:`Hold a strike bowler back for this window rather than spending him in the powerplay. ` +
+             `Three middle-over wickets is what knocks a side off the 120 track.` } },
+    { key:'death', title:'Death', ov:'overs 11–15',
+      bat:{ tgt:`${r(W.death)} in the last five`,
+        ev:`Winners score <b>${r(W.death)}</b> at the death against <b>${r(LS.death)}</b> for losers — ` +
+           `a <b>${PH.gaps.death}-run gap</b>, wider than the powerplay (${PH.gaps.pp}) or middle ` +
+           `(${PH.gaps.mid}). The 120-track innings add ${r(R.death)}.`,
+        rule:`You cannot access this phase without batters in. Arriving at over 11 four down rather than ` +
+             `six is worth more than any powerplay cameo — this is the whole reason for the plan above.` },
+      ball:{ tgt:`hold them to ${r(LS.death)}`,
+        ev:`Losing sides managed <b>${r(LS.death)}</b> in the last five. Every run saved here is worth ` +
+           `double: it is the phase with the widest winner–loser gap in the league.`,
+        rule:`Yorkers and pace off, protect the rope. If their chase reaches over 11 with wickets, you are ` +
+             `defending the hardest phase in cricket — take the wickets earlier.` } },
+  ];
+
+  $('phaseplay').innerHTML = PP_PLAN.map(function(p){
+    const n = PH.all[p.key+'n'];
+    return `<div class="pplan">
+      <div class="pplan-h"><span class="pp-t">${p.title}</span><span class="pp-o">${p.ov}</span>
+        <span class="pp-n">${n} innings</span></div>
+      <div class="pplan-b">
+        <div class="pp-side pp-bat"><div class="pp-lab">With the bat</div>
+          <div class="pp-tgt">${p.bat.tgt}</div>
+          <p class="pp-ev">${p.bat.ev}</p><p class="pp-rule">${p.bat.rule}</p></div>
+        <div class="pp-side pp-ball"><div class="pp-lab">With the ball</div>
+          <div class="pp-tgt">${p.ball.tgt}</div>
+          <p class="pp-ev">${p.ball.ev}</p><p class="pp-rule">${p.ball.rule}</p></div>
+      </div></div>`;
+  }).join('');
+}
+
 const V0 = L.venues[0];
 const PLAY = [
   ['Win the toss, bat.',
@@ -1050,26 +1138,15 @@ const PLAY = [
    `limit exactly when the matches matter most.`,
    `5 knockout rounds across 6 days`],
 ];
-if (PH) {
+if (PH && PH.bowlTypes && PH.bowlTypes.spin) {
   PLAY.push(
-    ['Hold wickets for the death — that is where the match is decided.',
-     `Winning innings scored ${PH.won.death} in overs 11–15 against ${PH.lost.death} for losing sides — ` +
-     `a ${PH.gaps.death}-run gap, wider than the powerplay (${PH.gaps.pp}) or middle (${PH.gaps.mid}). ` +
-     `You cannot access that phase without batters in. Getting to over 11 with wickets standing is ` +
-     `worth more than any powerplay cameo.`,
-     `death-overs gap: ${PH.gaps.death} runs · ${PH.sample.innings} innings`],
-    ['Know your checkpoints: 43 at five, 96 at ten.',
-     `Innings that reached 120+ were on ${PH.milestone.reached.pp} after five overs and ` +
-     `${Math.round((PH.milestone.reached.pp+PH.milestone.reached.mid)*10)/10} after ten. Sides that fell short were on ` +
-     `${PH.milestone.missed.pp} and ${Math.round((PH.milestone.missed.pp+PH.milestone.missed.mid)*10)/10}. ` +
-     `Call these out on the field — if you are behind at ten overs, the gap is already ` +
-     `${Math.round((PH.milestone.reached.pp+PH.milestone.reached.mid-PH.milestone.missed.pp-PH.milestone.missed.mid)*10)/10} runs and closing it needs a plan, not hope.`,
-     `from ${PH.milestone.reached.n} innings that reached 120 vs ${PH.milestone.missed.n} that did not`],
-    ['Chasing? The middle overs are where chases die.',
-     `Chasing sides scored ${PH.bat2.mid} in overs 6–10 against ${PH.bat1.mid} for sides batting first — ` +
-     `the largest phase deficit in the chase. Teams get through the powerplay fine and then stall. ` +
-     `If you are chasing, plan a specific middle-overs scoring plan rather than "keep wickets and see".`,
-     `chasing middle: ${PH.bat2.mid} · batting first: ${PH.bat1.mid}`],
+    ['Bowl the spinners in the middle — it is the look this league has not faced.',
+     `This competition is almost entirely medium and fast: only ${PH.bowlTypes.spin.n} of the ` +
+     `${PH.bowlTypes.pace.n + PH.bowlTypes.spin.n} sampled overs with a known bowler type were spin. ` +
+     `Sides here have barely practised against it, and the middle overs are where wickets decide ` +
+     `innings — the natural slot for a change of pace. Spin's own economy in this sample is too thin ` +
+     `to prove anything, so treat this as an edge to test, not a rule.`,
+     `spin: ${PH.bowlTypes.spin.n} sampled overs vs ${PH.bowlTypes.pace.n} pace`],
   );
 }
 $('play').innerHTML = PLAY.map(([h, p, ev]) =>
