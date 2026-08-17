@@ -1,0 +1,592 @@
+<title>GTCC Fall League 2025 — What the Data Says</title>
+<style>
+  :root{
+    --paper:#F2F0E9; --surface:#FCFBF7; --surface-2:#F7F5EE;
+    --ink:#1B1E1A; --ink-2:#4A4E45; --muted:#74786C; --rule:#DCD7CA; --rule-2:#E9E5DA;
+    --bat:#B03A2B; --chase:#0E6E9C; --gold:#8A6D1F; --gold-bg:#F0E7CC;
+    --good:#2F6B3A; --bad:#9B2C1F;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:1000px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#131614; --surface:#1B1F1C; --surface-2:#212623;
+      --ink:#E9E7DF; --ink-2:#C3C0B5; --muted:#8E9288; --rule:#2E3430; --rule-2:#262B27;
+      --bat:#DA6A57; --chase:#3E9CC4; --gold:#C9A961; --gold-bg:#2C2617;
+      --good:#79B489; --bad:#E08472;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131614; --surface:#1B1F1C; --surface-2:#212623;
+    --ink:#E9E7DF; --ink-2:#C3C0B5; --muted:#8E9288; --rule:#2E3430; --rule-2:#262B27;
+    --bat:#DA6A57; --chase:#3E9CC4; --gold:#C9A961; --gold-bg:#2C2617;
+    --good:#79B489; --bad:#E08472;
+  }
+  :root[data-theme="light"]{
+    --paper:#F2F0E9; --surface:#FCFBF7; --surface-2:#F7F5EE;
+    --ink:#1B1E1A; --ink-2:#4A4E45; --muted:#74786C; --rule:#DCD7CA; --rule-2:#E9E5DA;
+    --bat:#B03A2B; --chase:#0E6E9C; --gold:#8A6D1F; --gold-bg:#F0E7CC;
+    --good:#2F6B3A; --bad:#9B2C1F;
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px 96px;}
+  .prose{max-width:66ch;}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0;line-height:1.15;}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+  a{color:var(--chase);}
+  :focus-visible{outline:2px solid var(--chase);outline-offset:2px;border-radius:2px;}
+
+  /* masthead */
+  header{border-bottom:3px double var(--rule);margin-bottom:40px;padding:48px 0 24px;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+           color:var(--muted);margin-bottom:14px;}
+  h1{font-size:clamp(32px,5.2vw,52px);letter-spacing:-.015em;}
+  .standfirst{font-family:var(--serif);font-size:clamp(17px,2.2vw,21px);color:var(--ink-2);
+              margin-top:16px;max-width:60ch;line-height:1.45;}
+  .prov{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:22px;line-height:1.7;}
+
+  section{margin-top:60px;}
+  .sechead{display:flex;align-items:baseline;gap:14px;border-top:1px solid var(--rule);
+           padding-top:14px;margin-bottom:22px;}
+  .sechead .n{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;
+              padding-top:6px;white-space:nowrap;}
+  .sechead h2{font-size:clamp(22px,3vw,30px);}
+  .lede{font-size:17px;color:var(--ink-2);margin:0 0 26px;max-width:66ch;}
+  p{margin:0 0 16px;}
+
+  /* hero verdict */
+  .verdict{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+           padding:30px 28px;display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .verdict .cell{display:flex;flex-direction:column;gap:6px;}
+  .verdict .cell + .cell{border-left:1px solid var(--rule);padding-left:28px;}
+  .big{font-family:var(--serif);font-size:clamp(44px,8vw,68px);line-height:1;letter-spacing:-.02em;
+       font-variant-numeric:tabular-nums;}
+  .big.hi{color:var(--bat);} .big.lo{color:var(--muted);}
+  .cap{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .sub{font-size:14.5px;color:var(--ink-2);}
+  @media (max-width:640px){
+    .verdict{grid-template-columns:1fr;}
+    .verdict .cell + .cell{border-left:0;padding-left:0;border-top:1px solid var(--rule);padding-top:24px;}
+  }
+
+  /* bar chart */
+  .chart{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:24px 26px 20px;}
+  .chart h3{font-size:16px;margin-bottom:4px;}
+  .chart .note{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .bandrow{display:grid;grid-template-columns:88px 1fr 78px;align-items:center;gap:14px;margin-bottom:9px;}
+  .bandrow .lab{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-align:right;}
+  .track{position:relative;height:26px;background:var(--surface-2);border-radius:3px;overflow:hidden;}
+  .bar{height:100%;border-radius:0 4px 4px 0;background:var(--bat);transition:filter .15s;}
+  .bar.dim{background:var(--muted);opacity:.55;}
+  .bandrow:hover .bar{filter:brightness(1.08);}
+  .bandrow .val{font-family:var(--mono);font-size:13px;color:var(--ink);}
+  .bandrow .val small{color:var(--muted);}
+  .cliff{border-top:1px dashed var(--bat);margin:12px 0;position:relative;}
+  .cliff span{position:absolute;top:-9px;left:102px;background:var(--surface);padding:0 8px;
+              font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--bat);text-transform:uppercase;}
+
+  /* split bar */
+  .split{display:flex;gap:2px;height:44px;margin:8px 0 12px;}
+  .split div{display:flex;align-items:center;justify-content:center;color:#fff;
+             font-family:var(--mono);font-size:13px;border-radius:3px;}
+  .sp-bat{background:var(--bat);} .sp-chase{background:var(--chase);}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:14px;}
+  .legend i{width:11px;height:11px;border-radius:2px;display:inline-block;margin-right:7px;vertical-align:baseline;}
+
+  /* stat pair */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .stat{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:20px 22px;}
+  .stat .k{font-family:var(--serif);font-size:34px;line-height:1;font-variant-numeric:tabular-nums;}
+  .stat .t{font-size:14px;color:var(--ink-2);margin-top:8px;}
+  @media (max-width:640px){.pair{grid-template-columns:1fr;}}
+
+  /* tables */
+  .scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--rule-2);white-space:nowrap;}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+     color:var(--muted);font-weight:400;background:var(--surface-2);position:sticky;top:0;}
+  td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:var(--surface-2);}
+  .team{font-weight:600;}
+  .pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+        padding:2px 7px;border-radius:10px;border:1px solid currentColor;}
+  .p-champ{color:var(--gold);background:var(--gold-bg);}
+  .p-thru{color:var(--good);} .p-out{color:var(--muted);}
+  .pos{color:var(--good);} .neg{color:var(--bad);}
+
+  /* groups */
+  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
+  .grp{background:var(--surface);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .grp h3{font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
+          padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--rule);color:var(--ink-2);}
+  .grp table{font-size:12.5px;width:100%;}
+  .grp td,.grp th{padding:6px 10px;}
+  .grp td.team{white-space:normal;line-height:1.35;}
+  .grp .pill{font-size:9px;padding:2px 5px;}
+  .grp tr.thru td:first-child{box-shadow:inset 3px 0 0 var(--good);}
+  .grp tr.miss td:first-child{box-shadow:inset 3px 0 0 var(--bat);}
+
+  /* team picker */
+  .picker{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:22px 24px;}
+  .picker label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--muted);display:block;margin-bottom:9px;}
+  select{font-family:var(--sans);font-size:15px;padding:9px 12px;border:1px solid var(--rule);
+         border-radius:3px;background:var(--surface-2);color:var(--ink);width:100%;max-width:420px;}
+  .tprofile{margin-top:24px;}
+  .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;
+         background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .tgrid div{background:var(--surface);padding:14px 16px;}
+  .tgrid .k{font-family:var(--serif);font-size:23px;line-height:1.1;font-variant-numeric:tabular-nums;}
+  .tgrid .t{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+            color:var(--muted);margin-top:5px;}
+  .reads{margin-top:20px;padding-left:0;list-style:none;}
+  .reads li{padding:11px 0 11px 26px;border-bottom:1px solid var(--rule-2);position:relative;font-size:15px;}
+  .reads li:before{content:"▸";position:absolute;left:6px;color:var(--bat);}
+  .reads li:last-child{border-bottom:0;}
+  .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
+
+  /* playbook */
+  .play{counter-reset:pb;display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .play article{background:var(--surface);padding:22px 24px;counter-increment:pb;}
+  .play h3{font-size:18px;margin-bottom:8px;display:flex;gap:12px;align-items:baseline;}
+  .play h3:before{content:counter(pb,decimal-leading-zero);font-family:var(--mono);font-size:12px;
+                  color:var(--bat);letter-spacing:.05em;}
+  .play p{font-size:15px;color:var(--ink-2);margin:0;max-width:70ch;}
+  .play .ev{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;display:block;}
+
+  .caveat{background:var(--surface-2);border:1px solid var(--rule);border-left:3px solid var(--gold);
+          border-radius:3px;padding:20px 24px;font-size:14.5px;color:var(--ink-2);}
+  .caveat b{color:var(--ink);}
+  footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);
+         font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.8;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+  /* phones */
+  @media (max-width:520px){
+    body{font-size:15.5px;}
+    .wrap{padding:0 15px 72px;}
+    header{padding:32px 0 20px;}
+    .bandrow{grid-template-columns:64px 1fr 62px;gap:9px;}
+    .bandrow .lab{font-size:11px;}
+    .bandrow .val{font-size:12px;}
+    .cliff span{left:74px;font-size:9.5px;}
+    .verdict{padding:24px 20px;}
+    .chart{padding:20px 16px 16px;}
+    .picker,.stat,.play article{padding:18px 16px;}
+    .groups{grid-template-columns:1fr;}
+    .tgrid{grid-template-columns:repeat(2,1fr);}
+    .prov{font-size:10.5px;}
+    .scroll{-webkit-overflow-scrolling:touch;}
+  }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Amiirtham · GTCC Fall League 2025 · Post-season analysis</div>
+  <h1>How this league is actually won</h1>
+  <p class="standfirst" id="standfirst"></p>
+  <div class="prov" id="prov"></div>
+</header>
+
+<section>
+  <div class="sechead"><div class="n">01</div><h2>The win line is 120</h2></div>
+  <p class="lede">First-innings totals do not produce a gentle gradient of win probability.
+     They produce a cliff, and it sits between 119 and 120.</p>
+
+  <div class="verdict">
+    <div class="cell">
+      <div class="cap">Posted 120 or more batting first</div>
+      <div class="big hi" id="v-hi"></div>
+      <div class="sub" id="v-hi-sub"></div>
+    </div>
+    <div class="cell">
+      <div class="cap">Posted under 120 batting first</div>
+      <div class="big lo" id="v-lo"></div>
+      <div class="sub" id="v-lo-sub"></div>
+    </div>
+  </div>
+
+  <div class="chart" style="margin-top:18px;">
+    <h3>Win rate when batting first, by first-innings total</h3>
+    <div class="note" id="band-note"></div>
+    <div id="bands"></div>
+    <div class="legend">
+      <span><i style="background:var(--bat)"></i>Matches won by the side batting first</span>
+      <span><i style="background:var(--muted);opacity:.55"></i>Below the win line</span>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:26px;" id="avg-line"></p>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">02</div><h2>Bat first</h2></div>
+  <p class="lede">If you win the toss, bat. The edge is real, it is consistent across the two
+     grounds that host most of the cricket, and it grows in knockout matches.</p>
+  <div class="chart">
+    <h3>Who wins, across all decided matches</h3>
+    <div class="note" id="split-note"></div>
+    <div class="split" id="split"></div>
+    <div class="legend">
+      <span><i style="background:var(--bat)"></i>Batting first</span>
+      <span><i style="background:var(--chase)"></i>Chasing</span>
+    </div>
+  </div>
+  <div class="scroll" style="margin-top:18px;">
+    <table><thead><tr>
+      <th>Ground</th><th class="n">Matches</th><th class="n">Bat-first win rate</th><th class="n">Avg 1st innings</th>
+    </tr></thead><tbody id="venues"></tbody></table>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">03</div><h2>Wickets in hand are worth 35 runs</h2></div>
+  <p class="lede">Nearly a third of all innings in this league ended all out. Simply batting
+     out your 15 overs — regardless of how fast you score — is the single largest lever on
+     the scoreboard.</p>
+  <div class="pair">
+    <div class="stat">
+      <div class="k" id="s-out"></div>
+      <div class="t" id="s-out-t"></div>
+    </div>
+    <div class="stat">
+      <div class="k" id="s-ao"></div>
+      <div class="t" id="s-ao-t"></div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:22px;" id="ao-line"></p>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">04</div><h2>Your team</h2></div>
+  <p class="lede">Pick your side to see its record, its scoring rates, and the specific gap
+     between where it finished and the win line.</p>
+  <div class="picker">
+    <label for="teamsel">Select your team</label>
+    <select id="teamsel"><option value="">— choose —</option></select>
+    <div class="tprofile" id="tprofile" hidden>
+      <div class="tgrid" id="tgrid"></div>
+      <ul class="reads" id="treads"></ul>
+      <div class="scroll" style="margin-top:20px;">
+        <table><thead><tr>
+          <th>Date</th><th>Round</th><th>Opponent</th><th>Inns</th>
+          <th class="n">Their score</th><th class="n">Opp score</th><th>Result</th>
+        </tr></thead><tbody id="tlog"></tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">05</div><h2>Qualification is a group of six</h2></div>
+  <p class="lede">The 30 teams played five round-robin matches inside five groups of six.
+     The top three in each group went through — fifteen teams, exactly half the field.
+     Three wins from five put you on the bubble, and the bubble was broken by
+     head-to-head and net run rate.</p>
+  <div class="groups" id="groups"></div>
+  <p class="lede" style="margin-top:24px;" id="bubble-line"></p>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">06</div><h2>The field, ranked</h2></div>
+  <p class="lede">Sorted by how far each side went, then by group record. Runs per over for
+     and against are computed across all matches, with an all-out innings charged the full
+     quota — the same convention net run rate uses.</p>
+  <div class="scroll">
+    <table><thead><tr>
+      <th>#</th><th>Team</th><th class="n">Group</th><th class="n">Overall</th><th class="n">NRR</th>
+      <th class="n">RPO for</th><th class="n">RPO agst</th><th class="n">All out</th><th>Finish</th>
+    </tr></thead><tbody id="ranks"></tbody></table>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">07</div><h2>The playbook</h2></div>
+  <p class="lede">Seven decisions this data supports, in the order they matter.</p>
+  <div class="play" id="play"></div>
+</section>
+
+<section>
+  <div class="sechead"><div class="n">08</div><h2>Where these numbers come from</h2></div>
+  <div class="caveat" id="method"></div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+
+<div id="tip" style="position:fixed;pointer-events:none;opacity:0;transition:opacity .12s;
+     background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:11.5px;
+     padding:6px 9px;border-radius:3px;z-index:9;white-space:nowrap;"></div>
+
+<script>
+const DATA = /*__DATA__*/;
+const L = DATA.league, T = DATA.teams;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+/* provenance */
+const fmtDate = s => {
+  const [y, m, d] = s.split('-').map(Number);
+  return `${d} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]}`;
+};
+const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
+
+$('standfirst').textContent =
+  `Every ball bowled across ${L.matches} matches says the same thing: this is a bat-first ` +
+  `competition decided by one number on the scoreboard — and most teams finish just short of it.`;
+
+$('prov').innerHTML =
+  `${L.matches} matches · ${L.teams} teams · ${SPAN} · 15 overs a side<br>` +
+  `Scores transcribed from the CricHeroes match list and reconciled against the fixture ` +
+  `spreadsheet: all ${L.matches} agree on batting order, overs, margin and result.`;
+
+/* 01 — win line */
+const hi = L.hi120, lo = L.lo120;
+$('v-hi').textContent = Math.round(hi.w / hi.n * 100) + '%';
+$('v-hi-sub').textContent = `won ${hi.w} of ${hi.n} matches`;
+$('v-lo').textContent = Math.round(lo.w / lo.n * 100) + '%';
+$('v-lo-sub').textContent = `won ${lo.w} of ${lo.n} matches`;
+
+$('band-note').textContent =
+  `${L.scored15} completed 15-over matches. Bar length is the share defended; the number in ` +
+  `brackets is how many matches fell in that band.`;
+$('bands').innerHTML = L.bands.map(b => {
+  const cliff = b.label === '120–139'
+    ? `<div class="cliff"><span>the win line</span></div>` : '';
+  return cliff + `<div class="bandrow" data-tip="${b.won} of ${b.n} defended">
+      <div class="lab">${b.label}</div>
+      <div class="track"><div class="bar${b.pct < 50 ? ' dim' : ''}" style="width:${Math.max(b.pct,1.5)}%"></div></div>
+      <div class="val">${b.pct}% <small>(${b.n})</small></div>
+    </div>`;
+}).join('');
+
+$('avg-line').innerHTML =
+  `The average first innings in this league was <b>${L.avg1}</b> and the median <b>${L.med1}</b> — ` +
+  `both below the line. Only <b>${hi.n} of ${L.scored15}</b> first innings reached 120 at all. ` +
+  `The gap between an average total and a winning one is roughly <b>one partnership</b>.`;
+
+/* 02 — bat first */
+const bfp = L.batFirstPct, chp = 100 - bfp;
+$('split-note').textContent = `${L.batFirstW} of ${L.scored} decided matches were won by the side that batted first.`;
+$('split').innerHTML =
+  `<div class="sp-bat" style="flex:${bfp}" data-tip="${L.batFirstW} matches">${bfp}%</div>` +
+  `<div class="sp-chase" style="flex:${chp}" data-tip="${L.scored - L.batFirstW} matches">${chp}%</div>`;
+$('venues').innerHTML = L.venues.map(v => `<tr>
+    <td class="team">${esc(v.venue)}</td><td class="n">${v.n}</td>
+    <td class="n">${v.pct}%</td><td class="n">${v.avg1}</td></tr>`).join('');
+
+/* 03 — wickets in hand */
+const oq = L.outQuota, ao = L.allOut;
+$('s-out').innerHTML = `${oq.avg} <span style="font-size:16px;color:var(--muted)">avg</span>`;
+$('s-out-t').innerHTML = `when the side batting first <b>survived all 15 overs</b> — and it won ` +
+  `${oq.w} of ${oq.n} (${Math.round(oq.w/oq.n*100)}%)`;
+$('s-ao').innerHTML = `${ao.avg} <span style="font-size:16px;color:var(--muted)">avg</span>`;
+$('s-ao-t').innerHTML = `when it was <b>bowled out</b> — and it won ` +
+  `${ao.w} of ${ao.n} (${Math.round(ao.w/ao.n*100)}%)`;
+$('ao-line').innerHTML =
+  `${L.alloutPct}% of all innings ended all out. Batting out the quota was worth ` +
+  `<b>${oq.avg - ao.avg} runs</b> and roughly <b>doubled</b> the win rate. Note this is not a ` +
+  `case for blocking: the surviving sides scored <i>more</i>, not slower.`;
+
+/* 05 — groups */
+$('groups').innerHTML = L.groups.map(g => `<div class="grp"><h3>${g.name}</h3>
+  <table><tbody>${g.rows.map(r => `<tr class="${r.through ? 'thru' : 'miss'}">
+    <td class="team">${esc(r.team)}</td>
+    <td class="n">${r.W}–${r.L}</td>
+    <td class="n ${r.nrr >= 0 ? 'pos' : 'neg'}">${r.nrr >= 0 ? '+' : ''}${r.nrr.toFixed(2)}</td>
+    <td>${r.through ? '<span class="pill p-thru">through</span>' : ''}</td>
+  </tr>`).join('')}</tbody></table></div>`).join('');
+
+const bq = L.bubble.qualified, bm = L.bubble.missed, hn = L.h2hNote;
+const WORDS = ['no','one','two','three','four','five','six','seven','eight','nine','ten'];
+const nWord = n => WORDS[n] !== undefined ? WORDS[n] : n;
+const cap = s => String(s).charAt(0).toUpperCase() + String(s).slice(1);
+let bubbleTxt = `${cap(nWord(bq.length + bm.length))} teams finished 3–2 — ` +
+  `${nWord(bq.length)} went through and ${nWord(bm.length)} did not. ` +
+  `Net run rate separated most of them`;
+const missA = hn && bm.find(x => x.team === hn.a), thruB = hn && bq.find(x => x.team === hn.b);
+if (missA && thruB && missA.nrr > thruB.nrr) {
+  bubbleTxt += ` — but not all: <b>${esc(hn.a)}</b> missed out on a net run rate of ` +
+    `<b>${missA.nrr >= 0 ? '+' : ''}${missA.nrr.toFixed(2)}</b> while <b>${esc(hn.b)}</b> advanced on ` +
+    `<b>${thruB.nrr.toFixed(2)}</b>, because ${esc(hn.winner)} had won the head-to-head.`;
+} else {
+  bubbleTxt += `, with the head-to-head result breaking any two-way tie first.`;
+}
+$('bubble-line').innerHTML = bubbleTxt +
+  ` Beat your direct rivals, then run up the score on everyone else.`;
+
+/* 06 — ranks */
+$('ranks').innerHTML = T.map(t => {
+  const pill = t.finish === 'Champion' ? 'p-champ' : (t.ko ? 'p-thru' : 'p-out');
+  return `<tr>
+    <td class="n">${t.rank}</td>
+    <td class="team">${esc(t.team)}</td>
+    <td class="n">${t.lgW}–${t.lgL}</td>
+    <td class="n">${t.W}–${t.L}</td>
+    <td class="n ${t.nrr >= 0 ? 'pos' : 'neg'}">${t.nrr >= 0 ? '+' : ''}${t.nrr.toFixed(2)}</td>
+    <td class="n">${t.rf.toFixed(2)}</td>
+    <td class="n">${t.ra.toFixed(2)}</td>
+    <td class="n">${t.allout}/${t.inns}</td>
+    <td><span class="pill ${pill}">${esc(t.finish)}</span></td></tr>`;
+}).join('');
+
+/* 04 — team picker */
+const sel = $('teamsel');
+[...T].sort((a, b) => a.team.localeCompare(b.team)).forEach(t => {
+  const o = document.createElement('option');
+  o.value = t.team; o.textContent = t.team; sel.appendChild(o);
+});
+sel.addEventListener('change', () => {
+  const t = T.find(x => x.team === sel.value);
+  if (!t) { $('tprofile').hidden = true; return; }
+  $('tprofile').hidden = false;
+  const cells = [
+    [`${t.lgW}–${t.lgL}`, 'group record'],
+    [`${t.W}–${t.L}`, 'all matches'],
+    [`${t.nrr >= 0 ? '+' : ''}${t.nrr.toFixed(2)}`, 'net run rate'],
+    [t.rf.toFixed(2), 'runs / over for'],
+    [t.ra.toFixed(2), 'runs / over against'],
+    [t.avg1 == null ? '—' : t.avg1, 'avg batting first'],
+    [`${t.allout}/${t.inns}`, 'innings all out'],
+    [t.finish, 'finished'],
+  ];
+  $('tgrid').innerHTML = cells.map(([k, v]) =>
+    `<div><div class="k">${esc(k)}</div><div class="t">${esc(v)}</div></div>`).join('');
+
+  const reads = [];
+  if (t.avg1 == null) {
+    reads.push(`You never batted first in a 15-over match, so there is no first-innings average to read.`);
+  } else if (t.bat1 < 3) {
+    reads.push(`You batted first only <b>${t.bat1}</b> time${t.bat1 === 1 ? '' : 's'} ` +
+      `(averaging ${t.avg1}) — too few innings to draw a conclusion from. The league's win line is 120.`);
+  } else {
+    reads.push(t.avg1 >= 120
+      ? `Batting first you averaged <b>${t.avg1}</b> across ${t.bat1} innings — above the 120 win line, ` +
+        `and the main reason you were hard to beat.`
+      : `Batting first you averaged <b>${t.avg1}</b> across ${t.bat1} innings, ` +
+        `<b>${120 - t.avg1} runs short</b> of the line that wins 94% of matches.`);
+  }
+  const aoPct = t.inns ? t.allout / t.inns : 0;
+  reads.push(aoPct >= 0.35
+    ? `You were bowled out in <b>${t.allout} of ${t.inns}</b> innings — the league's biggest single leak.`
+    : `You were bowled out in <b>${t.allout} of ${t.inns}</b> innings (league average ${L.alloutPct}%).`);
+  if (t.bat1 && t.bat2) {
+    const b1 = Math.round(t.bat1W / t.bat1 * 100), b2 = Math.round(t.bat2W / t.bat2 * 100);
+    let verdict;
+    if (t.bat1 < 2 || t.bat2 < 2)
+      verdict = 'Too lopsided a sample to call either way — but the league as a whole favours batting first.';
+    else if (t.bat2 >= 3 && b2 - b1 >= 15)
+      verdict = 'You chase better than you defend, which is rare here — though it usually means the ' +
+                'batting-first totals were the real problem.';
+    else if (b1 >= b2)
+      verdict = 'Bat first: it is both the league trend and yours.';
+    else
+      verdict = 'Close enough between the two that the league trend should settle it: bat first.';
+    reads.push(`Batting first you won <b>${t.bat1W} of ${t.bat1}</b> (${b1}%); chasing, ` +
+      `<b>${t.bat2W} of ${t.bat2}</b> (${b2}%). ` + verdict);
+  }
+  reads.push(t.ra <= 6.6
+    ? `Conceding <b>${t.ra.toFixed(2)}</b> an over is a genuine strength — league-winning sides sat near this mark.`
+    : `You conceded <b>${t.ra.toFixed(2)}</b> an over. Over 15 overs that is roughly <b>${Math.round((t.ra - 6.6) * 15)} runs</b> more than the sides that went deep.`);
+  $('treads').innerHTML = reads.map(r => `<li>${r}</li>`).join('');
+
+  $('tlog').innerHTML = t.log.map(m => `<tr>
+      <td class="n">${m.date.slice(5)}</td>
+      <td>${esc(m.rnd)}</td>
+      <td class="team">${esc(m.opp)}</td>
+      <td>${m.first ? '1st' : '2nd'}</td>
+      <td class="n">${m.s == null ? '—' : m.s + '/' + m.w + ' (' + m.ov.toFixed(1) + ')'}</td>
+      <td class="n">${m.os == null ? '—' : m.os + '/' + m.ow + ' (' + m.oov.toFixed(1) + ')'}</td>
+      <td class="${m.won ? 'won' : 'lost'}">${m.won ? 'won' : 'lost'} by ${esc(m.margin)}</td>
+    </tr>`).join('');
+});
+
+/* 07 — playbook */
+const V0 = L.venues[0];
+const PLAY = [
+  ['Win the toss, bat.',
+   `Batting first won ${L.batFirstPct}% of all decided matches` +
+   (V0 ? ` and ${V0.pct}% at ${V0.venue}, where the largest share of the league is played` : '') +
+   `. There is no ground in this competition where chasing is the better bet.`,
+   `${L.batFirstW}/${L.scored} matches`],
+  ['Set the target at 130, not "as many as we can".',
+   `Sides posting 120+ won ${Math.round(hi.w/hi.n*100)}% of the time; under 120 they won ` +
+   `${Math.round(lo.w/lo.n*100)}%. Pick 130 so a mid-innings wobble still leaves you above the line, ` +
+   `and build the batting order around reaching it rather than around a fast start.`,
+   `120+: ${hi.w}/${hi.n} won · under 120: ${lo.w}/${lo.n}`],
+  ['Bat all fifteen overs. This is the whole game.',
+   `Sides that survived the quota averaged ${oq.avg} and won ${Math.round(oq.w/oq.n*100)}%. ` +
+   `Sides bowled out averaged ${ao.avg} and won ${Math.round(ao.w/ao.n*100)}%. The surviving teams ` +
+   `scored faster as well as longer — wickets buy tempo, they do not cost it.`,
+   `${L.alloutPct}% of all innings ended all out`],
+  ['Defend with containment, not just strike bowlers.',
+   `The four sides that reached the semi-finals all conceded under 7.2 an over. Across a 15-over ` +
+   `innings, half a run an over is eight runs — which is more than the margin in most close games ` +
+   `in this league.`,
+   `${L.closePct}% of matches finished within 10 runs or 2 wickets`],
+  ['Treat every group game as a net-run-rate game.',
+   `Ten teams finished 3–2 and only seven advanced. You cannot know in September which of your ` +
+   `matches will be the tiebreak, so close out the games you are winning: bat the full quota when ` +
+   `defending and finish chases early rather than coasting.`,
+   `${L.blowPct}% of matches were one-sided — the margin is there to be taken`],
+  ['Beat your direct rivals first.',
+   (missA && thruB && missA.nrr > thruB.nrr
+     ? `Head-to-head sat above net run rate in the tiebreak: ${esc(hn.a)} missed the knockouts with a ` +
+       `better net run rate than ${esc(hn.b)}, who advanced having won the meeting between them. `
+     : `A two-way tie for the last qualifying place is broken by the head-to-head result before net ` +
+       `run rate is even looked at. `) +
+   `Identify the two or three sides you are level with and prioritise those fixtures.`,
+   `decided the last qualifying place`],
+  ['Carry a squad of fourteen into October.',
+   `The knockout run was three match days in three days (3–5 Oct), then a semi-final and final on ` +
+   `consecutive days. Bowlers who carried a full workload through the group stage will be at their ` +
+   `limit exactly when the matches matter most.`,
+   `5 knockout rounds across 6 days`],
+];
+$('play').innerHTML = PLAY.map(([h, p, ev]) =>
+  `<article><h3>${h}</h3><p>${p}</p><span class="ev">${ev}</span></article>`).join('');
+
+/* 08 — method */
+$('method').innerHTML =
+  `<p><b>Source.</b> The fixture spreadsheet supplied the ${L.matches} fixtures, dates, grounds, ` +
+  `rounds and overs. It did not contain scores or winners, so those were read from the CricHeroes ` +
+  `match list and cross-checked against it.</p>` +
+  `<p><b>Verification.</b> All ${L.matches} matches agree between the two sources on batting order, ` +
+  `overs faced, margin, round and quota. Every run margin reconciles against the two totals and ` +
+  `every wicket margin against wickets lost, with no arithmetic exceptions.</p>` +
+  `<p><b>Conventions.</b> Net run rate charges an all-out innings the full quota, as the ` +
+  `competition regulations do. Two fixtures were awarded without a result being played ` +
+  `(Birthday Boys XI twice) and count in records but not in run rates. Two group matches were ` +
+  `played over 12 overs rather than 15; totals from those are excluded from the win-line bands. ` +
+  `<b>Not in this data:</b> individual batting and bowling figures, tosses, and ball-by-ball ` +
+  `detail — so nothing here identifies which players to pick, only how to play.</p>`;
+
+$('foot').innerHTML =
+  `Amiirtham · GTCC Fall league 2025 — ${L.matches} matches, ${L.teams} teams, ${SPAN}.<br>` +
+  `Analysis prepared from the supplied fixture spreadsheet and CricHeroes match list. ` +
+  `Last rebuilt ${document.documentElement.dataset.built || 'locally'}.`;
+
+/* tooltips */
+const tip = $('tip');
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest('[data-tip]');
+  if (!el) return;
+  tip.textContent = el.dataset.tip; tip.style.opacity = 1;
+});
+document.addEventListener('mousemove', e => {
+  if (tip.style.opacity === '1') {
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px';
+    tip.style.top = (e.clientY + 18) + 'px';
+  }
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest('[data-tip]')) tip.style.opacity = 0;
+});
+</script>
