@@ -171,4 +171,9 @@ def build_payload():
     except Exception:
         out['phases'] = None
     out['squad'] = SQUAD
+    try:
+        from season import build_season
+        out['season'] = build_season(out['phases'], LEAGUE['venues'])
+    except Exception:
+        out['season'] = None
     return out

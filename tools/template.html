@@ -212,6 +212,48 @@
   }
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
+  /* 2026 fixtures */
+  .fixt{width:100%;border-collapse:collapse;border:1px solid var(--rule);border-radius:3px;}
+  .fixt th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+           color:var(--muted);background:var(--surface-2);padding:9px 12px;white-space:nowrap;}
+  .fixt td{background:var(--surface);padding:13px 12px;border-top:1px solid var(--rule-2);
+           vertical-align:top;white-space:normal;}
+  /* these two must out-specify .fixt td{white-space:normal} above */
+  .fixt td.fx-d{font-family:var(--mono);font-size:12px;white-space:nowrap;width:1%;}
+  .fx-d span{display:block;color:var(--muted);font-size:10px;margin-top:3px;}
+  .fixt td.fx-o{font-family:var(--serif);font-size:17px;white-space:nowrap;width:1%;}
+  .fx-v{font-size:13px;color:var(--ink-2);min-width:150px;}
+  .fx-v span{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
+  .fx-k{font-size:13px;color:var(--ink-2);}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;
+       text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:5px;}
+  .tag.ok{background:var(--good);color:#fff;} .tag.no{background:var(--rule);color:var(--ink-2);}
+  .know{display:block;line-height:1.5;}
+  .seedbox{margin-top:22px;border:1px solid var(--rule);border-left:3px solid var(--chase);
+           border-radius:0 3px 3px 0;background:var(--surface);padding:18px 20px;}
+  .seedbox h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+              color:var(--chase);margin:0 0 12px;}
+  .seedtbl{width:100%;border-collapse:collapse;margin-bottom:12px;}
+  .seedtbl td{padding:8px 10px 8px 0;border-top:1px solid var(--rule-2);font-size:13.5px;
+              color:var(--ink-2);vertical-align:top;white-space:normal;}
+  .seedtbl tr:first-child td{border-top:0;}
+  .sd-a{font-family:var(--serif);font-size:15px;color:var(--ink);white-space:nowrap;width:1%;}
+  .sd-b{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap;width:1%;
+        letter-spacing:.05em;}
+  .seedbox p{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0 0 10px;max-width:75ch;}
+  .seedbox p:last-child{margin-bottom:0;}
+  .seed-scout{border-top:1px solid var(--rule-2);padding-top:11px;}
+  @media (max-width:640px){
+    .fixt,.fixt thead,.fixt tbody,.fixt tr,.fixt td{display:block;width:auto;}
+    .fixt thead{display:none;}
+    .fixt tr{border-top:1px solid var(--rule);padding:12px 0;}
+    .fixt tr:first-child{border-top:0;}
+    .fixt td{border-top:0;padding:2px 12px;}
+    .fixt td.fx-d,.fixt td.fx-o{display:inline-block;margin-right:10px;width:auto;}
+    .fx-d span{display:inline;margin-left:6px;}
+    .seedtbl td{display:block;padding:3px 0;}
+    .seedtbl tr{display:block;border-top:1px solid var(--rule-2);padding:9px 0;}
+  }
   /* playbook — phase-by-phase operating plan */
   .pplan{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin-bottom:14px;
          background:var(--surface);}
@@ -272,21 +314,29 @@
 
 <div class="wrap">
 <header>
-  <div class="eyebrow">Amiirtham · GTCC Fall League 2025 · Post-season analysis</div>
+  <div class="eyebrow">Royal Challenger Blaster · GTCC Fall League 2026 · Match dashboard</div>
   <h1>How this league is actually won</h1>
   <p class="standfirst" id="standfirst"></p>
   <div class="prov" id="prov"></div>
   <nav class="qnav" aria-label="Jump to section">
     <a href="#plan">Match plan</a>
     <a href="#phases">Phase targets</a>
+    <a href="#season">2026 fixtures</a>
     <a href="#playbook">Playbook</a>
     <a href="#sec-ranks">Rankings</a>
     <a href="#squad">Squad</a>
   </nav>
 </header>
 
+<section id="season">
+  <div class="sechead"><div class="n">01</div><h2>Our 2026 campaign</h2></div>
+  <p class="lede" id="season-lede"></p>
+  <div id="fixtures"></div>
+  <div id="seeding"></div>
+</section>
+
 <section>
-  <div class="sechead"><div class="n">01</div><h2>The win line is 120</h2></div>
+  <div class="sechead"><div class="n">02</div><h2>The win line is 120</h2></div>
   <p class="lede">First-innings totals do not produce a gentle gradient of win probability.
      They produce a cliff, and it sits between 119 and 120.</p>
 
@@ -317,7 +367,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">02</div><h2>Bat first</h2></div>
+  <div class="sechead"><div class="n">03</div><h2>Bat first</h2></div>
   <p class="lede">If you win the toss, bat. The edge is real, it is consistent across the two
      grounds that host most of the cricket, and it grows in knockout matches.
      Put in to field instead? The <a href="#plan">match plan</a> builds the bowling-first job.</p>
@@ -338,7 +388,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">03</div><h2>Wickets in hand are worth 35 runs</h2></div>
+  <div class="sechead"><div class="n">04</div><h2>Wickets in hand are worth 35 runs</h2></div>
   <p class="lede">Nearly a third of all innings in this league ended all out. Simply batting
      out your 15 overs — regardless of how fast you score — is the single largest lever on
      the scoreboard.</p>
@@ -356,7 +406,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">04</div><h2>Your team</h2></div>
+  <div class="sechead"><div class="n">05</div><h2>Your team</h2></div>
   <p class="lede">Pick your side to see its record, its scoring rates, and the specific gap
      between where it finished and the win line.</p>
   <div class="picker">
@@ -376,7 +426,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">05</div><h2>Qualification is a group of six</h2></div>
+  <div class="sechead"><div class="n">06</div><h2>Qualification is a group of six</h2></div>
   <p class="lede">The 30 teams played five round-robin matches inside five groups of six.
      The top three in each group went through — fifteen teams, exactly half the field.
      Three wins from five put you on the bubble, and the bubble was broken by
@@ -386,7 +436,7 @@
 </section>
 
 <section id="sec-ranks">
-  <div class="sechead"><div class="n">06</div><h2>The field, ranked</h2></div>
+  <div class="sechead"><div class="n">07</div><h2>The field, ranked</h2></div>
   <p class="lede">Sorted by how far each side went, then by group record. Runs per over for
      and against are computed across all matches, with an all-out innings charged the full
      quota — the same convention net run rate uses.</p>
@@ -399,7 +449,7 @@
 </section>
 
 <section id="phases">
-  <div class="sechead"><div class="n">07</div><h2>Phase by phase: where matches are won</h2></div>
+  <div class="sechead"><div class="n">08</div><h2>Phase by phase: where matches are won</h2></div>
   <p class="lede" id="phase-lede"></p>
 
   <div class="chart">
@@ -447,7 +497,7 @@
 </section>
 
 <section id="plan">
-  <div class="sechead"><div class="n">08</div><h2>Match plan: scout your opponent</h2></div>
+  <div class="sechead"><div class="n">09</div><h2>Match plan: scout your opponent</h2></div>
   <p class="lede">Pick the side you are about to play. Below the target plan you get their
      phase-by-phase profile &mdash; exactly where they hurt you and where they crack, with bat
      and with ball &mdash; each read turned into the move it dictates for our powerplay, middle
@@ -465,7 +515,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">09</div><h2>Conditions: what actually matters</h2></div>
+  <div class="sechead"><div class="n">10</div><h2>Conditions: what actually matters</h2></div>
   <p class="lede" id="wx-lede"></p>
   <div class="scroll">
     <table><thead><tr>
@@ -477,7 +527,7 @@
 </section>
 
 <section id="playbook">
-  <div class="sechead"><div class="n">10</div><h2>The playbook</h2></div>
+  <div class="sechead"><div class="n">11</div><h2>The playbook</h2></div>
   <p class="lede">Section 08 is who we are playing. This is how <i>we</i> play, whoever it is:
      what winning sides in this league actually do in each phase, with bat and with ball, and
      the number to call from the boundary at every break.</p>
@@ -487,13 +537,13 @@
 </section>
 
 <section id="squad">
-  <div class="sechead"><div class="n">11</div><h2>Our squad</h2></div>
+  <div class="sechead"><div class="n">12</div><h2>Our squad</h2></div>
   <p class="lede" id="squad-lede"></p>
   <div class="tgrid" id="squadgrid"></div>
 </section>
 
 <section>
-  <div class="sechead"><div class="n">12</div><h2>Where these numbers come from</h2></div>
+  <div class="sechead"><div class="n">13</div><h2>Where these numbers come from</h2></div>
   <div class="caveat" id="method"></div>
 </section>
 
@@ -510,16 +560,60 @@ const L = DATA.league, T = DATA.teams;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-/* provenance */
 const fmtDate = s => {
   const [y, m, d] = s.split('-').map(Number);
   return `${d} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]}`;
 };
+
+/* 01 — our 2026 campaign */
+const SEA = DATA.season;
+if (SEA) {
+  const F = SEA.format, nS = SEA.scoutedCount, nF = SEA.fixtures.length;
+  $('season-lede').innerHTML =
+    `We are in <b>${esc(SEA.group)}</b> of ${F.groups}, with ${F.perTeam} matches between ` +
+    `${fmtDate(F.leagueStart)} and ${fmtDate(F.leagueEnd)}. The top <b>${F.advancePerGroup} of ${F.groupSize}</b> ` +
+    `go through — ${F.advanceTotal} of ${F.teams} teams, exactly half the field, on the same format as last ` +
+    `season. That makes every 2025 number below directly usable: the group is the same size, the round ` +
+    `robin the same length, and the bubble breaks the same way.`;
+
+  $('fixtures').innerHTML =
+    `<table class="fixt"><thead><tr><th>Date</th><th>Opponent</th><th>Ground</th>` +
+    `<th>What we know</th></tr></thead><tbody>` +
+    SEA.fixtures.map(f => {
+      const v = f.venue
+        ? `${esc(f.ground)}<span>bat first won ${f.venue.batFirstPct}% here in 2025 · par ${f.venue.avg1}</span>`
+        : esc(f.ground);
+      const know = f.scouted
+        ? `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
+          `pick them in section 09 for the plan.</span>`
+        : `<span class="tag no">No data</span><span class="know">Did not play this league in 2025 under ` +
+          `this name. Treat the first sighting as reconnaissance.</span>`;
+      return `<tr><td class="fx-d">${esc(f.disp)}<span>${esc(f.time)}</span></td>` +
+             `<td class="fx-o">${esc(f.opp)}</td><td class="fx-v">${v}</td>` +
+             `<td class="fx-k">${know}</td></tr>`;
+    }).join('') + `</tbody></table>`;
+
+  const seedRows = F.seeding.map(([a,b,c]) =>
+    `<tr><td class="sd-a">${esc(a)}</td><td class="sd-b">${esc(b)}</td><td class="sd-c">${esc(c)}</td></tr>`).join('');
+  $('seeding').innerHTML =
+    `<div class="seedbox"><h4>Why finishing position is worth chasing</h4>` +
+    `<table class="seedtbl"><tbody>${seedRows}</tbody></table>` +
+    `<p>Third place is not one outcome but two: the best two third-placed sides by net run rate walk into ` +
+    `the pre-quarters, the other four must win an eliminator on 3 October first. That is the whole ` +
+    `argument for closing out won games rather than coasting — net run rate is the tiebreak that decides ` +
+    `which side of that line you land on.</p>` +
+    `<p class="seed-scout"><b>${nS} of our ${nF} opponents</b> played this league in 2025, so we carry a real ` +
+    `phase profile into those two matches. The other ${nF - nS} are unknown quantities — no history under ` +
+    `these names, and nothing here invents one.</p></div>`;
+}
+
+/* provenance */
 const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
 
 $('standfirst').textContent =
-  `Every ball bowled across ${L.matches} matches says the same thing: this is a bat-first ` +
-  `competition decided by one number on the scoreboard — and most teams finish just short of it.`;
+  `Our 2026 fixtures, and what every ball bowled across ${L.matches} matches last season says about ` +
+  `how to win them: this is a bat-first competition decided by one number on the scoreboard — and ` +
+  `most teams finish just short of it.`;
 
 $('prov').innerHTML =
   `${L.matches} matches · ${L.teams} teams · ${SPAN} · 15 overs a side<br>` +
@@ -1157,9 +1251,10 @@ const SQ = DATA.squad;
 if (SQ) {
   $('squad-lede').innerHTML =
     `<b>${esc(SQ.team)}</b> (${esc(SQ.city)}) — ${SQ.players.length} registered players, ` +
-    `captained by <b>${esc(SQ.captain)}</b>. This is our first season in this league, so we have no ` +
-    `match history here yet; every number on this page is the field we are walking into, not a ` +
-    `record of us. Once we play, this section becomes our own phase log.`;
+    `captained by <b>${esc(SQ.captain)}</b>. We have no match history in this league yet, so every ` +
+    `number on this page is the field we are walking into, not a record of us. The 2026 squad limit ` +
+    `is 30 and additions close on <b>29 August</b> — the knockouts run five rounds in ten days, so ` +
+    `depth in bowling is what that allowance is for. Once we play, this becomes our own phase log.`;
   $('squadgrid').innerHTML = SQ.players.map(p =>
     `<div style="padding:12px 14px"><div class="k" style="font-size:15.5px;font-family:var(--sans);line-height:1.35">${esc(p)}</div>` +
     (p === SQ.captain ? `<div class="t" style="margin-top:4px;color:var(--bat)">captain</div>` : '') +
