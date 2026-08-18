@@ -196,6 +196,44 @@
   .ph-move{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:14px;white-space:normal;}
   .ph-src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
   .ph-src .thin{color:var(--bat);font-weight:400;}
+  /* toss recommendation */
+  .toss{display:grid;grid-template-columns:auto 1fr;gap:0;margin-top:18px;border:1px solid var(--rule);
+        border-radius:3px;overflow:hidden;background:var(--surface);}
+  .toss-main{background:var(--bat);color:#fff;padding:18px 22px;display:flex;flex-direction:column;
+             justify-content:center;min-width:150px;}
+  .toss-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;}
+  .toss-verdict{font-family:var(--serif);font-size:40px;line-height:1;margin:6px 0 4px;}
+  .toss-tgt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;opacity:.95;}
+  .toss-tgt b{font-size:15px;}
+  .toss-why{padding:16px 20px;}
+  .toss-why p{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 9px;max-width:74ch;}
+  .toss-why p:last-child{margin-bottom:0;color:var(--ink);}
+  .toss-lose{margin-top:10px;border:1px solid var(--rule);border-radius:3px;background:var(--surface-2);
+             padding:13px 18px;}
+  .tl-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--muted);margin-bottom:9px;}
+  .tl-row{display:flex;gap:12px;align-items:baseline;padding:6px 0;border-top:1px solid var(--rule-2);}
+  .tl-row:first-of-type{border-top:0;}
+  .tl-k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+        color:var(--chase);white-space:nowrap;min-width:78px;}
+  .tl-v{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+  /* grouped plan notes */
+  .plan h4{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .plan-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+            color:var(--muted);font-weight:400;}
+  .plan-grp{margin-top:16px;}
+  .plan-grp h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+               margin:0 0 2px;}
+  .plan-grp.is-opp h5{color:var(--bat);}
+  .plan-grp.is-league h5{color:var(--muted);}
+  .plan-grp.is-league .reads li{color:var(--ink-2);font-size:14px;}
+  .plan-grp.is-league .reads li:before{color:var(--muted);}
+  @media (max-width:640px){
+    .toss{grid-template-columns:1fr;}
+    .toss-main{padding:14px 18px;}
+    .toss-verdict{font-size:32px;}
+    .tl-row{flex-direction:column;gap:2px;}
+  }
   .noph-read{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 9px;max-width:78ch;}
   .noph-edge{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0;padding-left:12px;
              border-left:2px solid var(--bat);}
@@ -509,6 +547,7 @@
   <div class="picker">
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
+    <div id="tossbox" hidden></div>
     <div class="seg" id="scenario" role="group" aria-label="Innings scenario">
       <button type="button" data-s="bat" aria-pressed="false">We bat first</button>
       <button type="button" data-s="bowl" aria-pressed="false">We bowl first</button>
@@ -1015,6 +1054,78 @@ if (PH && PH.teams) {
     return parts.join(' ') + plan;
   }
 
+  // The toss call itself never really moves: batting first wins in this league and
+  // at both our grounds. What the opponent changes is how big a total has to be,
+  // so that is what we work out here rather than pretending the choice flips.
+  function setTarget(t){
+    const base = 130;
+    if (t && t.bat && (t.bat.deathn || 0) >= 3) {
+      const d = Math.round(t.bat.death - PH.all.death);
+      if (d >= 4)  return { n: 140, why: 'up', d: d };
+      if (d <= -4) return { n: 125, why: 'down', d: -d };
+    }
+    return { n: base, why: 'par', d: 0 };
+  }
+
+  function renderToss(){
+    const box = $('tossbox');
+    const oppName = osel.value;
+    if (!oppName) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    const t = PH.teams[oppName];
+    const fx = OPP26[oppName];
+    const who = esc(oppName);
+    const tg = setTarget(t);
+    const hiPct = Math.round(L.hi120.w / L.hi120.n * 100);
+    const gr = fx && fx.venue
+      ? `, and <b>${fx.venue.batFirstPct}%</b> at ${esc(fx.ground)} where we play them`
+      : '';
+
+    // Why this target, against this side.
+    let why;
+    if (tg.why === 'up') {
+      why = `<b>${who} finish hard</b> — ${Math.round(t.bat.death)} in the last five against a par of ` +
+            `${Math.round(PH.all.death)}, ${tg.d} above. A par total gets chased by a side that can ` +
+            `close: set <b>${tg.n}</b>, not 130, and take wickets before over 11 so there is nobody left to do it.`;
+    } else if (tg.why === 'down') {
+      why = `<b>${who} do not accelerate</b> — ${Math.round(t.bat.death)} at the death, ${tg.d} below par. ` +
+            `<b>${tg.n}</b> is enough here; batting deep matters more than swinging early, because if their ` +
+            `chase is behind at ten it is effectively finished.`;
+    } else if (t && t.bat) {
+      why = `${who} score about par at the death (${Math.round(t.bat.death)}), so the standard <b>${tg.n}</b> ` +
+            `applies — comfortably clear of the 120 line with room for one bad phase.`;
+    } else if (fx && fx.form) {
+      why = `We have no fifteen-over read on ${who}, so the target stays the league default of <b>${tg.n}</b>. ` +
+            `Their record is ${esc(fx.form.comps)} — nothing there sizes a total in this format.`;
+    } else {
+      why = `No record for ${who} at all, so take the league default of <b>${tg.n}</b> and adjust off what ` +
+            `you see in their first six overs.`;
+    }
+
+    box.innerHTML =
+      `<div class="toss">
+         <div class="toss-main">
+           <div class="toss-lab">If we win the toss</div>
+           <div class="toss-verdict">Bat</div>
+           <div class="toss-tgt">set <b>${tg.n}</b></div>
+         </div>
+         <div class="toss-why">
+           <p>Batting first won <b>${L.batFirstPct}%</b> of decided matches last season${gr}. Totals of ` +
+      `120+ were defended <b>${hiPct}%</b> of the time. There is no ground in this competition where
+              chasing is the better bet.</p>
+           <p>${why}</p>
+         </div>
+       </div>
+       <div class="toss-lose">
+         <div class="tl-lab">If we lose the toss</div>
+         <div class="tl-row"><span class="tl-k">They bat</span>
+           <span class="tl-v">We bowl first — the job becomes keeping them under <b>120</b>. Open the
+             <b>We bowl first</b> plan below.</span></div>
+         <div class="tl-row"><span class="tl-k">They bowl</span>
+           <span class="tl-v">We bat first anyway — this is the plan we wanted. Use <b>We bat first</b> below.</span></div>
+       </div>`;
+  }
+
   function renderPlan(){
     const box = $('planbox');
     if (!SCEN) { box.hidden = true; box.innerHTML = ''; return; }
@@ -1028,13 +1139,16 @@ if (PH && PH.teams) {
     const hiPct = Math.round(L.hi120.w / L.hi120.n * 100);
     const chaseWinUnder = Math.round((L.lo120.n - L.lo120.w) / L.lo120.n * 100);
     const who = oppName ? esc(oppName) : 'your opponent';
-    const notes = [];
-    let head, targets;
+    const tg = setTarget(t);
+    const oppNotes = [], leagueNotes = [];
+    const notes = leagueNotes;   // league rules unless a note says otherwise
+    let head, sub, targets;
 
     if (SCEN === 'bat') {
-      head = 'We bat first — post it, then close the door';
+      head = 'We bat first';
+      sub = 'We won the toss, or they put us in';
       targets = [
-        ['130', 'the target to set'],
+        [tg.n, 'the target to set'],
         [c5, 'ours by over 5'],
         [c10, 'ours by over 10'],
         ['4 down', 'max at over 10'],
@@ -1045,12 +1159,12 @@ if (PH && PH.teams) {
       if (bowl) {
         const leak = PHASES.reduce((a,b)=> bowl[b] > bowl[a] ? b : a);
         const tight = PHASES.reduce((a,b)=> bowl[b] < bowl[a] ? b : a);
-        notes.push(`${who} concede most in the <b>${phName(leak)}</b> (${bowl[leak]} against a league par ` +
+        oppNotes.push(`They concede most in the <b>${phName(leak)}</b> (${bowl[leak]} against a league par ` +
           `of ${par[leak]}) — that is where the checkpoint gets banked. They are tightest in the ` +
           `<b>${phName(tight)}</b> (${bowl[tight]}): keep wickets there rather than forcing it.`);
       } else if (oppName) {
         const fm = OPP26[oppName] && OPP26[oppName].form;
-        notes.push(fm
+        oppNotes.push(fm
           ? `We have no phase profile for ${who} — their record is ${esc(fm.comps)}, so there is nothing ` +
             `to say about how they bowl a fifteen-over innings. Bat to the checkpoints above and let the ` +
             `first six overs tell you where their weak bowler is.`
@@ -1061,17 +1175,18 @@ if (PH && PH.teams) {
         `four down, not six, at ten.`);
       if (bat) {
         const d = Math.round(bat.death - par.death);
-        notes.push(d > 3
-          ? `Defending it: they score <b>${bat.death}</b> at the death, ${d} above par. Do not let the chase ` +
-            `reach over 11 alive — attack for wickets in their middle overs rather than containing.`
+        oppNotes.push(d > 3
+          ? `<b>Defending it:</b> they score <b>${bat.death}</b> at the death, ${d} above par. Do not let the ` +
+            `chase reach over 11 alive — attack for wickets in their middle overs rather than containing.`
           : d < -3
-            ? `Defending it: their death scoring is <b>${bat.death}</b>, ${-d} below par. If their chase is ` +
-              `behind at ten it is effectively over — hold your lines and give nothing soft.`
-            : `Defending it: their death scoring (${bat.death}) is about league par. The ${c5}/${c10} ` +
+            ? `<b>Defending it:</b> their death scoring is <b>${bat.death}</b>, ${-d} below par. If their chase ` +
+              `is behind at ten it is effectively over — hold your lines and give nothing soft.`
+            : `<b>Defending it:</b> their death scoring (${bat.death}) is about league par. The ${c5}/${c10} ` +
               `checkpoints work in reverse — keep their chase behind them at each break.`);
       }
     } else {
-      head = 'We bowl first — keep them under 120, then chase calm';
+      head = 'We bowl first';
+      sub = 'They won the toss and chose to bat';
       targets = [
         ['120', 'keep them under it'],
         [c5, 'their cap at over 5'],
@@ -1093,12 +1208,12 @@ if (PH && PH.teams) {
       if (bat) {
         const strong = PHASES.reduce((a,b)=> bat[b] > bat[a] ? b : a);
         const weak = PHASES.reduce((a,b)=> bat[b] < bat[a] ? b : a);
-        notes.push(`${who} score most in the <b>${phName(strong)}</b> (${bat[strong]} against a par of ` +
+        oppNotes.push(`They score most in the <b>${phName(strong)}</b> (${bat[strong]} against a par of ` +
           `${par[strong]}) — save your best two bowlers for it. Their thinnest phase is the ` +
           `<b>${phName(weak)}</b> (${bat[weak]}): attack there for the wickets that knock them off the 120 track.`);
       } else if (oppName) {
         const fm = OPP26[oppName] && OPP26[oppName].form;
-        notes.push(fm
+        oppNotes.push(fm
           ? `No phase profile for ${who} — their record is ${esc(fm.comps)}, a different game. What does ` +
             `travel is coarser: <b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played}. ${esc(fm.read)} ` +
             `<b>${esc(fm.edge)}</b>`
@@ -1110,15 +1225,22 @@ if (PH && PH.teams) {
     }
 
     box.hidden = false;
-    box.innerHTML = `<div class="plan"><h4>${head}</h4>` +
+    const grp = (label, arr, cls) => arr.length
+      ? `<div class="plan-grp ${cls}"><h5>${label}</h5><ul class="reads">` +
+        arr.map(n => `<li>${n}</li>`).join('') + `</ul></div>`
+      : '';
+    box.innerHTML = `<div class="plan"><h4>${head}<span class="plan-sub">${sub}</span></h4>` +
       `<div class="tgrid">` + targets.map(([k, v]) =>
         `<div><div class="k" style="font-size:22px">${k}</div><div class="t">${v}</div></div>`).join('') +
-      `</div><ul class="reads">` + notes.map(n => `<li>${n}</li>`).join('') + `</ul>` +
+      `</div>` +
+      grp(oppName ? `Against ${who}` : 'Against your opponent', oppNotes, 'is-opp') +
+      grp('League rules that apply', leagueNotes, 'is-league') +
       (oppName ? '' : `<div class="hint">Pick an opponent above to sharpen this with their phase profile.</div>`) +
       `</div>`;
   }
 
   osel.addEventListener('change', () => {
+    renderToss();
     renderPlan();
     const t = PH.teams[osel.value];
     const box = $('oppprofile');
