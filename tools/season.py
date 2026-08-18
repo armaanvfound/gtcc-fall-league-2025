@@ -37,6 +37,35 @@ VENUE_2025 = {
     "GTCC Ajax Ground": "GTCC Ajax Cricket Ground",
 }
 
+# Opponents with a CricHeroes history, but none of it in this competition or
+# anything close to its format. Read from their team-profile match lists on
+# 18 Aug 2026. Deliberately kept apart from the phase model in tools/phases.py:
+# a 5-over total or a 12-over tennis-ball innings cannot be laid against a
+# 15-over hardball par, and a phase profile built from one would look precise
+# while meaning nothing. What survives a format change is coarse - does a side
+# get bowled out, does it win - so that is all this records.
+FORM = {
+    "South Warriors": dict(
+        profile="https://cricheroes.com/team-profile/7515748/south-warriors-2026/matches",
+        played=13, won=2, lost=11,
+        comps="GTCC Tennis T20 2026 (20 overs, tennis ball) and GTCC Summer T12 2026 (12 overs)",
+        read="Bowled out or nine down in six of the seven innings with a visible score "
+             "(94/10, 89/10, 72/9, 59/9, 55/9, 37/9 - only 53/6 survived). Two wins in "
+             "thirteen. Collapsing is a property of a batting line-up rather than of a "
+             "format, so it is the one read here worth carrying into September.",
+        edge="Bowl at them. On this evidence they have no one who bats through an innings.",
+    ),
+    "Lisa Challengers": dict(
+        profile="https://cricheroes.com/team-profile/10445479/lisa-challengers/matches",
+        played=5, won=3, lost=2,
+        comps="Sauga Cup 2025 - every match five overs a side, played over two days in July 2025",
+        read="Their whole record is five-over cricket from a year ago, where 77 off 5 is a "
+             "good score. Nothing in it describes how they build or defend a fifteen-over "
+             "innings, and none of it is recent.",
+        edge="Treat as unknown. Plan the first six overs off what you see on the day.",
+    ),
+}
+
 # Our five group matches, in order.
 FIXTURES = [
     dict(no=5,  date="2026-09-05", disp="Sat 5 Sep",  time="09:05",
@@ -80,15 +109,19 @@ def build_season(phases=None, venues=None):
         old = KNOWN_2025.get(f["opp"])
         prof = (phases or {}).get("teams", {}).get(old) if old else None
         v2025 = vmap.get(VENUE_2025.get(f["ground"], ""))
+        form = FORM.get(f["opp"])
         fixtures.append(dict(
             f,
             scouted=bool(prof),
+            tier="scouted" if prof else ("form" if form else "none"),
             name2025=old,
+            form=form,
             venue=dict(n=v2025["n"], batFirstPct=v2025["pct"], avg1=v2025["avg1"]) if v2025 else None,
         ))
     return dict(team=TEAM, group=GROUP, groupTeams=GROUP_TEAMS,
                 fixtures=fixtures, format=FORMAT,
-                scoutedCount=sum(1 for f in fixtures if f["scouted"]))
+                scoutedCount=sum(1 for f in fixtures if f["scouted"]),
+                formCount=sum(1 for f in fixtures if f["tier"] == "form"))
 
 
 if __name__ == "__main__":

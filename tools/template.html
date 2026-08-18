@@ -228,6 +228,7 @@
   .tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;
        text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:5px;}
   .tag.ok{background:var(--good);color:#fff;} .tag.no{background:var(--rule);color:var(--ink-2);}
+  .tag.form{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold);}
   .know{display:block;line-height:1.5;}
   .seedbox{margin-top:22px;border:1px solid var(--rule);border-left:3px solid var(--chase);
            border-radius:0 3px 3px 0;background:var(--surface);padding:18px 20px;}
@@ -583,11 +584,19 @@ if (SEA) {
       const v = f.venue
         ? `${esc(f.ground)}<span>bat first won ${f.venue.batFirstPct}% here in 2025 · par ${f.venue.avg1}</span>`
         : esc(f.ground);
-      const know = f.scouted
-        ? `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
-          `pick them in section 09 for the plan.</span>`
-        : `<span class="tag no">No data</span><span class="know">Did not play this league in 2025 under ` +
-          `this name. Treat the first sighting as reconnaissance.</span>`;
+      let know;
+      if (f.tier === 'scouted') {
+        know = `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
+               `pick them in section 09 for the plan.</span>`;
+      } else if (f.tier === 'form') {
+        const fm = f.form;
+        know = `<span class="tag form">Form only</span><span class="know">` +
+               `<b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played} matches, but all of it ${esc(fm.comps)} — ` +
+               `never this league or this format. ${esc(fm.read)} <b>${esc(fm.edge)}</b></span>`;
+      } else {
+        know = `<span class="tag no">No data</span><span class="know">Did not play this league in 2025 under ` +
+               `this name. Treat the first sighting as reconnaissance.</span>`;
+      }
       return `<tr><td class="fx-d">${esc(f.disp)}<span>${esc(f.time)}</span></td>` +
              `<td class="fx-o">${esc(f.opp)}</td><td class="fx-v">${v}</td>` +
              `<td class="fx-k">${know}</td></tr>`;
@@ -603,8 +612,10 @@ if (SEA) {
     `argument for closing out won games rather than coasting — net run rate is the tiebreak that decides ` +
     `which side of that line you land on.</p>` +
     `<p class="seed-scout"><b>${nS} of our ${nF} opponents</b> played this league in 2025, so we carry a real ` +
-    `phase profile into those two matches. The other ${nF - nS} are unknown quantities — no history under ` +
-    `these names, and nothing here invents one.</p></div>`;
+    `phase profile into those two matches. ${SEA.formCount} more have a CricHeroes record, but none of it in ` +
+    `this competition or anything near its format — five-over and twelve-over cricket, some of it with a ` +
+    `tennis ball. Those give a form guide and nothing finer: their phase splits are deliberately absent ` +
+    `rather than estimated, because a number that looks precise and means nothing is worse than a blank.</p></div>`;
 }
 
 /* provenance */
