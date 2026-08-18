@@ -196,6 +196,9 @@
   .ph-move{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:14px;white-space:normal;}
   .ph-src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
   .ph-src .thin{color:var(--bat);font-weight:400;}
+  .noph-read{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 9px;max-width:78ch;}
+  .noph-edge{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0;padding-left:12px;
+             border-left:2px solid var(--bat);}
   .ph-num .thin{color:var(--bat);font-weight:400;}
   .ph-num .nn{color:var(--muted);}
   .opp-note{margin-top:18px;font-size:14px;color:var(--ink-2);border-left:3px solid var(--gold);
@@ -499,10 +502,10 @@
 
 <section id="plan">
   <div class="sechead"><div class="n">09</div><h2>Match plan: scout your opponent</h2></div>
-  <p class="lede">Pick the side you are about to play. Below the target plan you get their
-     phase-by-phase profile &mdash; exactly where they hurt you and where they crack, with bat
-     and with ball &mdash; each read turned into the move it dictates for our powerplay, middle
-     and death.</p>
+  <p class="lede">Pick the side you are about to play &mdash; all five of our 2026 group are listed
+     first. Where we have a 2025 profile you get their phase-by-phase read, with bat and with ball,
+     each turned into the move it dictates for our powerplay, middle and death. Where we do not,
+     you get exactly what we do know and a plain statement of what we do not.</p>
   <div class="picker">
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
@@ -870,10 +873,30 @@ if (PH) {
 /* 08 — match plan + opponent scouting */
 if (PH && PH.teams) {
   const osel = $('oppsel');
-  Object.keys(PH.teams).sort((a,b)=>a.localeCompare(b)).forEach(name => {
+  // Our 2026 opponents, by how much we actually know about them. A form-only or
+  // unknown side still gets a plan — it is just built on league patterns rather
+  // than on them, and the panel says so.
+  const OPP26 = {};
+  if (SEA) SEA.fixtures.forEach(f => { OPP26[f.opp] = f; });
+  const LABEL = { scouted:'2025 profile', form:'form only', none:'no data' };
+
+  const mkOpt = (name, note) => {
     const o = document.createElement('option');
-    o.value = name; o.textContent = name; osel.appendChild(o);
-  });
+    o.value = name; o.textContent = note ? `${name} — ${note}` : name;
+    return o;
+  };
+  if (SEA && SEA.fixtures.length) {
+    const g1 = document.createElement('optgroup');
+    g1.label = 'Our 2026 group — in fixture order';
+    SEA.fixtures.forEach(f => g1.appendChild(mkOpt(f.opp, LABEL[f.tier])));
+    osel.appendChild(g1);
+  }
+  const g2 = document.createElement('optgroup');
+  g2.label = 'Everyone else from 2025';
+  Object.keys(PH.teams).sort((a,b)=>a.localeCompare(b))
+    .filter(n => !OPP26[n])
+    .forEach(n => g2.appendChild(mkOpt(n)));
+  osel.appendChild(g2);
 
   let SCEN = null;
   const segBtns = [...document.querySelectorAll('#scenario button')];
@@ -1026,7 +1049,12 @@ if (PH && PH.teams) {
           `of ${par[leak]}) — that is where the checkpoint gets banked. They are tightest in the ` +
           `<b>${phName(tight)}</b> (${bowl[tight]}): keep wickets there rather than forcing it.`);
       } else if (oppName) {
-        notes.push(`No bowling innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
+        const fm = OPP26[oppName] && OPP26[oppName].form;
+        notes.push(fm
+          ? `We have no phase profile for ${who} — their record is ${esc(fm.comps)}, so there is nothing ` +
+            `to say about how they bowl a fifteen-over innings. Bat to the checkpoints above and let the ` +
+            `first six overs tell you where their weak bowler is.`
+          : `No bowling innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
       }
       notes.push(`Winning innings add <b>${PH.won.death}</b> in the last five overs — and 120-track innings ` +
         `add ${R.death}. That only happens with batters in hand: overs 11–15 are the whole reason to be ` +
@@ -1069,7 +1097,12 @@ if (PH && PH.teams) {
           `${par[strong]}) — save your best two bowlers for it. Their thinnest phase is the ` +
           `<b>${phName(weak)}</b> (${bat[weak]}): attack there for the wickets that knock them off the 120 track.`);
       } else if (oppName) {
-        notes.push(`No batting innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
+        const fm = OPP26[oppName] && OPP26[oppName].form;
+        notes.push(fm
+          ? `No phase profile for ${who} — their record is ${esc(fm.comps)}, a different game. What does ` +
+            `travel is coarser: <b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played}. ${esc(fm.read)} ` +
+            `<b>${esc(fm.edge)}</b>`
+          : `No batting innings of ${who} made the ball-by-ball sample, so this plan leans on league patterns.`);
       }
       notes.push(`Then the chase. Chases in this league stall in the middle: <b>${PH.bat2.mid}</b> in ` +
         `overs 6–10 against ${PH.bat1.mid} for sides batting first — the biggest deficit anywhere. Name who ` +
@@ -1089,7 +1122,32 @@ if (PH && PH.teams) {
     renderPlan();
     const t = PH.teams[osel.value];
     const box = $('oppprofile');
-    if (!t) { box.hidden = true; box.innerHTML = ''; return; }
+    const fx = OPP26[osel.value];
+
+    // No phase profile: say what we do have, and why there are no splits.
+    if (!t) {
+      if (!fx) { box.hidden = true; box.innerHTML = ''; return; }
+      box.hidden = false;
+      const fm = fx.form;
+      box.innerHTML = fm
+        ? `<div class="opp-head"><b>${esc(osel.value)}</b> have never played this competition, or ` +
+          `anything near its format — their whole record is ${esc(fm.comps)}. That is a form guide, ` +
+          `not a profile: <b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played}.</div>` +
+          `<div class="opp-block"><h4>What carries over</h4>` +
+          `<p class="noph-read">${esc(fm.read)}</p>` +
+          `<p class="noph-edge">${esc(fm.edge)}</p></div>` +
+          `<div class="opp-block"><h4>What does not</h4>` +
+          `<p class="noph-read">No powerplay, middle or death splits are shown because there is no ` +
+          `comparable innings to build them from. A five-over or twelve-over score cannot be set ` +
+          `against this league's par, and a phase table made from one would look exactly as ` +
+          `authoritative as the real ones above. Use the plan for the targets, and read their ` +
+          `first six overs on the day.</p></div>`
+        : `<div class="opp-head"><b>${esc(osel.value)}</b> have no record we can find — not this ` +
+          `league in 2025, and no other competition under this name. Everything below is the league ` +
+          `pattern, unsharpened. Treat the first six overs as reconnaissance and trust the ` +
+          `checkpoints rather than any read on them.</div>`;
+      return;
+    }
     box.hidden = false;
 
     const block = (title, prof, mode, kind) => {
