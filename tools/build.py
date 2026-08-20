@@ -75,7 +75,7 @@ PAGES = {
 }
 
 # Script blocks every page needs: the shared head (helpers) is handled separately.
-ALWAYS_JS = ["provenance", "tooltips"]
+ALWAYS_JS = ["provenance", "tooltips", "ask the data"]
 
 
 def to_entities(s):
@@ -95,6 +95,11 @@ def split_template(tpl):
     # and the hover tooltip element (page level). Both belong on every page.
     footer = re.search(r'<footer id="foot"></footer>', tpl).group(0)
     tip = re.search(r'<div id="tip"[^>]*></div>', tpl, re.S).group(0)
+    # The assistant's markup is nested, so it is delimited by comments rather than
+    # matched structurally. Anything outside a <section> has to be claimed here or
+    # it is silently dropped from every page.
+    ask = re.search(r'<!--ASK-->.*?<!--/ASK-->', tpl, re.S).group(0)
+    tip = tip + "\n" + ask
 
     sections = {}
     for m in re.finditer(r'<section id="([^"]+)">.*?</section>', tpl, re.S):
@@ -153,6 +158,17 @@ def main():
         claimed_text |= {blocks[j] for j in cfg["js"]}
     orphan_js = sorted({k for k, v in blocks.items() if v not in claimed_text})
     orphan_sec = sorted(set(sections) - {s for c in PAGES.values() for s in c["sections"]})
+
+    # The chatbot's brief. Written next to the pages and fetched by the widget at
+    # runtime, so one copy serves all three and adding a match refreshes the bot.
+    try:
+        from factpack import build_factpack
+        facts = json.dumps(build_factpack(payload), separators=(",", ":"))
+        (ROOT / "facts.json").write_text(facts, encoding="utf-8")
+        facts_note = "facts.json  %7s bytes  (~%d tokens)" % (
+            format(len(facts), ","), len(facts) / 3.5)
+    except Exception as e:
+        facts_note = "facts.json NOT written: %s" % e
 
     built = datetime.date.today().isoformat()
     for name, cfg in PAGES.items():
@@ -218,6 +234,7 @@ def main():
         print("built %-12s %7s bytes  (%d sections, %d payload keys)" % (
             out.name, format(len(html), ','), len(cfg["sections"]), len(cfg["data"])))
 
+    print("built " + facts_note)
     lg = payload["league"]
     print("  %d matches | %d teams | %s to %s" % (lg['matches'], lg['teams'], lg['first'], lg['last']))
     if payload.get("ours"):

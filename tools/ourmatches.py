@@ -43,7 +43,10 @@ PLAYER_STYLE = {
     "Armaan Wadhwa":         ("RHB", "Right-arm medium"),
     "Patel Happy":           ("LHB", "Right-arm fast"),
     "Pankhil Patel":         ("RHB", "Right-arm medium"),
-    "Jay":                   ("LHB", "Right-arm fast"),
+    # Jay's CricHeroes profile was corrected on 20 Aug 2026 from right-arm fast to
+    # leg break. He is the only spinner we have used, which matters: the 2025
+    # league was almost entirely pace (see phases.bowlTypes).
+    "Jay":                   ("LHB", "Right-arm leg break"),
     "Jay Vasani":            ("RHB", None),
     "Jemish Virendra Patel": ("RHB", "Right-arm medium"),
     "Jonty Patel":           ("RHB", None),
@@ -335,11 +338,10 @@ def batters_total(batters, innings):
 def attack_types(bowlers):
     """Our bowling grouped by type, so pace vs spin (and fast vs medium) is plain.
 
-    Rows sum the bowlers of each type; a type nobody bowls (spin, so far) is kept
-    as an explicit empty row rather than dropped, because 'we have no spinner' is
-    itself the finding.
+    Rows sum the bowlers of each type. A type nobody bowls is kept as an explicit
+    empty row rather than dropped, because an absent option is itself a finding.
     """
-    order = [("fast", "Right-arm fast"), ("medium", "Right-arm medium"), ("spin", "Spin")]
+    order = [("fast", "Pace - fast"), ("medium", "Pace - medium"), ("spin", "Spin")]
     rows = []
     for key, label in order:
         bs = [b for b in bowlers if b["type"] == key
