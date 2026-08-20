@@ -155,6 +155,10 @@ def build_factpack(payload):
             "and in teamBowlingTotal the field is `wktsBowler`: only what the bowler "
             "is credited with, so run outs sit with the fielders. " + _wkt_tally +
             "Never quote one beside the other, and say which you mean.",
+            "Runs follow the same split: a bowler's runs (career and per phase) are "
+            "bowler-credited and exclude byes and leg byes, while team phase blocks "
+            "include them. So teamBowlingTotal can trail phaseSplits.bowl by a few "
+            "runs; the gap is byes, recorded per innings as byeRuns.",
             "Nothing here says which players to pick. Selection is the captain's call.",
         ],
 
@@ -178,7 +182,11 @@ def build_factpack(payload):
         },
 
         "phasePar2025": {
-            "note": "League average runs per phase, from 98 complete 15-over innings. "
+            "note": "League average runs per phase. Each phase is averaged over every "
+                    "innings that completed THAT phase, so the samples differ: powerplay "
+                    "167 innings, middle 155, death 98 (only innings that reached over 15). One innings has no over-by-over record "
+                    "(Friends United 184/6 v Golden City, 2025-09-28) and sits outside "
+                    "phase averages, though it counts in results and win-line bands. "
                     "Powerplay = overs 1-5, middle = 6-10, death = 11-15.",
             "all": _phase_block(ph.get("all", {})),
             "winners": _phase_block(ph.get("won", {})),

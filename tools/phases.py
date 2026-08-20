@@ -1,4 +1,4 @@
-"""Phase-by-phase analysis from the 40-match ball-by-ball sample in ../phase-data/.
+"""Phase-by-phase analysis from the ball-by-ball record of every completed match in ../phase-data/.
 
 Each phase-data/<matchid>.json holds per-over [over, runs, wickets, bowler_type]
 for both innings, collected from CricHeroes commentary and validated against the

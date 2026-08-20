@@ -2147,13 +2147,16 @@ $('method').innerHTML =
   `(Birthday Boys XI twice) and count in records but not in run rates. Two group matches were ` +
   `played over 12 overs rather than 15; totals from those are excluded from the win-line bands.</p>` +
   (PH ? `<p><b>Phase data.</b> Feeds the phase-by-phase section here and the match plan on the fixtures ` +
-    `page. Over-by-over scores were read from the CricHeroes ` +
-    `commentary for a ${PH.sample.matches}-match sample chosen to span the full range of totals and ` +
-    `both innings types, covering every team at least twice. Each innings was reconciled against its ` +
-    `known final total — ${PH.sample.innings} complete innings passed that check and are used here. ` +
-    `Innings that ended early (all out, or a chase won inside the quota) are excluded from phase ` +
-    `averages because they have no comparable death phase; that is why the phase sample ` +
-    `(${PH.sample.innings}) is smaller than the match count.</p>` : '') +
+    `page. Over-by-over scores were read from the CricHeroes commentary for all ` +
+    `${PH.sample.matches} completed 15-over matches, and every innings was reconciled against its ` +
+    `known final total — ${PH.sample.innings} innings in all. Each phase is then averaged over the ` +
+    `innings that actually completed that phase, so an innings that ended at 14.3 still counts in ` +
+    `the powerplay and middle it really bowled: powerplay ${PH.all.ppn}, middle ${PH.all.midn}, ` +
+    `death ${PH.all.deathn} innings (the death needs all fifteen overs, which is why its sample ` +
+    `is the smallest). Full-innings averages use the ${PH.sample.complete} innings that ran their ` +
+    `whole quota. One innings is missing from the ball-by-ball record - Friends United's ` +
+    `184/6 against Golden City on Sep 28 has no over-by-over data on CricHeroes - so it counts ` +
+    `in the results and the win-line bands but sits outside the phase averages.</p>` : '') +
   (OURS ? `<p><b>Our own matches (the <a href="form.html">Our form</a> page).</b> All ${OURS.record.played} matches we have played, read ` +
     `ball by ball from the CricHeroes commentary and reconciled against the scorecard: runs, wickets, legal ` +
     `deliveries and every bowler's figures match the published card in all ` +
