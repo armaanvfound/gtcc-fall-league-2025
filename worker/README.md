@@ -27,6 +27,14 @@ npx wrangler deploy
 
 Wrangler prints a URL like `https://rcb-ask.<your-subdomain>.workers.dev`.
 
+> **`DEEPSEEK_API_KEY` is a literal name, not a placeholder.** Type those 16
+> characters exactly; the key goes at the `Enter a secret value:` prompt that
+> follows, never on the command line. Adding it through the Cloudflare dashboard
+> works too (Workers & Pages -> rcb-ask -> Settings -> Variables and Secrets),
+> but a secret added there only binds on the **next deploy** - run
+> `npx wrangler deploy` afterwards or the Worker will still report
+> "not configured".
+
 Put it in `ASK_PROXY` at the top of `tools/build.py`, then from the repo root:
 
 ```bash
