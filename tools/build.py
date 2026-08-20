@@ -27,6 +27,12 @@ from stats import build_payload
 
 SITE = "GTCC Fall League 2026 - Royal Challenger Blaster"
 
+# Deployed team proxy for the assistant (see worker/README.md). Paste the URL
+# wrangler prints, then rebuild: the whole team shares one key and readers only
+# ever enter a passphrase. While this is empty the assistant shows setup notes
+# instead. No API key belongs here - the proxy holds it as a Cloudflare secret.
+ASK_PROXY = ""
+
 # file -> what it is made of.
 #   sections: <section id="..."> blocks, in the order given
 #   js:       script blocks, named by the comment that opens them
@@ -201,7 +207,9 @@ def main():
         body = nav + '\n<div class="wrap">\n' + inner + "\n</div>\n" + tip
         js = jshead + "\n" + "\n".join(
             blocks[b] for b in cfg["js"] + [j for j in ALWAYS_JS if j not in cfg["js"]])
-        js = js.replace("/*__DATA__*/", data).replace("/*__PAGE__*/", name)
+        js = (js.replace("/*__DATA__*/", data)
+                .replace("/*__PAGE__*/", name)
+                .replace("/*__ASKPROXY__*/", ASK_PROXY))
 
         # Character references are not decoded inside <script>, so the two regions
         # are escaped differently: numeric references in the markup, \uXXXX in JS.

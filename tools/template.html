@@ -289,15 +289,16 @@
   #askclose{background:none;border:0;color:var(--muted);font-size:22px;line-height:1;
             cursor:pointer;padding:0 4px;}
   #askclose:hover{color:var(--ink);}
-  #ask-key{padding:16px;border-bottom:1px solid var(--rule-2);}
-  #ask-key p{font-size:13px;line-height:1.55;color:var(--ink-2);margin:0 0 9px;}
-  #ask-key .ask-note{font-size:11.5px;color:var(--muted);line-height:1.5;}
-  #askkey{width:100%;box-sizing:border-box;font-family:var(--mono);font-size:12px;
+  #ask-setup,#ask-pass{padding:16px;border-bottom:1px solid var(--rule-2);}
+  #ask-setup p,#ask-pass p{font-size:13px;line-height:1.55;color:var(--ink-2);margin:0 0 9px;}
+  #ask-setup .ask-note,#ask-pass .ask-note{font-size:11.5px;color:var(--muted);line-height:1.5;}
+  #askpass{width:100%;box-sizing:border-box;font-family:var(--mono);font-size:12px;
           padding:9px 10px;border:1px solid var(--rule);border-radius:3px;
           background:var(--paper);color:var(--ink);}
   .ask-krow{display:flex;align-items:center;gap:12px;margin-top:9px;}
-  #asksave{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-           background:var(--bat);color:#fff;border:0;border-radius:3px;padding:8px 14px;cursor:pointer;}
+  #asspasssave{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+           text-transform:uppercase;background:var(--bat);color:#fff;border:0;border-radius:3px;
+           padding:8px 14px;cursor:pointer;}
   .ask-krow a{font-family:var(--mono);font-size:11px;color:var(--muted);}
   .ask-err{color:var(--bad);font-size:12px;margin-top:8px;line-height:1.5;}
   #ask-log{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;
@@ -848,20 +849,24 @@
     <button type="button" id="askclose" aria-label="Close">&times;</button>
   </div>
 
-  <div id="ask-key" hidden>
-    <p>This asks Claude your question with the dashboard's numbers attached. It runs
-       from <b>your</b> browser with <b>your</b> Anthropic key.</p>
-    <p class="ask-note">The key is stored only in this browser (localStorage). It is
-       never in the repo, never in the published page, and is sent only to
-       api.anthropic.com. Anyone else using the dashboard sets their own.</p>
-    <input type="password" id="askkey" placeholder="sk-ant-..." autocomplete="off"
+  <div id="ask-pass" hidden>
+    <p>Enter the <b>team passphrase</b> to use the assistant. You only do this once
+       on this device.</p>
+    <p class="ask-note">Ask the captain for it. No API key needed &mdash; the team
+       shares one, and it never reaches your browser.</p>
+    <input type="password" id="askpass" placeholder="team passphrase" autocomplete="off"
            spellcheck="false">
     <div class="ask-krow">
-      <button type="button" id="asksave">Save key</button>
-      <a href="https://console.anthropic.com/settings/keys" target="_blank"
-         rel="noopener">Get a key</a>
+      <button type="button" id="asspasssave">Start asking</button>
     </div>
-    <div id="askkeyerr" class="ask-err" hidden></div>
+    <div id="askpasserr" class="ask-err" hidden></div>
+  </div>
+
+  <div id="ask-setup" hidden>
+    <p>The assistant is not switched on yet.</p>
+    <p class="ask-note">Deploy the team proxy and put its URL in <b>ASK_PROXY</b> in
+       <b>tools/build.py</b>, then rebuild. Setup takes about five minutes and is
+       written up in <b>worker/README.md</b>.</p>
   </div>
 
   <div id="ask-log" aria-live="polite"></div>
@@ -880,8 +885,8 @@
     <button type="submit" id="asksend">Ask</button>
   </form>
   <div class="ask-foot">
-    <span id="ask-model">Claude Sonnet 5</span>
-    <button type="button" id="askforget">Forget key</button>
+    <span id="ask-model">DeepSeek v4-pro &middot; reasoning on</span>
+    <button type="button" id="askforget">Reset</button>
   </div>
 </div>
 <!--/ASK-->
@@ -2182,31 +2187,37 @@ document.addEventListener('mouseout', e => {
 /* ask the data */
 // A grounded assistant over facts.json.
 //
-// Runs entirely in the reader's own browser against their own Anthropic key,
-// which is why there is no server here and no key in this file. The key is put
-// in by the reader, kept in localStorage on their machine, and sent only to
-// api.anthropic.com. Calling the API from a page needs the
-// anthropic-dangerous-direct-browser-access header; without it the browser
-// blocks the request at CORS.
+// Every question goes through the team proxy in worker/, which holds the one API
+// key the team shares. No key is in this page, in this repository, or in any
+// reader's browser - only a passphrase. The proxy also owns the model, the
+// reasoning effort, the token ceiling and the system prompt, so nothing sent
+// from here can change what a question costs or what it is willing to answer.
 //
 // The model is never asked to work anything out. facts.json holds every number
-// the pages already computed and reconciled, and the system prompt tells the
-// model to answer only from it and to say so when something is absent. That is
-// the whole reliability story: the arithmetic happened in Python, was checked
-// against the scorecards, and the model only has to find a number and phrase it.
+// the pages already computed and reconciled, and the prompt tells the model to
+// answer only from it and to say so when something is absent. That is the whole
+// reliability story: the arithmetic happened in Python, was checked against the
+// scorecards, and the model only has to find a number and phrase it.
 (function(){
-  const KEY = 'rcb.anthropic.key';
-  const MODEL = 'claude-sonnet-5';
+  const PASS = 'rcb.team.pass';
+  // Set at build time from ASK_PROXY in tools/build.py. The proxy holds the one
+  // API key the team shares; readers only ever supply the passphrase.
+  const PROXY = "/*__ASKPROXY__*/";
+
   const btn = $('askbtn'), panel = $('askpanel');
   if (!btn || !panel) return;
 
-  const log = $('ask-log'), keyBox = $('ask-key'), form = $('ask-form');
+  const log = $('ask-log'), setupBox = $('ask-setup'), passBox = $('ask-pass'), form = $('ask-form');
   const qIn = $('askq'), send = $('asksend');
-  let facts = null, factsErr = null, busy = false;
-  const history = [];                       // [{role, content}] — last few turns
+  let busy = false;
+  const history = [];                       // [{role, content}] — plain strings
 
-  const getKey = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
-  const hasKey = () => /^sk-ant-/.test(getKey());
+  const ls = {
+    get(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } },
+    set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+  const ready = () => !!PROXY && !!ls.get(PASS);
 
   function say(cls, html) {
     const d = document.createElement('div');
@@ -2221,25 +2232,17 @@ document.addEventListener('mouseout', e => {
     log.innerHTML = '';
     say('bot', `<span class="ask-empty">Ask anything the dashboard can answer &mdash; our form, an ` +
       `opponent, the league, a phase, a player. Answers come only from the numbers on these pages, ` +
-      `and it will say so when something is not in the data.</span>`);
+      `and it will say so when something is not in the data. It reasons before answering, so give ` +
+      `it a couple of seconds.</span>`);
   }
 
-  function showKeyBox(on) {
-    keyBox.hidden = !on;
+  function showSetup(on) {
+    // No proxy configured yet -> explain; otherwise ask for the passphrase.
+    setupBox.hidden = !(on && !PROXY);
+    passBox.hidden = !(on && PROXY);
     form.hidden = on;
     $('ask-eg').hidden = on;
     if (!on) setTimeout(() => qIn.focus(), 30);
-  }
-
-  async function loadFacts() {
-    if (facts || factsErr) return;
-    try {
-      const r = await fetch('facts.json', {cache: 'no-cache'});
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      facts = await r.json();
-    } catch (e) {
-      factsErr = e.message || String(e);
-    }
   }
 
   btn.addEventListener('click', async () => {
@@ -2249,35 +2252,30 @@ document.addEventListener('mouseout', e => {
     btn.style.display = open ? '' : 'none';
     if (open) return;
     if (!log.children.length) greet();
-    showKeyBox(!hasKey());
-    loadFacts();
+    showSetup(!ready());
   });
   const close = () => { panel.hidden = true; btn.style.display = ''; btn.setAttribute('aria-expanded','false'); };
   $('askclose').addEventListener('click', close);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) close(); });
 
-  $('asksave').addEventListener('click', () => {
-    const v = $('askkey').value.trim();
-    const err = $('askkeyerr');
-    if (!/^sk-ant-/.test(v)) {
+  $('asspasssave').addEventListener('click', () => {
+    const v = $('askpass').value.trim();
+    const err = $('askpasserr');
+    if (!v) { err.hidden = false; err.textContent = 'Enter the passphrase.'; return; }
+    if (!ls.set(PASS, v)) {
       err.hidden = false;
-      err.textContent = 'That does not look like an Anthropic key — they start with sk-ant-.';
+      err.textContent = 'This browser is blocking local storage, so it cannot be saved.';
       return;
     }
-    try { localStorage.setItem(KEY, v); } catch (e) {
-      err.hidden = false;
-      err.textContent = 'This browser is blocking local storage, so the key cannot be saved.';
-      return;
-    }
-    err.hidden = true; $('askkey').value = '';
-    showKeyBox(false);
+    err.hidden = true; $('askpass').value = '';
+    showSetup(false);
   });
 
   $('askforget').addEventListener('click', () => {
-    try { localStorage.removeItem(KEY); } catch (e) {}
+    ls.del(PASS);
     history.length = 0;
     greet();
-    showKeyBox(true);
+    showSetup(true);
   });
 
   $('ask-eg').addEventListener('click', e => {
@@ -2287,51 +2285,11 @@ document.addEventListener('mouseout', e => {
     form.requestSubmit();
   });
 
-  function systemPrompt() {
-    return [
-      "You answer questions about the Royal Challenger Blaster cricket dashboard.",
-      "",
-      "The JSON below is the complete set of facts available to you. It was computed",
-      "from ball-by-ball data and reconciled against the scorecards, so the numbers in",
-      "it are correct and final.",
-      "",
-      "Rules, in order of importance:",
-      "1. Answer ONLY from this JSON. Never use outside cricket knowledge for facts about",
-      "   these teams, players, matches or the league.",
-      "2. Never calculate. Every figure you need is already in the JSON. Quote it as it",
-      "   stands. If a question needs a number that is not there, say plainly that the",
-      "   dashboard does not hold it rather than working it out or estimating.",
-      "3. Respect the `caveats` array. Our own record is three friendlies against one",
-      "   opponent and is not league cricket. Never present it as proof of how good the",
-      "   team is, and say so when a question leans on it.",
-      "4. If a question cannot be answered from the JSON, say so in one sentence and",
-      "   name what would be needed. Do not guess, and do not pad the answer.",
-      "5. Do not tell the captain who to select. You may say what the numbers show about",
-      "   a player; selection is their call.",
-      "",
-      "Style: answer first, in one or two short sentences, then the numbers that support",
-      "it. Be specific and quote figures. Keep it under about 130 words unless asked for",
-      "more. Plain sentences; use <b> for a key number and <ul><li> for a short list.",
-      "Never use markdown. This is a team's own dashboard, so 'we' and 'our' are right.",
-      "",
-      "FACTS:",
-      JSON.stringify(facts)
-    ].join("\n");
-  }
-
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const q = qIn.value.trim();
     if (!q || busy) return;
-
-    if (!hasKey()) { showKeyBox(true); return; }
-    await loadFacts();
-    if (!facts) {
-      say('err', `Could not load the data file (facts.json${factsErr ? ': ' + esc(factsErr) : ''}). ` +
-        `If you opened this page straight off disk, browsers block that read — serve the folder ` +
-        `over http, or use the published site.`);
-      return;
-    }
+    if (!ready()) { showSetup(true); return; }
 
     qIn.value = '';
     say('me', esc(q));
@@ -2340,49 +2298,36 @@ document.addEventListener('mouseout', e => {
 
     history.push({role: 'user', content: q});
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      // The proxy pins the model, the reasoning effort, the ceiling and the
+      // prompt. We send only the conversation, so nothing here can change what
+      // it costs or what it is willing to answer.
+      const res = await fetch(PROXY, {
         method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'x-api-key': getKey(),
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          max_tokens: 700,
-          // Lookup and phrasing, not reasoning — the sums are already done.
-          thinking: {type: 'disabled'},
-          system: [{
-            type: 'text',
-            text: systemPrompt(),
-            // The pack is byte-identical every turn, so it caches; repeat
-            // questions bill the prefix at roughly a tenth of the input rate.
-            cache_control: {type: 'ephemeral'}
-          }],
-          messages: history.slice(-8)
-        })
+        headers: {'content-type': 'application/json', 'x-team-pass': ls.get(PASS)},
+        body: JSON.stringify({messages: history.slice(-8)})
       });
 
+      // The proxy always answers JSON, and puts anything gone wrong in .error.
+      let data = null;
+      try { data = await res.json(); } catch (e) {}
+      const detail = (data && data.error) ? String(data.error) : '';
+
       if (!res.ok) {
-        let detail = '';
-        try { const j = await res.json(); detail = (j.error && j.error.message) || ''; } catch (e) {}
         thinking.remove();
         history.pop();
-        const msg = res.status === 401
-          ? `That key was rejected. Check it, or set a different one with <b>Forget key</b>.`
-          : res.status === 429
-            ? `Rate limited by the API — wait a moment and ask again.`
-            : res.status === 400 && /credit|balance/i.test(detail)
-              ? `The API account has no credit left.`
-              : `The API returned ${res.status}. ${esc(detail).slice(0, 180)}`;
-        say('err', msg);
+        if (res.status === 401) {
+          ls.del(PASS);
+          say('err', `That passphrase was not accepted. Check it with the captain and try again.`);
+          showSetup(true);
+          return;
+        }
+        say('err', detail
+          ? esc(detail)
+          : `The assistant returned ${res.status}. Try again in a moment.`);
         return;
       }
 
-      const data = await res.json();
-      const text = (data.content || [])
-        .filter(b => b.type === 'text').map(b => b.text).join('').trim();
+      const text = (data && data.text || '').trim();
       thinking.remove();
       if (!text) { history.pop(); say('err', 'The model returned an empty answer. Try rephrasing.'); return; }
       // The model is told to emit only <b>, <ul>, <li> — strip anything else.
@@ -2390,6 +2335,8 @@ document.addEventListener('mouseout', e => {
         .replace(/<(?!\/?(b|ul|li|br)\b)[^>]*>/gi, '')
         .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
       say('bot', safe);
+      // Plain strings both ways: DeepSeek's API is OpenAI-shaped, and the
+      // reasoning is not replayed as conversation.
       history.push({role: 'assistant', content: text});
     } catch (err) {
       thinking.remove();
