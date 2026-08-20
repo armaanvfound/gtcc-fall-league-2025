@@ -227,19 +227,78 @@ def record(matches):
                 nrr=round(rf / ro - ra / oo, 2) if ro and oo else None)
 
 
+def _overs_str(balls):
+    return "%d.%d" % (balls // 6, balls % 6)
+
+
+def bowlers_total(bowlers):
+    """The whole team's bowling, as the column totals of the per-bowler table.
+
+    Summed from the rows so it always reconciles with them. Wickets are therefore
+    bowler-credited, so this can trail the team's dismissals by the run-outs -
+    which belong to the fielders, not the attack.
+    """
+    balls = sum(b["balls"] for b in bowlers)
+    runs = sum(b["runs"] for b in bowlers)
+    wkts = sum(b["wkts"] for b in bowlers)
+    dots = sum(b["dots"] for b in bowlers)
+    ph = {}
+    for p in PHASES:
+        pb = sum(b["ph"][p]["balls"] for b in bowlers)
+        pd = sum(b["ph"][p]["dots"] for b in bowlers)
+        pr = sum(b["ph"][p]["runs"] for b in bowlers)
+        pw = sum(b["ph"][p]["wkts"] for b in bowlers)
+        ph[p] = dict(balls=pb, dots=pd, runs=pr, wkts=pw, dotPct=_pct(pd, pb),
+                     econ=round(pr / (pb / 6), 2) if pb else None)
+    return dict(overs=_overs_str(balls), balls=balls, runs=runs, wkts=wkts,
+                econ=round(runs / (balls / 6), 2) if balls else None,
+                avg=round(runs / wkts, 1) if wkts else None,
+                sr=round(balls / wkts, 1) if wkts else None,
+                dots=dots, dotPct=_pct(dots, balls), ph=ph)
+
+
+def batters_total(batters, innings):
+    """The whole team's batting off the bat, as column totals of the batter table.
+
+    `innings` is the number of team innings (once per match). Runs are off the
+    bat only, so this trails the team totals in the match log by the extras.
+    """
+    runs = sum(b["runs"] for b in batters)
+    balls = sum(b["balls"] for b in batters)
+    outs = sum(b["outs"] for b in batters)
+    f4 = sum(b["f4"] for b in batters)
+    f6 = sum(b["f6"] for b in batters)
+    ph = {}
+    for p in PHASES:
+        pb = sum(b["ph"][p]["balls"] for b in batters)
+        pd = sum(b["ph"][p]["dots"] for b in batters)
+        pr = sum(b["ph"][p]["runs"] for b in batters)
+        ph[p] = dict(balls=pb, dots=pd, runs=pr, dotPct=_pct(pd, pb),
+                     sr=round(pr / pb * 100) if pb else None)
+    return dict(inns=innings, runs=runs, balls=balls, outs=outs, f4=f4, f6=f6,
+                best=max((b["best"] for b in batters), default=0),
+                avg=round(runs / outs, 1) if outs else None,
+                sr=round(runs / balls * 100, 1) if balls else None,
+                bdryPct=_pct(f4 * 4 + f6 * 6, runs) if runs else None, ph=ph)
+
+
 def build_ours():
     matches = load()
     if not matches:
         return None
     m15 = [m for m in matches if int(float(m["quota"])) == 15]
+    bowlers = bowler_table(matches)
+    batters = batter_table(matches)
     return dict(
         record=record(matches),
         matches=match_rows(matches),
         all=phase_totals(matches),
         fifteen=phase_totals(matches, only15=True),
         fifteenCount=len(m15),
-        bowlers=bowler_table(matches),
-        batters=batter_table(matches),
+        bowlers=bowlers,
+        batters=batters,
+        bowlersTotal=bowlers_total(bowlers),
+        battersTotal=batters_total(batters, len(matches)),
     )
 
 

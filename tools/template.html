@@ -364,10 +364,14 @@
   .par-note{font-size:12.5px;line-height:1.55;color:var(--muted);margin:10px 0 0;max-width:78ch;}
   .pltbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
   .pltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
-            color:var(--muted);text-align:left;padding:0 10px 8px 0;font-weight:400;white-space:nowrap;}
+            color:var(--muted);text-align:left;padding:0 10px 8px;font-weight:400;white-space:nowrap;}
   .pltbl th span{display:block;color:var(--rule);font-size:8.5px;margin-top:2px;text-transform:none;letter-spacing:0;}
   .pltbl td{padding:9px 10px;border-top:1px solid var(--rule-2);white-space:nowrap;font-size:13.5px;}
-  .pltbl td:first-child{padding-left:0;}
+  .pltbl th:first-child,.pltbl td:first-child{padding-left:16px;}
+  .pltbl th:last-child,.pltbl td:last-child{padding-right:16px;}
+  .pltbl tfoot td{border-top:2px solid var(--rule);background:var(--surface-2);}
+  .pl-total .pl-n{font-family:var(--serif);}
+  .pl-total .pl-n span{font-family:var(--mono);}
   .pl-n{font-size:14px;}
   .pl-n span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
   .pl-ph b{font-family:var(--serif);font-size:15px;font-weight:400;}
@@ -950,11 +954,23 @@ if (OURS) {
         return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
           `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
       }).join('') + `</tr>`).join('') +
-    `</tbody></table></div>` +
+    `</tbody><tfoot>` + (function(){
+      const T = OURS.bowlersTotal;
+      return `<tr class="pl-total"><td class="pl-n">All bowlers<span>whole team</span></td>` +
+        `<td>${T.overs}</td><td>${T.runs}</td><td><b>${T.wkts}</b></td>` +
+        `<td class="${T.econ <= 7 ? 'good' : (T.econ >= 10 ? 'bad' : '')}">${T.econ}</td>` +
+        `<td>${T.avg === null ? '&mdash;' : T.avg}</td><td>${T.sr === null ? '&mdash;' : T.sr}</td>` +
+        `<td>${pc(T.dotPct)}</td>` +
+        PHK.map(p => {
+          const d = T.ph[p];
+          return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
+            `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
+        }).join('') + `</tr>`;
+    })() + `</tfoot></table></div>` +
     `<div class="pl-key"><b>R</b> runs &middot; <b>W</b> wickets &middot; <b>Econ</b> runs per over &middot; ` +
     `<b>Avg</b> runs per wicket &middot; <b>SR</b> balls per wicket &middot; <b>Dot%</b> dot-ball share. ` +
-    `Phase cells show economy, with dot% and balls beneath. Wickets are bowler-credited &mdash; a run out ` +
-    `sits with the fielding side, not the bowler.</div>`;
+    `Phase cells show economy, with dot% and balls beneath. The total row sums the bowlers, so wickets ` +
+    `are bowler-credited &mdash; run outs and byes sit with the fielders, not the attack.</div>`;
 
   // ---- batters, with the same phase-by-phase treatment as the bowlers
   const srClass = v => v === null ? '' : (v >= 150 ? 'good' : (v < 100 ? 'bad' : ''));
@@ -978,11 +994,23 @@ if (OURS) {
         return `<td class="pl-ph"><b class="${srClass(d.sr)}">${d.sr}</b>` +
           `<span>${pc(d.dotPct)} &middot; ${d.balls}b${(d.f4 + d.f6) ? ' &middot; ' + (d.f4 + d.f6) + '&times;4/6' : ''}</span></td>`;
       }).join('') + `</tr>`).join('') +
-    `</tbody></table></div>` +
+    `</tbody><tfoot>` + (function(){
+      const T = OURS.battersTotal;
+      return `<tr class="pl-total"><td class="pl-n">All batters<span>whole team</span></td>` +
+        `<td>${T.inns}</td><td><b>${T.runs}</b></td><td>${T.balls}</td>` +
+        `<td>${T.avg === null ? 'n/o' : T.avg}</td><td class="${srClass(T.sr)}">${T.sr}</td>` +
+        `<td>${T.best}</td><td>${T.f4}/${T.f6}</td><td>${pc(T.bdryPct)}</td>` +
+        PHK.map(p => {
+          const d = T.ph[p];
+          return `<td class="pl-ph"><b class="${srClass(d.sr)}">${d.sr}</b>` +
+            `<span>${pc(d.dotPct)} &middot; ${d.balls}b</span></td>`;
+        }).join('') + `</tr>`;
+    })() + `</tfoot></table></div>` +
     `<div class="pl-key"><b>Inns</b> innings &middot; <b>R</b> runs &middot; <b>B</b> balls faced &middot; ` +
     `<b>Avg</b> runs per dismissal (a not-out never counts, so an unbeaten batter shows <b>n/o</b>) &middot; ` +
     `<b>SR</b> runs per 100 balls &middot; <b>HS</b> highest score &middot; <b>Bdry%</b> share of runs in boundaries. ` +
-    `Phase cells show strike rate, with dot% and balls beneath.</div>`;
+    `Phase cells show strike rate, with dot% and balls beneath. The total row is runs off the bat, so it ` +
+    `trails the match-log totals by the extras we were given.</div>`;
 
   // ---- what it changes: computed, so it moves as matches are added
   (function(){
