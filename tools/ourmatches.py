@@ -165,12 +165,17 @@ def bowler_table(matches):
 
 
 def batter_table(matches):
-    """Per-batter career. Average is runs per dismissal; not-outs never count as one."""
+    """Per-batter career, with phase splits. Average is runs per dismissal;
+    not-outs never count as one. Phase arrays are [balls, dots, runs, 4s, 6s]."""
+    # batting-phase array indices
+    BB, BD, BR, B4, B6 = 0, 1, 2, 3, 4
     agg = {}
     for m in matches:
+        bp = m["ourInnings"].get("battingPhases", {})
         for name, r, b, f4, f6, out_ in m["ourInnings"]["batting"]:
             a = agg.setdefault(name, dict(name=name, inns=0, runs=0, balls=0, outs=0,
-                                          f4=0, f6=0, best=0, notOuts=0))
+                                          f4=0, f6=0, best=0, notOuts=0,
+                                          ph={p: [0, 0, 0, 0, 0] for p in PHASES}))
             a["inns"] += 1
             a["runs"] += r
             a["balls"] += b
@@ -180,6 +185,11 @@ def batter_table(matches):
             a["notOuts"] += 0 if out_ else 1
             if r > a["best"]:
                 a["best"] = r
+            for p in PHASES:
+                cell = bp.get(name, {}).get(p)
+                if cell:
+                    for i in range(5):
+                        a["ph"][p][i] += cell[i]
     rows = []
     for a in agg.values():
         rows.append(dict(
@@ -188,6 +198,11 @@ def batter_table(matches):
             avg=round(a["runs"] / a["outs"], 1) if a["outs"] else None,
             sr=round(a["runs"] / a["balls"] * 100, 1) if a["balls"] else None,
             bdryPct=_pct(a["f4"] * 4 + a["f6"] * 6, a["runs"]) if a["runs"] else None,
+            ph={p: dict(balls=a["ph"][p][BB], dots=a["ph"][p][BD], runs=a["ph"][p][BR],
+                        f4=a["ph"][p][B4], f6=a["ph"][p][B6],
+                        sr=round(a["ph"][p][BR] / a["ph"][p][BB] * 100) if a["ph"][p][BB] else None,
+                        dotPct=_pct(a["ph"][p][BD], a["ph"][p][BB]))
+                for p in PHASES},
         ))
     rows.sort(key=lambda x: -x["runs"])
     return rows

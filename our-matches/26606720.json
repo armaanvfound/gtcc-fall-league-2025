@@ -24,7 +24,15 @@
    ["Patel Happy", 0, 1, 0, 0, true],
    ["Jeetmanyu Bawra", 2, 2, 0, 0, true],
    ["Nikhil Das T", 2, 1, 0, 0, false]
-  ]
+  ],
+  "battingPhases": {
+   "Jonty Patel": {"pp": [8, 3, 18, 1, 2], "mid": [4, 2, 8, 0, 1], "death": [0, 0, 0, 0, 0]},
+   "Yash Chauhan": {"pp": [4, 0, 10, 2, 0], "mid": [3, 2, 1, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Kalpesh Saraiya": {"pp": [0, 0, 0, 0, 0], "mid": [1, 0, 1, 0, 0], "death": [6, 3, 6, 0, 0]},
+   "Patel Happy": {"pp": [0, 0, 0, 0, 0], "mid": [1, 1, 0, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Jeetmanyu Bawra": {"pp": [0, 0, 0, 0, 0], "mid": [2, 1, 2, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Nikhil Das T": {"pp": [0, 0, 0, 0, 0], "mid": [1, 0, 2, 0, 0], "death": [0, 0, 0, 0, 0]}
+  }
  },
  "theirInnings": {
   "order": 2,

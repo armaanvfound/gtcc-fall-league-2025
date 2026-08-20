@@ -7,9 +7,11 @@ played" section and into the form line that section 09's match plan reads.
 ## Adding a match
 
 1. Open the match on CricHeroes and go to the **Commentary** tab.
-2. Run the extractor below in the browser console, once per innings (use the
-   innings dropdown to switch). Pass the phase boundaries for the format:
-   15 overs -> `__agg(5,10)`, 12 overs -> `__agg(4,8)`, 10 overs -> `__agg(3,7)`.
+2. Run **`__agg`** (below) once per innings for the team-level phase splits and
+   the per-bowler figures. Then run **`__bat`** (also below) on *our* batting
+   innings only, for the per-batter phase splits. Use the innings dropdown to
+   switch. Pass the phase boundaries for the format:
+   15 overs -> `(5,10)`, 12 overs -> `(4,8)`, 10 overs -> `(3,7)`.
 3. Copy the numbers into a new `<matchid>.json` in the shape below.
 4. Reconcile against the **Scorecard** tab before committing - see Checks.
 5. `python3 tools/build.py`.
@@ -53,6 +55,41 @@ window.__agg=function(ppEnd,midEnd){
 __agg(5,10)
 ```
 
+And the per-batter phase extractor, run on **our** batting innings only. Each
+phase array is `[balls faced, dots, runs, 4s, 6s]`, where a ball faced is any
+non-wide delivery and a dot is a faced ball with no runs off the bat:
+
+```js
+window.__bat=function(ppEnd,midEnd){
+  var L=document.querySelector('main').innerText.split('\n').map(s=>s.trim());
+  var out={team:(document.querySelector('main').innerText.match(/\n([^\n]+)\nFull Commentary/)||[])[1],bat:{}};
+  for(var i=0;i<L.length;i++){
+    var m=L[i].match(/^(\d+)\.(\d)$/); if(!m) continue;
+    var d=(L[i+1]||'').split(' AI:')[0];
+    var N=+m[1], b=+m[2], ov=(b===0)?N:N+1;
+    var p=ov<=ppEnd?'pp':(ov<=midEnd?'mid':'death');
+    var sm=d.match(/\bto\s+([^,]+),/), striker=sm?sm[1].trim():'?';
+    if(/,\s*wide/i.test(d)) continue;                 // a wide is not faced
+    var nb=/\(no ball\)/i.test(d), runs=0, f4=0, f6=0, r;
+    if(/,\s*(leg bye|byes|bye)/i.test(d)) runs=0;      // extras, faced, 0 off bat
+    else if(/,\s*SIX/.test(d)){ runs=6; f6=1; }
+    else if(/,\s*FOUR/.test(d)){ runs=4; f4=1; }
+    else if(nb){ r=d.match(/\(no ball\),\s*(\d+)\s*runs?/i); runs=r?+r[1]:0; }
+    else if(/,\s*OUT[\s,]/.test(d)){ r=d.match(/,\s*(\d+)\s*runs?/); runs=r?+r[1]:0; }
+    else if(/,\s*no run/i.test(d)) runs=0;
+    else { r=d.match(/,\s*(\d+)\s*runs?/); runs=r?+r[1]:0; }
+    if(!out.bat[striker]) out.bat[striker]={pp:[0,0,0,0,0],mid:[0,0,0,0,0],death:[0,0,0,0,0]};
+    var a=out.bat[striker][p]; a[0]++; if(runs===0) a[1]++; a[2]+=runs; a[3]+=f4; a[4]+=f6;
+  }
+  return out;
+};
+__bat(5,10)
+```
+
+A no-ball counts as a ball faced (0 off the bat unless a boundary or runs
+follow), which is why a batter's total balls faced can exceed the innings' legal
+deliveries by the number of no-balls - the scorecard counts it the same way.
+
 ## Checks before committing
 
 The extractor is regex over commentary prose, so verify it rather than trust it.
@@ -64,6 +101,10 @@ Every innings recorded so far passes all four:
 - **Per-bowler runs** equal each bowler's figures. Note the scorecard's own
   bowling table renders without its runs column - recover it as
   `economy x overs`, which is exact.
+- **Per-batter phase splits** reconcile to each batter's innings line: the sum of
+  a batter's `pp/mid/death` runs equals their `batting` runs, and likewise for
+  balls, fours and sixes. `tools/ourmatches.py` does not enforce this, so check it
+  when you add a match - all six innings recorded so far match exactly.
 
 Two known traps, both already handled by the code above:
 
@@ -98,7 +139,10 @@ no-balls, which is correct - a batter faces a no-ball, the over does not count i
    "runs": 131, "wkts": 7, "oversText": "13.4", "balls": 82,
    "wideRuns": 7, "noBalls": 1,
    "phases": {"pp": [30,15,52,3], "mid": [30,7,50,3], "death": [22,10,29,1]},
-   "batting": [["Name", runs, balls, fours, sixes, wasDismissed], ...]
+   "batting": [["Name", runs, balls, fours, sixes, wasDismissed], ...],
+   "battingPhases": {          // per batter, from __bat; [balls,dots,runs,4s,6s]
+     "Name": {"pp": [4,2,6,1,0], "mid": [15,1,34,6,0], "death": [0,0,0,0,0]}
+   }
  },
  "theirInnings": {
    "order": 1,
@@ -113,7 +157,8 @@ no-balls, which is correct - a batter faces a no-ball, the over does not count i
 }
 ```
 
-Every phase array is `[legal balls, dots, runs, wickets]`.
+Team and bowling phase arrays are `[legal balls, dots, runs, wickets]`; the
+per-batter `battingPhases` arrays are `[balls faced, dots, runs, 4s, 6s]`.
 
 ## What the model will and will not do with these
 

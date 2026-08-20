@@ -25,7 +25,17 @@
    ["Pankhil Patel", 2, 3, 0, 0, true],
    ["Jay Vasani", 7, 8, 0, 0, false],
    ["Jemish Virendra Patel", 6, 2, 0, 1, false]
-  ]
+  ],
+  "battingPhases": {
+   "Jonty Patel": {"pp": [12, 6, 12, 0, 1], "mid": [4, 3, 1, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Kalpesh Saraiya": {"pp": [13, 5, 14, 1, 0], "mid": [0, 0, 0, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Yash Chauhan": {"pp": [0, 0, 0, 0, 0], "mid": [3, 2, 1, 0, 0], "death": [0, 0, 0, 0, 0]},
+   "Armaan Wadhwa": {"pp": [0, 0, 0, 0, 0], "mid": [7, 2, 11, 0, 1], "death": [9, 2, 19, 0, 2]},
+   "Jay": {"pp": [0, 0, 0, 0, 0], "mid": [10, 3, 15, 1, 1], "death": [2, 1, 2, 0, 0]},
+   "Pankhil Patel": {"pp": [0, 0, 0, 0, 0], "mid": [0, 0, 0, 0, 0], "death": [3, 2, 2, 0, 0]},
+   "Jay Vasani": {"pp": [0, 0, 0, 0, 0], "mid": [0, 0, 0, 0, 0], "death": [8, 4, 7, 0, 0]},
+   "Jemish Virendra Patel": {"pp": [0, 0, 0, 0, 0], "mid": [0, 0, 0, 0, 0], "death": [2, 1, 6, 0, 1]}
+  }
  },
  "theirInnings": {
   "order": 1,
