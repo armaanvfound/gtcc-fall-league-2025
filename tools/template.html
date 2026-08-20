@@ -2449,7 +2449,7 @@ document.addEventListener('mouseout', e => {
         // anyway and **stars** on screen look broken. Convert rather than trust.
         .replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>')
         .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s.,;:)]|$)/g, '$1<b>$2</b>')
-        .replace(/^\s*#{1,6}\s+/gm, '')
+        .replace(/^[ \t]*#{1,6}[ \t]+/gm, '')
         .replace(/^\s*[-*]\s+/gm, '\u2022 ')
         .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
       say('bot', safe);

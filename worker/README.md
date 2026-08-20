@@ -75,14 +75,40 @@ Worst case, someone determined burns a capped number of dashboard answers a day.
 
 ---
 
+## Speed, and why reasoning is off
+
+Reasoning is **off** (`THINKING = "off"`). That was measured, not assumed - same
+questions, same model, same fact pack:
+
+| | lookup | "weakest phase, who fixes it" | toss call | "bowling lineup, max 3 overs each" |
+|---|---|---|---|---|
+| reasoning high | — | 30-65s | ~65s | **277s** |
+| reasoning low | 8.8s | — | 11.7s | 89s |
+| **off** | **5.9s** | **5.2s** | **3.9s** | **8.3s** |
+
+Answers stayed correct with it off. A 14-question eval pulls every number out of
+every answer and checks it exists in `facts.json`; it passes. That is the fact
+pack doing its job - the arithmetic already happened in Python and was reconciled
+against the scorecards, so the model retrieves and phrases rather than derives.
+Reasoning was paying for work that was already done.
+
+Speed is also reliability. Phones suspend a page when you switch apps and kill the
+request with it, so a 90-second answer often never arrives - that was the real
+cause of "Could not reach the API".
+
+To turn it back on: `THINKING = "on"` in `wrangler.toml` (then `REASONING_EFFORT`
+applies), and redeploy. Worth trying only if answers feel shallow on a genuinely
+multi-step question.
+
 ## Running costs
 
-`deepseek-v4-flash` with reasoning on `low`. The fact pack (~8.1k tokens) sits at
-the front of every request unchanged, so DeepSeek's context cache picks it up and
-repeat questions bill input at the cache-hit rate rather than the miss rate.
+`deepseek-v4-pro`, reasoning off. The fact pack (~8.5k tokens) sits unchanged at
+the front of every request, so DeepSeek's context cache bills repeat questions at
+the cache-hit rate.
 
-Roughly **$0.0003 a question — about 3,000 questions per dollar.** The first
-question after a quiet spell costs a little more (cache miss, ~$0.002).
+Roughly **$0.001-0.002 a question** - several hundred per dollar. With reasoning
+on `high` a single hard question could reach 8,000+ output tokens, which is where
+the cost and the 277 seconds both came from.
 
 Published rates per million tokens, off-peak / peak:
 
@@ -93,9 +119,20 @@ Published rates per million tokens, off-peak / peak:
 
 Peak is 01:00-04:00 and 06:00-10:00 UTC.
 
-If answers ever feel thin, `MODEL = "deepseek-v4-pro"` or
-`REASONING_EFFORT = "medium"` in `wrangler.toml`, then redeploy — still around
-700 questions per dollar.
+## Keeping answers accurate
+
+Two rules do the heavy lifting, both in `tools/factpack.py`:
+
+- **Never calculate.** Every figure ships precomputed. If a number is not in the
+  pack the assistant says so rather than working it out.
+- **Never re-derive a decision the pages already made.** `tossPolicy` holds the
+  standing toss call and `opponents2025[team].target` each side's target. Without
+  this the assistant answered "bowl first" to a question the match-plan page
+  answers "bat" - a dashboard contradicting itself.
+
+`python3 /tmp/eval.py`-style grounding checks are worth re-running after any
+change to the pack: ask a spread of questions, extract every number from each
+answer, and confirm it appears in `facts.json`.
 
 ## Everyday operation
 
@@ -106,5 +143,5 @@ If answers ever feel thin, `MODEL = "deepseek-v4-pro"` or
 - **Rotating the API key**: `npx wrangler secret put DEEPSEEK_API_KEY`.
 - **Turning it off**: `npx wrangler delete`, or set `ASK_PROXY = ""` in
   `tools/build.py` and rebuild to go back to per-reader keys.
-- **Watching spend**: the Cloudflare dashboard shows request counts; the Anthropic
-  console shows cost.
+- **Watching spend**: the Cloudflare dashboard shows request counts; the DeepSeek
+  platform console shows cost.
