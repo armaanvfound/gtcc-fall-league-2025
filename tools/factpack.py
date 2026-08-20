@@ -55,21 +55,28 @@ Rules, in order of importance:
    in your first sentence, in plain words, then the numbers behind it. If the data
    is thin, still make the call: give your best read, say it is a best read, and
    name the one thing that would change it. Never end by handing the decision back.
-4. Own the judgement, and keep it visibly separate from the numbers. The figures are
+4. WHERE THE PACK ALREADY DECIDES SOMETHING, QUOTE ITS DECISION. `tossPolicy`
+   holds the standing toss call and `opponents2025[team].target` the target for
+   that side. These are what the dashboard's own pages show, so answering
+   anything else makes the assistant contradict the site it speaks for. If you
+   think the numbers point the other way, say so as a note AFTER giving the
+   dashboard's call - never instead of it.
+5. Own the judgement, and keep it visibly separate from the numbers. The figures are
    the dashboard's and they are final; the call is yours. Say "I would" and "we
    should". Never dress a judgement up as if it were a measured fact.
-5. Respect the `caveats` array. Our own record is three friendlies against one
+6. Respect the `caveats` array. Our own record is three friendlies against one
    opponent and is not league cricket - say so when a question leans on it, then
    still make the call on the evidence there is. A caveat qualifies a recommendation;
    it never replaces one.
-6. Only answer questions about this dashboard, this team, and this league. If asked
+7. Only answer questions about this dashboard, this team, and this league. If asked
    for anything else - general knowledge, writing, code, other sports - reply that
    you only answer questions about the Royal Challenger Blaster dashboard.
 
 Style: lead with the answer or the call, in one or two short sentences, then the
 numbers that support it. Be specific and quote figures. Keep it under about 150
-words unless asked for more. Plain sentences; use <b> for a key number or the call
-itself and <ul><li> for a short list. Never use markdown. This is a team's own
+words unless asked for more. Plain sentences. This renders as HTML, so use <b> for a key number or
+the call itself and <ul><li> for a short list. NEVER use markdown - no **bold**,
+no ##headings, no *bullets*. Asterisks appear literally on screen and look broken. This is a team's own
 dashboard, so "we" and "our" are right."""
 
 
@@ -125,6 +132,26 @@ def _attack_credited(attack):
     out = copy.deepcopy(attack)
     out["rows"] = [_bowler_credited(r) for r in out["rows"]]
     return out
+
+
+# The pages already decide the toss, and they decide it the same way every time:
+# bat. Leaving the assistant to re-derive that from the raw splits let it answer
+# "bowl first" to the question the dashboard answers "bat" - the one thing a
+# single source of truth must never do. So the call ships as a fact, with the
+# same target rule the match-plan page uses (setTarget in template.html).
+def _target_for(t, death_par):
+    """Mirror of setTarget(): 140 if they finish hard, 125 if they cannot, else 130."""
+    base = 130
+    bat = (t or {}).get("bat") or {}
+    if bat.get("death") is not None and (bat.get("deathn") or 0) >= 3 and death_par:
+        d = round(bat["death"] - death_par)
+        if d >= 4:
+            return {"target": 140, "because": "they finish hard", "deathVsPar": d}
+        if d <= -4:
+            return {"target": 125, "because": "they do not accelerate", "deathVsPar": d}
+    d = (round(bat["death"] - death_par)
+         if bat.get("death") is not None and death_par else 0)
+    return {"target": base, "because": "they finish about par", "deathVsPar": d}
 
 
 def build_factpack(payload):
@@ -247,6 +274,25 @@ def build_factpack(payload):
         },
 
         "paceVsSpin2025": ph.get("bowlTypes"),
+
+        # THE STANDING CALL. Quote this; do not re-derive it.
+        "tossPolicy": {
+            "ifWeWinTheToss": "BAT FIRST",
+            "isThisEverBowlFirst": "No. There is no ground in this competition "
+                                   "where chasing is the better bet.",
+            "why": "Batting first won %s%% of decided matches in 2025, and totals of "
+                   "120+ were defended %s%% of the time." % (
+                       lg.get("batFirstPct"),
+                       int(round((lg.get("hi120") or {}).get("w", 0)
+                                 / max(1, (lg.get("hi120") or {}).get("n", 1)) * 100))),
+            "ifWeLoseTheTossAndTheyBat": "We bowl first; the job is keeping them under 120.",
+            "ifWeLoseTheTossAndTheyBowl": "We bat first anyway - this is the plan we wanted.",
+            "defaultTarget": 130,
+            "perOpponentTarget": "See opponents2025[team].target - already computed.",
+            "note": "This is the dashboard's own recommendation and every page shows "
+                    "it. Never answer 'bowl first' to a won toss, and never present "
+                    "a contrary reading of the same numbers as the recommendation.",
+        },
     }
 
     for name, t in (ph.get("teams") or {}).items():
@@ -260,6 +306,7 @@ def build_factpack(payload):
             entry["bowlingConceded"] = dict(_phase_block(w), total=_r(w.get("total"), 1),
                                             innings=w.get("n"))
         if entry:
+            entry.update(_target_for(t, (ph.get("all") or {}).get("death")))
             pack["opponents2025"][name] = entry
 
     return pack

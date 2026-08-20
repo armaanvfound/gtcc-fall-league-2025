@@ -135,6 +135,7 @@ export default {
     catch (e) { return json({ error: "Could not load the dashboard data: " + e.message }, 502, cors); }
 
     const maxTokens = parseInt(env.MAX_TOKENS || "8000", 10);
+    const thinkOn = String(env.THINKING || "on").toLowerCase() !== "off";
 
     // Reasoning is drawn from the same budget as the answer, so a long think can
     // consume the lot and leave content empty with finish_reason "length" - that
@@ -150,8 +151,13 @@ export default {
       },
       body: JSON.stringify({
         model: env.MODEL || "deepseek-v4-pro",
-        thinking: { type: "enabled" },
-        reasoning_effort: env.REASONING_EFFORT || "high",
+        // THINKING=off turns reasoning off entirely. It is the single biggest
+        // lever on how long an answer takes, so it is a setting rather than a
+        // constant - see README for what it costs in answer quality.
+        // Omitting `thinking` does NOT turn reasoning off - v4-pro reasons by
+        // default - so "off" has to be stated explicitly.
+        thinking: { type: thinkOn ? "enabled" : "disabled" },
+        ...(thinkOn ? { reasoning_effort: env.REASONING_EFFORT || "low" } : {}),
         max_tokens: budget,
         stream: false,
         messages: [{ role: "system", content: system }, ...turns],
@@ -165,11 +171,12 @@ export default {
       } catch (e) { return false; }
     };
 
-    let upstream, raw;
+    let upstream, raw, retried = false;
     try {
       let res = await call(maxTokens);
       raw = await res.text();
       if (res.ok && emptyAndTruncated(raw)) {
+        retried = true;
         const res2 = await call(maxTokens * 2);
         const raw2 = await res2.text();
         if (res2.ok && !emptyAndTruncated(raw2)) { res = res2; raw = raw2; }
@@ -208,6 +215,6 @@ export default {
       }, 502, cors);
     }
 
-    return json({ text, usage: data.usage || null }, 200, cors);
+    return json({ text, usage: data.usage || null, retried }, 200, cors);
   },
 };

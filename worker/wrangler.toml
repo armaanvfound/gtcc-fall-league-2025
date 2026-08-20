@@ -15,10 +15,31 @@ FACTS_URL = "https://armaanvfound.github.io/gtcc-fall-league-2025/facts.json"
 # hundreds of questions per dollar. Drop to "deepseek-v4-flash" to spend less.
 MODEL = "deepseek-v4-pro"
 
-# Reasoning is enabled in worker.js; this is how hard it thinks before answering.
-# low | medium | high. High, because multi-part questions ("where are we weakest,
-# and who fixes it") are exactly what this gets asked.
-REASONING_EFFORT = "high"
+# Reasoning: off.
+#
+# Measured on this fact pack, same questions, same model:
+#
+#                          lookup   "weakest phase,   toss     "bowling lineup,
+#                                    who fixes it"    call      max 3 overs each"
+#   THINKING=on, high        --          30-65s        ~65s        277s
+#   THINKING=on, low        8.8s           --         11.7s         89s
+#   THINKING=off            5.9s          5.2s         3.9s        8.3s
+#
+# Off, and the answers were still correct - every figure spot-checked against
+# facts.json. That is the whole point of the fact pack: the arithmetic already
+# happened in Python and was reconciled against the scorecards, so the model is
+# retrieving and phrasing, not deriving. Reasoning was paying for work that was
+# already done.
+#
+# Speed is also reliability here. Phones suspend a page when you switch apps and
+# kill the request with it, so a 90-second answer frequently never arrives at
+# all - which is exactly what "Could not reach the API" was.
+#
+# Set THINKING = "on" to turn it back on; REASONING_EFFORT then applies
+# (low | medium | high). Worth trying if answers ever feel shallow on a genuinely
+# multi-step question - but re-read the table first.
+THINKING = "off"
+REASONING_EFFORT = "low"
 
 # Thinking and the answer share this budget. It is a ceiling, not a spend - you
 # pay for tokens used - so it is set well clear of a long think. Running out mid

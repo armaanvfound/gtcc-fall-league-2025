@@ -2396,6 +2396,9 @@ document.addEventListener('mouseout', e => {
     // It reasons before answering, and a hard question can genuinely take a
     // minute. Silent dots for that long read as broken, so show the clock.
     const t0 = Date.now();
+    let hiddenDuringWait = false;
+    const onHide = () => { if (document.hidden) hiddenDuringWait = true; };
+    document.addEventListener('visibilitychange', onHide);
     const tick = setInterval(() => {
       const s = Math.round((Date.now() - t0) / 1000);
       if (s < 4) return;
@@ -2442,6 +2445,12 @@ document.addEventListener('mouseout', e => {
       // The model is told to emit only <b>, <ul>, <li> — strip anything else.
       const safe = text
         .replace(/<(?!\/?(b|ul|li|br)\b)[^>]*>/gi, '')
+        // The prompt forbids markdown, but a model will occasionally emit it
+        // anyway and **stars** on screen look broken. Convert rather than trust.
+        .replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>')
+        .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s.,;:)]|$)/g, '$1<b>$2</b>')
+        .replace(/^\s*#{1,6}\s+/gm, '')
+        .replace(/^\s*[-*]\s+/gm, '\u2022 ')
         .replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
       say('bot', safe);
       // Plain strings both ways: DeepSeek's API is OpenAI-shaped, and the
@@ -2450,9 +2459,19 @@ document.addEventListener('mouseout', e => {
     } catch (err) {
       thinking.remove();
       history.pop();
-      say('err', `Could not reach the API — check the connection. (${esc(err.message || err)})`);
+      // Phones suspend a page when you switch apps and kill any request with
+      // it. That surfaces as a generic network failure, so "check the
+      // connection" sends people looking in the wrong place. If the page was
+      // hidden while we waited, name the real cause.
+      qIn.value = q;                       // so retrying is one tap, not retyping
+      say('err', hiddenDuringWait
+        ? `The phone paused this page while the answer was coming back, so it was lost. ` +
+          `Your question is still in the box — tap Ask to try again, and stay on this ` +
+          `screen while it answers.`
+        : `Could not reach the assistant — check the connection. (${esc(err.message || err)})`);
     } finally {
       clearInterval(tick);
+      document.removeEventListener('visibilitychange', onHide);
       busy = false; send.disabled = false; qIn.focus();
     }
   });
