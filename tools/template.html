@@ -2260,9 +2260,10 @@ document.addEventListener('mouseout', e => {
   function greet() {
     log.innerHTML = '';
     say('bot', `<span class="ask-empty">Ask anything the dashboard can answer &mdash; our form, an ` +
-      `opponent, the league, a phase, a player. Answers come only from the numbers on these pages, ` +
-      `and it will say so when something is not in the data. It reasons before answering, so give ` +
-      `it a couple of seconds.</span>`);
+      `opponent, the league, a phase, a player. Ask it what to <i>do</i>, too: bat or bowl, who ` +
+      `opens, which phase to attack. It gives a straight recommendation and says how strongly the ` +
+      `numbers back it. Figures come only from these pages, and it says so when something is not ` +
+      `in the data. It reasons first, so give it a couple of seconds.</span>`);
   }
 
   function showSetup(on) {
