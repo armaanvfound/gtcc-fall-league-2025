@@ -31,7 +31,7 @@ SITE = "GTCC Fall League 2026 - Royal Challenger Blaster"
 # wrangler prints, then rebuild: the whole team shares one key and readers only
 # ever enter a passphrase. While this is empty the assistant shows setup notes
 # instead. No API key belongs here - the proxy holds it as a Cloudflare secret.
-ASK_PROXY = ""
+ASK_PROXY = "https://rcb-ask.rcb-ask.workers.dev"
 
 # file -> what it is made of.
 #   sections: <section id="..."> blocks, in the order given
