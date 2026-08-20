@@ -48,7 +48,7 @@ PAGES = {
     "form": dict(
         title="Our form",
         eyebrow="Royal Challenger Blaster &middot; Our matches",
-        h1="How we have actually played",
+        h1="Our form so far",
         desc=("Every match Royal Challenger Blaster has played, read ball by ball: phase splits, "
               "dot-ball percentages, player careers and what they say we should change."),
         sections=["ours", "squad"],
@@ -91,6 +91,10 @@ def split_template(tpl):
     style = re.search(r'<style>.*?</style>', tpl, re.S).group(0)
     topnav = re.search(r'<nav class="topnav".*?</nav>\n', tpl, re.S).group(0)
     header = re.search(r'<header>.*?</header>', tpl, re.S).group(0)
+    # Page chrome that lives outside every <section>: the footer (inside .wrap)
+    # and the hover tooltip element (page level). Both belong on every page.
+    footer = re.search(r'<footer id="foot"></footer>', tpl).group(0)
+    tip = re.search(r'<div id="tip"[^>]*></div>', tpl, re.S).group(0)
 
     sections = {}
     for m in re.finditer(r'<section id="([^"]+)">.*?</section>', tpl, re.S):
@@ -111,17 +115,28 @@ def split_template(tpl):
         short = key.split(':')[0].strip()
         if short != key:
             blocks[short] = p
-    return style, topnav, header, sections, head, blocks
+    return style, topnav, header, sections, head, blocks, footer, tip
 
 
 def slice_payload(payload, keys):
     return {k: payload[k] for k in keys if k in payload}
 
 
+def renumber(section_html, n):
+    """Rewrite a section's sechead counter to its position on this page.
+
+    The numbers in the template are the old single-page reading order; once the
+    sections are spread across pages that order is meaningless and reads as a
+    scatter of gaps (03, then 11, then 14). Each page counts its own from 01.
+    """
+    return re.sub(r'(<div class="n">)\d+(</div>)', r'\g<1>%02d\g<2>' % n,
+                  section_html, count=1)
+
+
 def main():
     payload = build_payload()
     tpl = (HERE / "template.html").read_text(encoding="utf-8")
-    style, topnav, header, sections, jshead, blocks = split_template(tpl)
+    style, topnav, header, sections, jshead, blocks, footer, tip = split_template(tpl)
 
     missing = []
     for name, cfg in PAGES.items():
@@ -161,8 +176,13 @@ def main():
                         % (p, PAGES[p]["title"], PAGES[p]["h1"], PAGES[p]["desc"])
                         for p in others) + '</nav>') if others else ''
 
-        body = (nav + "\n" + head + "\n\n"
-                + "\n\n".join(sections[s] for s in cfg["sections"]) + "\n\n" + foot)
+        # The top nav is full-bleed so its sticky bar and border span the viewport
+        # (its own .tn-in centres the links). Everything else lives inside .wrap,
+        # which supplies the max-width column, the horizontal padding and the
+        # centring — without it every page renders edge to edge.
+        numbered = [renumber(sections[s], i) for i, s in enumerate(cfg["sections"], 1)]
+        inner = head + "\n\n" + "\n\n".join(numbered) + "\n\n" + foot + "\n" + footer
+        body = nav + '\n<div class="wrap">\n' + inner + "\n</div>\n" + tip
         js = jshead + "\n" + "\n".join(
             blocks[b] for b in cfg["js"] + [j for j in ALWAYS_JS if j not in cfg["js"]])
         js = js.replace("/*__DATA__*/", data).replace("/*__PAGE__*/", name)

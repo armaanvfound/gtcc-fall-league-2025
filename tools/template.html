@@ -758,6 +758,9 @@ const fmtDate = s => {
   const [y, m, d] = s.split('-').map(Number);
   return `${d} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]}`;
 };
+// shared: the provenance block renders the hero, but the method block (which is
+// emitted before it on the league page) also needs the season span.
+const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
 
 /* 01 — our 2026 campaign */
 const SEA = DATA.season;
@@ -780,7 +783,7 @@ if (SEA) {
       let know;
       if (f.tier === 'scouted') {
         know = `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
-               `pick them in section 10 for the plan.</span>`;
+               `pick them in the match plan below.</span>`;
       } else if (f.tier === 'form') {
         const fm = f.form;
         know = `<span class="tag form">Form only</span><span class="know">` +
@@ -1007,7 +1010,7 @@ if (OURS) {
       `ball being hit. Against a 120 win line it is the cheapest ten runs on this page.`]);
     items.push([`Our middle overs are already the strength &mdash; keep them`,
       `We bowl <b>${pc(OURS.all.bowl.mid.dotPct)}</b> dots in the middle against ${pc(OURS.all.bowl.pp.dotPct)} in the ` +
-      `powerplay, and concede ${OURS.all.bowl.mid.rpo} an over there. The league section below says middle-over ` +
+      `powerplay, and concede ${OURS.all.bowl.mid.rpo} an over there. The league page shows middle-over ` +
       `wickets are what separate winners from losers; this is the one phase where our own numbers already agree.`]);
     if (topBat) {
       items.push([`With the bat we accumulate better than we accelerate`,
@@ -1025,8 +1028,6 @@ if (OURS) {
 }
 
 /* provenance */
-const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
-
 if (PAGE === 'form') {
   const r = OURS ? OURS.record : null;
   $('standfirst').textContent = r
@@ -1056,6 +1057,13 @@ if (PAGE === 'form') {
     `Scores transcribed from the CricHeroes match list and reconciled against the fixture ` +
     `spreadsheet: all ${L.matches} agree on batting order, overs, margin and result.`;
 }
+
+// The page footer is site chrome, shown on every page.
+$('foot').innerHTML =
+  `Royal Challenger Blaster · GTCC Fall League 2026 — plans built from the 2025 season, ` +
+  `${L.matches} matches, ${L.teams} teams, ${SPAN}.<br>` +
+  `Prepared from the fixture spreadsheet and the CricHeroes match list. ` +
+  `Last rebuilt ${document.documentElement.dataset.built || 'locally'}.`;
 
 /* 01 — win line */
 const hi = L.hi120, lo = L.lo120;
@@ -1533,8 +1541,8 @@ if (PH && PH.teams) {
       `target, conceded without a shot being played.`]);
     return `<div class="ourform"><div class="of-lab">From our own ${OURS.record.played} matches</div>` +
       rows.map(([k, v]) => `<div class="of-row"><span class="of-k">${k}</span><span class="of-v">${v}</span></div>`).join('') +
-      `<div class="of-note">Friendlies against one opponent — habits, not proof. Full breakdown in
-         <a href="#ours">section 02</a>.</div></div>`;
+      `<div class="of-note">Friendlies against one opponent — habits, not proof. Full breakdown on
+         <a href="form.html">the Our form page</a>.</div></div>`;
   }
 
   function renderPlan(){
@@ -1769,7 +1777,7 @@ if (PH) {
            `a <b>${PH.gaps.death}-run gap</b>, wider than the powerplay (${PH.gaps.pp}) or middle ` +
            `(${PH.gaps.mid}). The 120-track innings add ${r(R.death)}.`,
         rule:`You cannot access this phase without batters in. Arriving at over 11 four down rather than ` +
-             `six is worth more than any powerplay cameo — this is the whole reason for the plan above.` },
+             `six is worth more than any powerplay cameo — this is the whole reason to keep wickets in hand.` },
       ball:{ tgt:`hold them to ${r(LS.death)}`,
         ev:`Losing sides managed <b>${r(LS.death)}</b> in the last five. Every run saved here is worth ` +
            `double: it is the phase with the widest winner–loser gap in the league.`,
@@ -1853,10 +1861,9 @@ const SQ = DATA.squad;
 if (SQ) {
   $('squad-lede').innerHTML =
     `<b>${esc(SQ.team)}</b> (${esc(SQ.city)}) — ${SQ.players.length} registered players, ` +
-    `captained by <b>${esc(SQ.captain)}</b>. We have no match history in this league yet, so every ` +
-    `number on this page is the field we are walking into, not a record of us. The 2026 squad limit ` +
-    `is 30 and additions close on <b>29 August</b> — the knockouts run five rounds in ten days, so ` +
-    `depth in bowling is what that allowance is for. Once we play, this becomes our own phase log.`;
+    `captained by <b>${esc(SQ.captain)}</b>. The record above is all friendlies so far; no league ` +
+    `match yet. The 2026 squad limit is 30 and additions close on <b>29 August</b> — the knockouts run ` +
+    `five rounds in ten days, so depth in bowling is what that allowance is for.`;
   $('squadgrid').innerHTML = SQ.players.map(p =>
     `<div style="padding:12px 14px"><div class="k" style="font-size:15.5px;font-family:var(--sans);line-height:1.35">${esc(p)}</div>` +
     (p === SQ.captain ? `<div class="t" style="margin-top:4px;color:var(--bat)">captain</div>` : '') +
@@ -1875,23 +1882,24 @@ $('method').innerHTML =
   `competition regulations do. Two fixtures were awarded without a result being played ` +
   `(Birthday Boys XI twice) and count in records but not in run rates. Two group matches were ` +
   `played over 12 overs rather than 15; totals from those are excluded from the win-line bands.</p>` +
-  (PH ? `<p><b>Phase data (sections 07–08).</b> Over-by-over scores were read from the CricHeroes ` +
+  (PH ? `<p><b>Phase data.</b> Feeds the phase-by-phase section here and the match plan on the fixtures ` +
+    `page. Over-by-over scores were read from the CricHeroes ` +
     `commentary for a ${PH.sample.matches}-match sample chosen to span the full range of totals and ` +
     `both innings types, covering every team at least twice. Each innings was reconciled against its ` +
     `known final total — ${PH.sample.innings} complete innings passed that check and are used here. ` +
     `Innings that ended early (all out, or a chase won inside the quota) are excluded from phase ` +
     `averages because they have no comparable death phase; that is why the phase sample ` +
     `(${PH.sample.innings}) is smaller than the match count.</p>` : '') +
-  (OURS ? `<p><b>Our own matches (section 02).</b> All ${OURS.record.played} matches we have played, read ` +
+  (OURS ? `<p><b>Our own matches (the <a href="form.html">Our form</a> page).</b> All ${OURS.record.played} matches we have played, read ` +
     `ball by ball from the CricHeroes commentary and reconciled against the scorecard: runs, wickets, legal ` +
     `deliveries and every bowler's figures match the published card in all ` +
     `${OURS.record.played * 2} innings. Wickets are bowler-credited, so a run out sits with the fielding side ` +
     `rather than whoever bowled the ball. A dot is a legal delivery off which no runs at all were scored — ` +
     `CricHeroes counts a bye as a dot for the batter, we do not. Only fifteen-over matches are set against ` +
-    `the league par above, because a twelve-over innings has no fifth-over powerplay and an eight-over ` +
+    `the league par, because a twelve-over innings has no fifth-over powerplay and an eight-over ` +
     `hit-out has no death; the rest still count toward player careers, where a ball faced means the same ` +
     `thing whatever the quota.</p>` : '') +
-  `<p><b>Weather (section 11).</b> Daily temperature, wind and rainfall from the Open-Meteo public ` +
+  `<p><b>Weather (the Conditions section).</b> Daily temperature, wind and rainfall from the Open-Meteo public ` +
   `archive, averaged across daytime hours for the Durham Region. Match start times are not in our ` +
   `data, so this is a day-level reading, not a per-match one.</p>` +
   `<p><b>What this page cannot tell you.</b> There are no individual batting or bowling figures ` +
@@ -1900,11 +1908,6 @@ $('method').innerHTML =
   `spin sample is a handful of overs — so the pace-or-spin section characterises the league and ` +
   `stops short of grading spin. Nothing here says which players to pick; it says how the league is ` +
   `won and where each opponent is soft. Squad selection is still your call.</p>`;
-
-$('foot').innerHTML =
-  `Amiirtham · GTCC Fall league 2025 — ${L.matches} matches, ${L.teams} teams, ${SPAN}.<br>` +
-  `Analysis prepared from the supplied fixture spreadsheet and CricHeroes match list. ` +
-  `Last rebuilt ${document.documentElement.dataset.built || 'locally'}.`;
 
 /* tooltips */
 const tip = $('tip');
