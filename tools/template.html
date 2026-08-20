@@ -910,7 +910,7 @@
     <button type="submit" id="asksend">Ask</button>
   </form>
   <div class="ask-foot">
-    <span id="ask-model">DeepSeek &middot; reasoning on</span>
+    <span id="ask-model">DeepSeek &middot; grounded in these pages</span>
     <button type="button" id="askforget">Reset</button>
   </div>
 </div>
@@ -2263,7 +2263,7 @@ document.addEventListener('mouseout', e => {
       `opponent, the league, a phase, a player. Ask it what to <i>do</i>, too: bat or bowl, who ` +
       `opens, which phase to attack. It gives a straight recommendation and says how strongly the ` +
       `numbers back it. Figures come only from these pages, and it says so when something is not ` +
-      `in the data. It reasons first, so give it a couple of seconds.</span>`);
+      `in the data. Answers come back in a few seconds.</span>`);
   }
 
   function showSetup(on) {
@@ -2393,8 +2393,8 @@ document.addEventListener('mouseout', e => {
     say('me', esc(q));
     busy = true; send.disabled = true;
     const thinking = say('bot', `<span class="ask-dots"><span></span><span></span><span></span></span>`);
-    // It reasons before answering, and a hard question can genuinely take a
-    // minute. Silent dots for that long read as broken, so show the clock.
+    // Answers land in a few seconds now that reasoning is off, but a slow
+    // network still happens and silent dots read as broken, so show the clock.
     const t0 = Date.now();
     let hiddenDuringWait = false;
     const onHide = () => { if (document.hidden) hiddenDuringWait = true; };
