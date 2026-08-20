@@ -1,5 +1,12 @@
 <title>GTCC Fall League 2025 — What the Data Says</title>
 <style>
+  /* The hidden attribute must actually hide. The browser's own [hidden] rule is
+     a plain element rule, so any id selector that sets display beats it - which
+     is how #askpanel{display:flex} left the assistant permanently on screen no
+     matter what the toggle set. Declared once here so every panel and box we
+     hide from script stays hidden, including ones added later. */
+  [hidden]{display:none!important;}
+
   :root{
     --paper:#F2F0E9; --surface:#FCFBF7; --surface-2:#F7F5EE;
     --ink:#1B1E1A; --ink-2:#4A4E45; --muted:#74786C; --rule:#DCD7CA; --rule-2:#E9E5DA;
