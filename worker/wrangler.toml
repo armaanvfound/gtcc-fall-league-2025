@@ -10,15 +10,18 @@ ALLOWED_ORIGINS = "https://armaanvfound.github.io,http://localhost:8899"
 # pushing updates the assistant on its own - no redeploy needed here.
 FACTS_URL = "https://armaanvfound.github.io/gtcc-fall-league-2025/facts.json"
 
-# DeepSeek's most capable model. deepseek-v4-flash is the cheaper, lighter one.
-MODEL = "deepseek-v4-pro"
+# The cheap one, and the right default here: the model is looking numbers up in a
+# brief we already computed, not working anything out, so the extra capability of
+# deepseek-v4-pro buys little. Roughly 3,000 questions per dollar against ~700.
+# Switch to "deepseek-v4-pro" if answers ever feel thin.
+MODEL = "deepseek-v4-flash"
 
-# Reasoning is enabled in worker.js. This sets how hard it thinks before
-# answering, and is the main cost lever: low | medium | high.
-REASONING_EFFORT = "high"
+# Reasoning is enabled in worker.js; this is how hard it thinks first, and the
+# main cost lever: low | medium | high. Low is plenty for a lookup.
+REASONING_EFFORT = "low"
 
-# Thinking and the answer share this budget, so it sits well above reply length.
-MAX_TOKENS = "3000"
+# Thinking and the answer share this budget, so it sits above reply length.
+MAX_TOKENS = "1500"
 
 # Spend guards. Only enforced when the KV namespace below is bound.
 MAX_PER_IP_HOUR = "40"

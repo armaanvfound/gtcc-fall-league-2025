@@ -1,81 +1,55 @@
 # Team proxy for the assistant
 
 One key, held server-side, so **the whole team just uses the assistant** — nobody
-sets up an API key, and the key never reaches anyone's browser.
+sets up an account, and the key never reaches anyone's browser.
 
-Without this, the dashboard falls back to asking each reader for their own key.
-With it, teammates open the site, type a shared word once, and ask away.
+Without it the dashboard just shows setup notes. With it, teammates open the
+site, type a shared word once, and ask away.
 
 Runs on Cloudflare Workers' free tier (100,000 requests a day; we will use a
 handful).
 
 ---
 
-## Setup — about five minutes
+## Setup — four commands
 
-Everything runs from this `worker/` folder.
+Run these from this `worker/` folder. Only the second one needs anything from
+you: it prompts, you paste the DeepSeek key, and it goes straight from your
+terminal to Cloudflare. The key is never written into this repository.
 
 ```bash
 cd worker
-```
-
-**1. Log in to Cloudflare** (creates a free account if you don't have one):
-
-```bash
 npx wrangler login
-```
-
-**2. Add your Anthropic API key.** This prompts you to paste it. It is stored
-encrypted by Cloudflare and is never written into this repository:
-
-```bash
-npx wrangler secret put ANTHROPIC_API_KEY
-```
-
-**3. Pick a team passphrase.** Any word. This is what your teammates type once:
-
-```bash
-npx wrangler secret put TEAM_PASS
-```
-
-**4. Deploy:**
-
-```bash
+npx wrangler secret put DEEPSEEK_API_KEY     # paste the key at the prompt
+echo -n "rcbchatbot" | npx wrangler secret put TEAM_PASS
 npx wrangler deploy
 ```
 
 Wrangler prints a URL like `https://rcb-ask.<your-subdomain>.workers.dev`.
 
-**5. Point the dashboard at it.** Put that URL in `ASK_PROXY` at the top of
-`tools/build.py`, then rebuild and push:
+Put it in `ASK_PROXY` at the top of `tools/build.py`, then from the repo root:
 
 ```bash
-cd .. && python3 tools/build.py && git add -A && git commit -m "Point assistant at team proxy" && git push
+python3 tools/build.py && git add -A && git commit -m "Enable team assistant" && git push
 ```
 
-**6. Tell the team**: open the dashboard, click **Ask the data**, enter the
-passphrase once. That's it — no keys, no accounts.
+Done. Tell the team: open the dashboard, hit **Ask the data**, type `rcbchatbot`
+once. No accounts, no keys, nothing to install.
 
----
+### Optional: the hard spending cap
 
-## Recommended: the hard spending cap
-
-Steps 1–5 give you an origin check, the passphrase, and a fixed model and token
-ceiling. To also get **rate limits and a hard daily cap**, add a KV namespace:
+The steps above give you an origin check, the passphrase, and a pinned model and
+token ceiling. To also get rate limits and a **hard daily cap**:
 
 ```bash
 npx wrangler kv namespace create ASK_KV
 ```
 
-Uncomment the `[[kv_namespaces]]` block in `wrangler.toml`, paste in the id it
-printed, and `npx wrangler deploy` again.
+Uncomment the `[[kv_namespaces]]` block in `wrangler.toml`, paste the id it
+printed, and `npx wrangler deploy` again. Now `MAX_PER_IP_HOUR` (40) and
+`MAX_PER_DAY` (500) are enforced. Without it both are simply skipped.
 
-With KV bound, the proxy enforces `MAX_PER_IP_HOUR` (40) and `MAX_PER_DAY` (500).
-Without it, both are skipped — everything else still applies.
-
----
-
-## What stops this being a free Claude for the internet
+## What stops this being a free chatbot for the internet
 
 The site is public, so the passphrase is discoverable by anyone who opens dev
 tools. That is expected, and it is why the proxy does not simply forward what it
@@ -95,20 +69,25 @@ Worst case, someone determined burns a capped number of dashboard answers a day.
 
 ## Running costs
 
-Claude Sonnet 5 with adaptive thinking on, `medium` effort. The fact pack (~7.6k
-tokens) is sent with `cache_control`, so after the first question in a five-minute
-window the prefix bills at about a tenth of the input rate.
+`deepseek-v4-flash` with reasoning on `low`. The fact pack (~8.1k tokens) sits at
+the front of every request unchanged, so DeepSeek's context cache picks it up and
+repeat questions bill input at the cache-hit rate rather than the miss rate.
 
-Roughly **half a cent to a cent per question**. A thousand questions is a few
-dollars. The daily cap is the backstop.
+Roughly **$0.0003 a question — about 3,000 questions per dollar.** The first
+question after a quiet spell costs a little more (cache miss, ~$0.002).
 
-Sonnet 5 is on introductory pricing ($2/$10 per 1M) until **31 Aug 2026**, then
-$3/$15.
+Published rates per million tokens, off-peak / peak:
 
-To spend less: set `EFFORT = "low"` in `wrangler.toml`, or `MODEL =
-"claude-haiku-4-5"` ($1/$5). To spend more for depth: `EFFORT = "high"`.
+| | input, cache hit | input, cache miss | output |
+|---|---|---|---|
+| `deepseek-v4-flash` | $0.007 / $0.014 | $0.22 / $0.44 | $0.66 / $1.32 |
+| `deepseek-v4-pro` | $0.022 / $0.044 | $0.66 / $1.32 | $1.98 / $3.96 |
 
----
+Peak is 01:00-04:00 and 06:00-10:00 UTC.
+
+If answers ever feel thin, `MODEL = "deepseek-v4-pro"` or
+`REASONING_EFFORT = "medium"` in `wrangler.toml`, then redeploy — still around
+700 questions per dollar.
 
 ## Everyday operation
 
@@ -116,7 +95,7 @@ To spend less: set `EFFORT = "low"` in `wrangler.toml`, or `MODEL =
   every five minutes, so the assistant updates itself — no redeploy.
 - **Changing the passphrase**: `npx wrangler secret put TEAM_PASS`, then tell the
   team. Their browsers will prompt again.
-- **Rotating the API key**: `npx wrangler secret put ANTHROPIC_API_KEY`.
+- **Rotating the API key**: `npx wrangler secret put DEEPSEEK_API_KEY`.
 - **Turning it off**: `npx wrangler delete`, or set `ASK_PROXY = ""` in
   `tools/build.py` and rebuild to go back to per-reader keys.
 - **Watching spend**: the Cloudflare dashboard shows request counts; the Anthropic

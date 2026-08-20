@@ -143,12 +143,13 @@ export default {
           authorization: "Bearer " + env.DEEPSEEK_API_KEY,
         },
         body: JSON.stringify({
-          model: env.MODEL || "deepseek-v4-pro",
-          // Reasoning on. Thinking is drawn from the same budget as the answer,
-          // so the ceiling sits well above the length of a reply.
+          model: env.MODEL || "deepseek-v4-flash",
+          // Reasoning on, but low: the model is looking up numbers in a brief we
+          // already computed, not deriving them. Thinking is drawn from the same
+          // budget as the answer, so the ceiling sits above reply length.
           thinking: { type: "enabled" },
-          reasoning_effort: env.REASONING_EFFORT || "high",
-          max_tokens: parseInt(env.MAX_TOKENS || "3000", 10),
+          reasoning_effort: env.REASONING_EFFORT || "low",
+          max_tokens: parseInt(env.MAX_TOKENS || "1500", 10),
           stream: false,
           messages: [{ role: "system", content: system }, ...turns],
         }),
