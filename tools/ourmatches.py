@@ -30,6 +30,53 @@ PHASES = ("pp", "mid", "death")
 # index into a phase array
 BALLS, DOTS, RUNS, WKTS = 0, 1, 2, 3
 
+# Batting hand and bowling style for every player who has batted or bowled for
+# us, read from their CricHeroes player profile / the commentary player cards
+# (verified on the profile page for the two whose card never showed). Every
+# bowler we have used is right-arm pace: three fast, five medium, no spinner and
+# no left-armer. Two of the batters are left-handed. Add a player here when they
+# first appear; a name that is missing simply shows no hand/type badge.
+PLAYER_STYLE = {
+    "Kalpesh Saraiya":       ("RHB", "Right-arm medium"),
+    "Yash Chauhan":          ("RHB", "Right-arm medium"),
+    "Nikhil Das T":          ("RHB", None),
+    "Armaan Wadhwa":         ("RHB", "Right-arm medium"),
+    "Patel Happy":           ("LHB", "Right-arm fast"),
+    "Pankhil Patel":         ("RHB", "Right-arm medium"),
+    "Jay":                   ("LHB", "Right-arm fast"),
+    "Jay Vasani":            ("RHB", None),
+    "Jemish Virendra Patel": ("RHB", "Right-arm medium"),
+    "Jonty Patel":           ("RHB", None),
+    "Jeetmanyu Bawra":       ("RHB", "Right-arm fast"),
+}
+
+
+def bowl_cat(style):
+    """(arm, type) from a style string, e.g. 'Left-arm orthodox' -> ('left','spin')."""
+    if not style:
+        return None, None
+    s = style.lower()
+    arm = "left" if "left" in s else "right"
+    if any(k in s for k in ("orthodox", "break", "googly", "chinaman", "spin", "leg-spin")):
+        typ = "spin"
+    elif "fast" in s:
+        typ = "fast"
+    elif "medium" in s:
+        typ = "medium"
+    else:
+        typ = "pace"
+    return arm, typ
+
+
+def bat_hand(name):
+    st = PLAYER_STYLE.get(name)
+    return st[0] if st else None
+
+
+def bowl_style(name):
+    st = PLAYER_STYLE.get(name)
+    return st[1] if st else None
+
 
 def load():
     out = []
@@ -146,9 +193,11 @@ def bowler_table(matches):
     for a in agg.values():
         balls = sum(a["ph"][p][BALLS] for p in PHASES)
         dots = sum(a["ph"][p][DOTS] for p in PHASES)
+        arm, typ = bowl_cat(bowl_style(a["name"]))
         out.append(dict(
             name=a["name"], matches=a["matches"], overs=round(a["overs"], 1),
             runs=a["runs"], wkts=a["wkts"],
+            style=bowl_style(a["name"]), arm=arm, type=typ,
             econ=_rate(a["runs"], a["overs"]),
             avg=round(a["runs"] / a["wkts"], 1) if a["wkts"] else None,
             sr=round(balls / a["wkts"], 1) if a["wkts"] else None,
@@ -194,6 +243,7 @@ def batter_table(matches):
     for a in agg.values():
         rows.append(dict(
             name=a["name"], inns=a["inns"], runs=a["runs"], balls=a["balls"],
+            hand=bat_hand(a["name"]),
             outs=a["outs"], notOuts=a["notOuts"], f4=a["f4"], f6=a["f6"], best=a["best"],
             avg=round(a["runs"] / a["outs"], 1) if a["outs"] else None,
             sr=round(a["runs"] / a["balls"] * 100, 1) if a["balls"] else None,
@@ -282,6 +332,57 @@ def batters_total(batters, innings):
                 bdryPct=_pct(f4 * 4 + f6 * 6, runs) if runs else None, ph=ph)
 
 
+def attack_types(bowlers):
+    """Our bowling grouped by type, so pace vs spin (and fast vs medium) is plain.
+
+    Rows sum the bowlers of each type; a type nobody bowls (spin, so far) is kept
+    as an explicit empty row rather than dropped, because 'we have no spinner' is
+    itself the finding.
+    """
+    order = [("fast", "Right-arm fast"), ("medium", "Right-arm medium"), ("spin", "Spin")]
+    rows = []
+    for key, label in order:
+        bs = [b for b in bowlers if b["type"] == key
+              or (key == "medium" and b["type"] == "pace")]
+        balls = sum(b["balls"] for b in bs)
+        runs = sum(b["runs"] for b in bs)
+        wkts = sum(b["wkts"] for b in bs)
+        dots = sum(b["dots"] for b in bs)
+        ph = {}
+        for p in PHASES:
+            pb = sum(b["ph"][p]["balls"] for b in bs)
+            pr = sum(b["ph"][p]["runs"] for b in bs)
+            pd = sum(b["ph"][p]["dots"] for b in bs)
+            pw = sum(b["ph"][p]["wkts"] for b in bs)
+            ph[p] = dict(balls=pb, runs=pr, dots=pd, wkts=pw, dotPct=_pct(pd, pb),
+                         econ=round(pr / (pb / 6), 2) if pb else None)
+        rows.append(dict(key=key, label=label, bowlers=len(bs),
+                         names=[b["name"] for b in bs], overs=_overs_str(balls),
+                         balls=balls, runs=runs, wkts=wkts, dots=dots,
+                         econ=round(runs / (balls / 6), 2) if balls else None,
+                         dotPct=_pct(dots, balls), ph=ph))
+    pace = sum(1 for b in bowlers if b["type"] in ("fast", "medium", "pace"))
+    spin = sum(1 for b in bowlers if b["type"] == "spin")
+    left = sum(1 for b in bowlers if b["arm"] == "left")
+    right = sum(1 for b in bowlers if b["arm"] == "right")
+    return dict(rows=rows, paceCount=pace, spinCount=spin, leftArm=left, rightArm=right)
+
+
+def hand_split(batters):
+    """Team batting split by hand: how our left- and right-handers have scored."""
+    out = {}
+    for hand in ("LHB", "RHB"):
+        bs = [b for b in batters if b["hand"] == hand]
+        runs = sum(b["runs"] for b in bs)
+        balls = sum(b["balls"] for b in bs)
+        outs = sum(b["outs"] for b in bs)
+        out[hand] = dict(players=len(bs), names=[b["name"] for b in bs],
+                         runs=runs, balls=balls,
+                         sr=round(runs / balls * 100, 1) if balls else None,
+                         avg=round(runs / outs, 1) if outs else None)
+    return out
+
+
 def build_ours():
     matches = load()
     if not matches:
@@ -299,6 +400,8 @@ def build_ours():
         batters=batters,
         bowlersTotal=bowlers_total(bowlers),
         battersTotal=batters_total(batters, len(matches)),
+        attack=attack_types(bowlers),
+        handSplit=hand_split(batters),
     )
 
 

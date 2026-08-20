@@ -160,6 +160,16 @@ no-balls, which is correct - a batter faces a no-ball, the over does not count i
 Team and bowling phase arrays are `[legal balls, dots, runs, wickets]`; the
 per-batter `battingPhases` arrays are `[balls faced, dots, runs, 4s, 6s]`.
 
+## Player styles (batting hand, bowling type)
+
+The pace-vs-spin table and the left/right-hand labels read from `PLAYER_STYLE`
+in `tools/ourmatches.py`, not from the match files. Each entry is
+`"Name": ("RHB"|"LHB", "Right-arm fast"|... | None)`, taken from the player's
+CricHeroes profile header (or the commentary player card, which shows `RHB`/`LHB`
+for an incoming batter and e.g. `Right-arm medium` for an incoming bowler). When
+a new player first appears, add a line there; a name that is missing simply shows
+no hand or type badge and is left out of the pace/spin and handedness splits.
+
 ## What the model will and will not do with these
 
 Only 15-over matches are set against the league par in `tools/phases.py`. A

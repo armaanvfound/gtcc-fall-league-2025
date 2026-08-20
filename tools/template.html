@@ -365,7 +365,10 @@
   .pltbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
   .pltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
             color:var(--muted);text-align:left;padding:0 10px 8px;font-weight:400;white-space:nowrap;}
-  .pltbl th span{display:block;color:var(--rule);font-size:8.5px;margin-top:2px;text-transform:none;letter-spacing:0;}
+  .pltbl th span{display:block;color:var(--muted);font-size:9px;margin-top:3px;text-transform:none;
+                 letter-spacing:0;font-weight:400;}
+  .pltbl tr.at-none td{color:var(--muted);}
+  .pltbl tr.at-none .pl-n{color:var(--ink-2);}
   .pltbl td{padding:9px 10px;border-top:1px solid var(--rule-2);white-space:nowrap;font-size:13.5px;}
   .pltbl th:first-child,.pltbl td:first-child{padding-left:16px;}
   .pltbl th:last-child,.pltbl td:last-child{padding-right:16px;}
@@ -525,8 +528,11 @@
   <div id="ours-dots"></div>
   <div class="subh">Our bowling, by phase</div>
   <div id="ours-bowl"></div>
+  <div class="subh">Pace, spin and type</div>
+  <div id="ours-attack"></div>
   <div class="subh">Our batting</div>
   <div id="ours-bat"></div>
+  <div id="ours-hand"></div>
   <div class="subh">What this changes for 2026</div>
   <div id="ours-plan"></div>
 </section>
@@ -931,59 +937,81 @@ if (OURS) {
         `look like a failure to score.</p></div>`;
     })() : '');
 
-  // ---- bowlers
-  const ab = (short, full) => `<abbr title="${full}">${short}</abbr>`;
+  // ---- bowlers.  headers carry the full form on a second line, no hover needed
+  const hd = (short, full) => `<th>${short}<span>${full}</span></th>`;
+  const eClass = e => e == null ? '' : (e <= 7 ? 'good' : (e >= 10 ? 'bad' : ''));
+  const armShort = a => a === 'left' ? 'LA' : (a === 'right' ? 'RA' : '');
+  const bowlLabel = b => b.style ? (armShort(b.arm) + ' ' + (b.type || '')).trim() : '';
+  const bowlHead = `<thead><tr><th>Bowler</th>` +
+    hd('Ov', 'overs') + hd('R', 'runs') + hd('W', 'wickets') + hd('Econ', 'runs per over') +
+    hd('Avg', 'runs per wkt') + hd('SR', 'balls per wkt') + hd('Dot%', 'dot-ball %') +
+    PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') + `</tr></thead>`;
+  const bowlPhase = d => d.balls
+    ? `<td class="pl-ph"><b class="${eClass(d.econ)}">${d.econ}</b>` +
+      `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`
+    : `<td class="pl-ph pl-none">&mdash;</td>`;
   $('ours-bowl').innerHTML =
-    `<div class="scroll"><table class="pltbl"><thead><tr><th>Bowler</th>` +
-    `<th>${ab('Ov', 'Overs bowled')}</th><th>${ab('R', 'Runs conceded')}</th>` +
-    `<th>${ab('W', 'Wickets')}</th><th>${ab('Econ', 'Economy — runs per over')}</th>` +
-    `<th>${ab('Avg', 'Average — runs per wicket')}</th>` +
-    `<th>${ab('SR', 'Strike rate — balls per wicket')}</th>` +
-    `<th>${ab('Dot%', 'Share of legal balls that were dots')}</th>` +
-    PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') +
-    `</tr></thead><tbody>` +
-    OURS.bowlers.map(b => `<tr><td class="pl-n">${esc(b.name)}<span>${b.matches} match${b.matches > 1 ? 'es' : ''}</span></td>` +
+    `<div class="scroll"><table class="pltbl">` + bowlHead + `<tbody>` +
+    OURS.bowlers.map(b => `<tr><td class="pl-n">${esc(b.name)}` +
+      `<span>${bowlLabel(b) ? bowlLabel(b) + ' &middot; ' : ''}${b.matches} match${b.matches > 1 ? 'es' : ''}</span></td>` +
       `<td>${b.overs}</td><td>${b.runs}</td><td><b>${b.wkts}</b></td>` +
-      `<td class="${b.econ <= 7 ? 'good' : (b.econ >= 10 ? 'bad' : '')}">${b.econ}</td>` +
+      `<td class="${eClass(b.econ)}">${b.econ}</td>` +
       `<td>${b.avg === null ? '&mdash;' : b.avg}</td>` +
       `<td>${b.sr === null ? '&mdash;' : b.sr}</td>` +
       `<td>${pc(b.dotPct)}</td>` +
-      PHK.map(p => {
-        const d = b.ph[p];
-        if (!d.balls) return `<td class="pl-ph pl-none">&mdash;</td>`;
-        return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
-          `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
-      }).join('') + `</tr>`).join('') +
+      PHK.map(p => bowlPhase(b.ph[p])).join('') + `</tr>`).join('') +
     `</tbody><tfoot>` + (function(){
       const T = OURS.bowlersTotal;
       return `<tr class="pl-total"><td class="pl-n">All bowlers<span>whole team</span></td>` +
         `<td>${T.overs}</td><td>${T.runs}</td><td><b>${T.wkts}</b></td>` +
-        `<td class="${T.econ <= 7 ? 'good' : (T.econ >= 10 ? 'bad' : '')}">${T.econ}</td>` +
+        `<td class="${eClass(T.econ)}">${T.econ}</td>` +
         `<td>${T.avg === null ? '&mdash;' : T.avg}</td><td>${T.sr === null ? '&mdash;' : T.sr}</td>` +
         `<td>${pc(T.dotPct)}</td>` +
-        PHK.map(p => {
-          const d = T.ph[p];
-          return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
-            `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
-        }).join('') + `</tr>`;
+        PHK.map(p => bowlPhase(T.ph[p])).join('') + `</tr>`;
     })() + `</tfoot></table></div>` +
-    `<div class="pl-key"><b>R</b> runs &middot; <b>W</b> wickets &middot; <b>Econ</b> runs per over &middot; ` +
-    `<b>Avg</b> runs per wicket &middot; <b>SR</b> balls per wicket &middot; <b>Dot%</b> dot-ball share. ` +
-    `Phase cells show economy, with dot% and balls beneath. The total row sums the bowlers, so wickets ` +
-    `are bowler-credited &mdash; run outs and byes sit with the fielders, not the attack.</div>`;
+    `<div class="pl-key">The total row sums the bowlers, so wickets are bowler-credited &mdash; run outs ` +
+    `and byes sit with the fielders, not the attack. Under each name: <b>RA</b>/<b>LA</b> = right/left-arm.</div>`;
+
+  // ---- pace vs spin, and by type
+  (function(){
+    const A = OURS.attack, fast = A.rows[0], med = A.rows[1];
+    const totW = OURS.bowlersTotal.wkts;
+    $('ours-attack').innerHTML =
+      `<div class="opp-head">Every bowler we have used is <b>right-arm pace</b> &mdash; ${fast.bowlers} fast, ` +
+      `${med.bowlers} medium, <b>no spinner and no left-armer</b>. And the quick men do the damage: they go at ` +
+      `<b>${fast.econ}</b> an over and have taken <b>${fast.wkts} of our ${totW}</b> wickets, while the ` +
+      `medium-pacers leak <b>${med.econ}</b>. A spin or left-arm option is the obvious gap to fill.</div>` +
+      `<div class="scroll"><table class="pltbl"><thead><tr><th>Type</th>` +
+      hd('Ov', 'overs') + hd('R', 'runs') + hd('W', 'wickets') + hd('Econ', 'runs per over') +
+      hd('Dot%', 'dot-ball %') + PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') +
+      `</tr></thead><tbody>` +
+      A.rows.map(r => {
+        if (!r.balls) return `<tr class="at-none"><td class="pl-n">${r.label}<span>not bowled</span></td>` +
+          `<td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td>` +
+          PHK.map(() => `<td class="pl-ph pl-none">&mdash;</td>`).join('') + `</tr>`;
+        return `<tr><td class="pl-n">${r.label}<span>${r.bowlers} bowler${r.bowlers > 1 ? 's' : ''}</span></td>` +
+          `<td>${r.overs}</td><td>${r.runs}</td><td><b>${r.wkts}</b></td>` +
+          `<td class="${eClass(r.econ)}">${r.econ}</td><td>${pc(r.dotPct)}</td>` +
+          PHK.map(p => bowlPhase(r.ph[p])).join('') + `</tr>`;
+      }).join('') + `</tbody></table></div>`;
+  })();
 
   // ---- batters, with the same phase-by-phase treatment as the bowlers
   const srClass = v => v === null ? '' : (v >= 150 ? 'good' : (v < 100 ? 'bad' : ''));
+  const batSub = b => {
+    const bits = [];
+    if (b.hand) bits.push(b.hand);
+    if (b.notOuts) bits.push(b.notOuts + ' not out');
+    return bits.join(' &middot; ');
+  };
   $('ours-bat').innerHTML =
     `<div class="scroll"><table class="pltbl"><thead><tr><th>Batter</th>` +
-    `<th>${ab('Inns', 'Innings batted')}</th><th>${ab('R', 'Runs scored')}</th>` +
-    `<th>${ab('B', 'Balls faced')}</th><th>${ab('Avg', 'Average — runs per dismissal')}</th>` +
-    `<th>${ab('SR', 'Strike rate — runs per 100 balls')}</th><th>${ab('HS', 'Highest score')}</th>` +
-    `<th>${ab('4s/6s', 'Fours and sixes')}</th><th>${ab('Bdry%', 'Share of runs scored in boundaries')}</th>` +
+    hd('Inns', 'innings') + hd('R', 'runs') + hd('B', 'balls') + hd('Avg', 'runs per out') +
+    hd('SR', 'runs per 100') + hd('HS', 'best') + hd('4s/6s', 'boundaries') + hd('Bdry%', 'runs in bndry') +
     PHK.map(p => `<th>${PLBL[p]}<span>SR / dot%</span></th>`).join('') +
     `</tr></thead><tbody>` +
     OURS.batters.map(b => `<tr><td class="pl-n">${esc(b.name)}` +
-      (b.notOuts ? `<span>${b.notOuts} not out</span>` : '') + `</td>` +
+      (batSub(b) ? `<span>${batSub(b)}</span>` : '') + `</td>` +
       `<td>${b.inns}</td><td><b>${b.runs}</b></td><td>${b.balls}</td>` +
       `<td>${b.avg === null ? 'n/o' : b.avg}</td>` +
       `<td class="${srClass(b.sr)}">${b.sr}</td>` +
@@ -1006,11 +1034,21 @@ if (OURS) {
             `<span>${pc(d.dotPct)} &middot; ${d.balls}b</span></td>`;
         }).join('') + `</tr>`;
     })() + `</tfoot></table></div>` +
-    `<div class="pl-key"><b>Inns</b> innings &middot; <b>R</b> runs &middot; <b>B</b> balls faced &middot; ` +
-    `<b>Avg</b> runs per dismissal (a not-out never counts, so an unbeaten batter shows <b>n/o</b>) &middot; ` +
-    `<b>SR</b> runs per 100 balls &middot; <b>HS</b> highest score &middot; <b>Bdry%</b> share of runs in boundaries. ` +
-    `Phase cells show strike rate, with dot% and balls beneath. The total row is runs off the bat, so it ` +
-    `trails the match-log totals by the extras we were given.</div>`;
+    `<div class="pl-key">A not-out never counts toward the average, so a batter who has never been out shows ` +
+    `<b>n/o</b>. <b>LHB</b>/<b>RHB</b> under each name is the batting hand. The total row is runs off the ` +
+    `bat, so it trails the match-log totals by the extras we were given.</div>`;
+
+  // ---- batting by hand
+  (function(){
+    const H = OURS.handSplit, Lh = H.LHB, Rh = H.RHB;
+    if (!Lh.players && !Rh.players) return;
+    const line = (Lh.players && Rh.players)
+      ? `Our <b>${Lh.players} left-hander${Lh.players > 1 ? 's' : ''}</b> (${Lh.names.map(esc).join(', ')}) strike at ` +
+        `<b>${Lh.sr}</b> off ${Lh.balls} balls; the ${Rh.players} right-handers at <b>${Rh.sr}</b>. ` +
+        `A thin sample, but the left-handers have been the faster scorers &mdash; worth a note when we set the order.`
+      : `All our batters so far are right-handed.`;
+    $('ours-hand').innerHTML = `<div class="opp-head">${line}</div>`;
+  })();
 
   // ---- what it changes: computed, so it moves as matches are added
   (function(){
