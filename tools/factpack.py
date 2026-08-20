@@ -12,6 +12,7 @@ question. The full page payload is ~74k characters, most of it the 30 teams'
 match logs, which no one will ask about. Trimmed and rounded, this lands near
 25k characters (~7k tokens) - small enough to send every time and to cache.
 """
+import copy
 import datetime
 import json
 
@@ -59,12 +60,77 @@ Plain sentences; use <b> for a key number and <ul><li> for a short list. Never u
 markdown. This is a team's own dashboard, so "we" and "our" are right."""
 
 
+# Two different wicket counts live in this pack and they are NOT the same number.
+# A phase total counts every wicket that fell in those overs, run outs included;
+# a bowler's column counts only what the bowler is credited with. Left both named
+# "wkts", they get mixed up - our death phase reads 5 one way and 4 the other, and
+# an answer can quote one line's runs beside the other line's wickets. So each is
+# renamed to say which it is, and the caveats spell out the difference.
+def _rename_wkts(block, new, phases=("pp", "mid", "death")):
+    """Rename 'wkts' to `new` in each phase dict of `block`. Returns a copy."""
+    if not isinstance(block, dict):
+        return block
+    out = copy.deepcopy(block)
+    for ph in phases:
+        d = out.get(ph)
+        if isinstance(d, dict) and "wkts" in d:
+            d[new] = d.pop("wkts")
+    return out
+
+
+def _phases_all(side):
+    """A phaseSplits/fifteen side ({bat, bowl, ...}) with team-wicket naming."""
+    if not isinstance(side, dict):
+        return side
+    out = copy.deepcopy(side)
+    for k in ("bat", "bowl"):
+        if k in out:
+            out[k] = _rename_wkts(out[k], "wktsAll")
+    return out
+
+
+def _bowler_credited(obj):
+    """A bowler-shaped dict ({..., wkts, ph:{pp,mid,death}}) with credited naming.
+
+    Both the career total and each phase are renamed, so every wicket number in a
+    bowling context reads `wktsBowler` without exception. A rule with no exceptions
+    is the one that survives being skim-read.
+    """
+    if not isinstance(obj, dict):
+        return obj
+    out = copy.deepcopy(obj)
+    if "wkts" in out:
+        out["wktsBowler"] = out.pop("wkts")
+    if isinstance(out.get("ph"), dict):
+        out["ph"] = _rename_wkts(out["ph"], "wktsBowler")
+    return out
+
+def _attack_credited(attack):
+    """The pace/spin table: {rows: [bowler-shaped, ...]}."""
+    if not isinstance(attack, dict) or not isinstance(attack.get("rows"), list):
+        return attack
+    out = copy.deepcopy(attack)
+    out["rows"] = [_bowler_credited(r) for r in out["rows"]]
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
     ours = payload.get("ours") or {}
     sea = payload.get("season") or {}
     squad = payload.get("squad") or {}
+
+    # Stated rather than left implicit: the gap between the two counts is the
+    # run outs, and quoting it is what stops the difference reading as an error.
+    _all_ph = (ours.get("all") or {}).get("bowl") or {}
+    _cred_ph = (ours.get("bowlersTotal") or {}).get("ph") or {}
+    _sum = lambda d: sum((d.get(k) or {}).get("wkts") or 0 for k in ("pp", "mid", "death"))
+    _wa, _wb = _sum(_all_ph), _sum(_cred_ph)
+    _wkt_tally = (
+        "Across our %d matches so far that is %d wktsAll against %d wktsBowler. "
+        % (len(ours.get("matches") or []), _wa, _wb) if _wa or _wb else ""
+    )
 
     pack = {
         "_prompt": PROMPT,
@@ -83,7 +149,12 @@ def build_factpack(payload):
             "has no fifth-over powerplay and an 8-over hit-out has no death.",
             "A dot ball here is a legal delivery off which no runs at all were "
             "scored. CricHeroes counts a bye as a dot for the batter; we do not.",
-            "Bowling wickets are bowler-credited, so run outs sit with the fielders.",
+            "Two wicket counts appear and they differ. In phase blocks "
+            "(phaseSplits, fifteenOverVsPar) the field is `wktsAll`: every wicket "
+            "that fell in those overs, run outs included. In a bowler's own figures "
+            "and in teamBowlingTotal the field is `wktsBowler`: only what the bowler "
+            "is credited with, so run outs sit with the fielders. " + _wkt_tally +
+            "Never quote one beside the other, and say which you mean.",
             "Nothing here says which players to pick. Selection is the captain's call.",
         ],
 
@@ -122,13 +193,13 @@ def build_factpack(payload):
         "us": {
             "record": ours.get("record"),
             "matches": ours.get("matches"),
-            "phaseSplits": ours.get("all"),
-            "fifteenOverVsPar": ours.get("fifteen"),
+            "phaseSplits": _phases_all(ours.get("all")),
+            "fifteenOverVsPar": _phases_all(ours.get("fifteen")),
             "batters": ours.get("batters"),
-            "bowlers": ours.get("bowlers"),
+            "bowlers": [_bowler_credited(b) for b in (ours.get("bowlers") or [])],
             "teamBattingTotal": ours.get("battersTotal"),
-            "teamBowlingTotal": ours.get("bowlersTotal"),
-            "attackByType": ours.get("attack"),
+            "teamBowlingTotal": _bowler_credited(ours.get("bowlersTotal")),
+            "attackByType": _attack_credited(ours.get("attack")),
             "battingByHand": ours.get("handSplit"),
             "squad": squad.get("players"),
             "captain": squad.get("captain"),
