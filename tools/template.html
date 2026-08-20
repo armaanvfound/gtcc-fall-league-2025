@@ -267,6 +267,54 @@
   }
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
+  /* top-level page navigation */
+  .topnav{position:sticky;top:0;z-index:50;background:var(--paper);
+          border-bottom:1px solid var(--rule);
+          -webkit-backdrop-filter:saturate(180%) blur(8px);backdrop-filter:saturate(180%) blur(8px);}
+  .tn-in{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;align-items:center;
+         gap:22px;min-height:52px;flex-wrap:wrap;}
+  .tn-brand{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+            color:var(--ink);text-decoration:none;font-weight:600;white-space:nowrap;}
+  .tn-brand span{color:var(--muted);font-weight:400;letter-spacing:.08em;}
+  .tn-links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;}
+  .tn-links a{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
+              color:var(--ink-2);text-decoration:none;padding:7px 13px;border-radius:3px;
+              border:1px solid transparent;white-space:nowrap;}
+  .tn-links a:hover{color:var(--bat);border-color:var(--rule);}
+  .tn-links a.on{background:var(--bat);border-color:var(--bat);color:#fff;}
+  @media (max-width:640px){
+    .tn-in{padding:0 16px;gap:10px;min-height:46px;}
+    .tn-brand span{display:none;}
+    .tn-links{margin-left:auto;gap:2px;}
+    .tn-links a{padding:6px 9px;font-size:10.5px;letter-spacing:.04em;}
+  }
+  /* cross-page callout card */
+  .xpage{display:block;text-decoration:none;color:inherit;margin-top:26px;
+         border:1px solid var(--rule);border-left:3px solid var(--bat);border-radius:0 3px 3px 0;
+         background:var(--surface);padding:18px 22px;transition:background .12s;}
+  .xpage:hover{background:var(--surface-2);}
+  .xp-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--bat);margin-bottom:6px;}
+  .xp-h{font-family:var(--serif);font-size:19px;margin-bottom:5px;}
+  .xp-h:after{content:" \2192";color:var(--bat);}
+  .xp-p{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0;max-width:74ch;}
+  .xp-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;padding-top:12px;
+            border-top:1px solid var(--rule-2);}
+  .xp-s{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.03em;}
+  .xp-s b{font-family:var(--serif);font-size:17px;color:var(--ink);letter-spacing:0;
+          display:block;margin-bottom:2px;}
+  /* end-of-page links to the other pages */
+  .pagefoot{margin-top:56px;padding-top:26px;border-top:1px solid var(--rule);
+            display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;
+            background:var(--rule);border-radius:3px;overflow:hidden;}
+  .pagefoot a{background:var(--surface);padding:20px 22px;text-decoration:none;color:inherit;
+              transition:background .12s;}
+  .pagefoot a:hover{background:var(--surface-2);}
+  .pf-l{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--bat);margin-bottom:6px;}
+  .pf-h{display:block;font-family:var(--serif);font-size:18px;margin-bottom:6px;color:var(--ink);}
+  .pf-h:after{content:" \2192";color:var(--bat);}
+  .pf-p{display:block;font-size:13.5px;line-height:1.55;color:var(--ink-2);}
   /* 02 — our own matches */
   .mlog{border:1px solid var(--rule);border-radius:3px;background:var(--surface);
         padding:16px 18px;margin-top:14px;}
@@ -434,20 +482,23 @@
 </style>
 
 <div class="wrap">
+<nav class="topnav" aria-label="Sections">
+  <div class="tn-in">
+    <a class="tn-brand" href="index.html">RCB<span> &middot; Fall League 2026</span></a>
+    <div class="tn-links">
+      <a href="index.html" data-pg="index">Match plan</a>
+      <a href="form.html" data-pg="form">Our form</a>
+      <a href="league.html" data-pg="league">The league</a>
+    </div>
+  </div>
+</nav>
+
 <header>
-  <div class="eyebrow">Royal Challenger Blaster · GTCC Fall League 2026 · Match dashboard</div>
-  <h1>How this league is actually won</h1>
+  <div class="eyebrow">/*__EYEBROW__*/</div>
+  <h1>/*__H1__*/</h1>
   <p class="standfirst" id="standfirst"></p>
   <div class="prov" id="prov"></div>
-  <nav class="qnav" aria-label="Jump to section">
-    <a href="#plan">Match plan</a>
-    <a href="#phases">Phase targets</a>
-    <a href="#season">2026 fixtures</a>
-    <a href="#ours">Our form</a>
-    <a href="#playbook">Playbook</a>
-    <a href="#sec-ranks">Rankings</a>
-    <a href="#squad">Squad</a>
-  </nav>
+  <nav class="qnav" id="qnav" aria-label="Jump to section"></nav>
 </header>
 
 <section id="season">
@@ -455,6 +506,7 @@
   <p class="lede" id="season-lede"></p>
   <div id="fixtures"></div>
   <div id="seeding"></div>
+  <div id="xp-form"></div>
 </section>
 
 <section id="ours">
@@ -472,7 +524,7 @@
   <div id="ours-plan"></div>
 </section>
 
-<section>
+<section id="winline">
   <div class="sechead"><div class="n">03</div><h2>The win line is 120</h2></div>
   <p class="lede">First-innings totals do not produce a gentle gradient of win probability.
      They produce a cliff, and it sits between 119 and 120.</p>
@@ -503,7 +555,7 @@
   <p class="lede" style="margin-top:26px;" id="avg-line"></p>
 </section>
 
-<section>
+<section id="batfirst">
   <div class="sechead"><div class="n">04</div><h2>Bat first</h2></div>
   <p class="lede">If you win the toss, bat. The edge is real, it is consistent across the two
      grounds that host most of the cricket, and it grows in knockout matches.
@@ -524,7 +576,7 @@
   </div>
 </section>
 
-<section>
+<section id="wickets">
   <div class="sechead"><div class="n">05</div><h2>Wickets in hand are worth 35 runs</h2></div>
   <p class="lede">Nearly a third of all innings in this league ended all out. Simply batting
      out your 15 overs — regardless of how fast you score — is the single largest lever on
@@ -542,7 +594,7 @@
   <p class="lede" style="margin-top:22px;" id="ao-line"></p>
 </section>
 
-<section>
+<section id="teamlookup">
   <div class="sechead"><div class="n">06</div><h2>Your team</h2></div>
   <p class="lede">Pick your side to see its record, its scoring rates, and the specific gap
      between where it finished and the win line.</p>
@@ -562,7 +614,7 @@
   </div>
 </section>
 
-<section>
+<section id="qualify">
   <div class="sechead"><div class="n">07</div><h2>Qualification is a group of six</h2></div>
   <p class="lede">The 30 teams played five round-robin matches inside five groups of six.
      The top three in each group went through — fifteen teams, exactly half the field.
@@ -652,7 +704,7 @@
   </div>
 </section>
 
-<section>
+<section id="conditions">
   <div class="sechead"><div class="n">11</div><h2>Conditions: what actually matters</h2></div>
   <p class="lede" id="wx-lede"></p>
   <div class="scroll">
@@ -680,7 +732,7 @@
   <div class="tgrid" id="squadgrid"></div>
 </section>
 
-<section>
+<section id="sources">
   <div class="sechead"><div class="n">14</div><h2>Where these numbers come from</h2></div>
   <div class="caveat" id="method"></div>
 </section>
@@ -694,7 +746,11 @@
 
 <script>
 const DATA = /*__DATA__*/;
+const PAGE = "/*__PAGE__*/";
 const L = DATA.league, T = DATA.teams;
+const OURS = DATA.ours;          // shared: the match plan reads it too
+const PH = DATA.phases;          // shared: match plan and form both read it
+const PHNAME = {pp:'Powerplay (1–5)', mid:'Middle (6–10)', death:'Death (11–15)'};
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -739,6 +795,27 @@ if (SEA) {
              `<td class="fx-k">${know}</td></tr>`;
     }).join('') + `</tbody></table>`;
 
+  // Prominent hand-off to the form page, carrying the headline numbers so the
+  // card is worth clicking rather than just a link.
+  if (OURS && $('xp-form')) {
+    const r = OURS.record;
+    const pp = OURS.all.bowl.pp, mid = OURS.all.bowl.mid;
+    $('xp-form').innerHTML =
+      `<a class="xpage" href="form.html">
+         <div class="xp-lab">Our own performance</div>
+         <div class="xp-h">How we have actually played</div>
+         <p class="xp-p">Every match we have played, read ball by ball &mdash; phase splits, dot-ball
+           percentages by bowler, player careers, and what they say we should change. This is the page
+           that grows as the season does.</p>
+         <div class="xp-stats">
+           <span class="xp-s"><b>${r.won}&ndash;${r.lost}&ndash;${r.tied}</b>won &ndash; lost &ndash; tied</span>
+           <span class="xp-s"><b>${r.nrr >= 0 ? '+' : ''}${r.nrr.toFixed(2)}</b>net run rate</span>
+           <span class="xp-s"><b>${pp.rpo}</b>conceded per over, powerplay</span>
+           <span class="xp-s"><b>${mid.rpo}</b>conceded per over, middle</span>
+         </div>
+       </a>`;
+  }
+
   const seedRows = F.seeding.map(([a,b,c]) =>
     `<tr><td class="sd-a">${esc(a)}</td><td class="sd-b">${esc(b)}</td><td class="sd-c">${esc(c)}</td></tr>`).join('');
   $('seeding').innerHTML =
@@ -756,7 +833,6 @@ if (SEA) {
 }
 
 /* 02 — how we have actually played */
-const OURS = DATA.ours;
 if (OURS) {
   const R = OURS.record, PHK = ['pp','mid','death'];
   const PLBL = {pp:'Powerplay', mid:'Middle', death:'Death'};
@@ -951,15 +1027,35 @@ if (OURS) {
 /* provenance */
 const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
 
-$('standfirst').textContent =
-  `Our 2026 fixtures, and what every ball bowled across ${L.matches} matches last season says about ` +
-  `how to win them: this is a bat-first competition decided by one number on the scoreboard — and ` +
-  `most teams finish just short of it.`;
-
-$('prov').innerHTML =
-  `${L.matches} matches · ${L.teams} teams · ${SPAN} · 15 overs a side<br>` +
-  `Scores transcribed from the CricHeroes match list and reconciled against the fixture ` +
-  `spreadsheet: all ${L.matches} agree on batting order, overs, margin and result.`;
+if (PAGE === 'form') {
+  const r = OURS ? OURS.record : null;
+  $('standfirst').textContent = r
+    ? `Every match we have played, read ball by ball. What we do in each phase, who bowls a dot and ` +
+      `who leaks, and what that says we should change before the league starts.`
+    : `No matches recorded yet.`;
+  $('prov').innerHTML = r
+    ? `${r.played} matches · ${r.won}W ${r.lost}L ${r.tied}T · NRR ${r.nrr >= 0 ? '+' : ''}${r.nrr.toFixed(2)} · ` +
+      `${r.leagueCount} league<br>Read from the CricHeroes commentary and reconciled against every ` +
+      `scorecard: runs, wickets, balls and each bowler's figures agree in all ${r.played * 2} innings.`
+    : '';
+} else if (PAGE === 'index') {
+  $('standfirst').textContent =
+    `Who we play, when, and what to do when we get there. Pick the opponent and the page turns ` +
+    `last season's ${L.matches} matches and our own form into a toss call and a set of targets.`;
+  $('prov').innerHTML =
+    `Group 5 · 5 matches · 30 Aug – 27 Sep 2026<br>` +
+    `Plans below are built from ${L.matches} league matches of 2025 evidence` +
+    (OURS ? ` and our own ${OURS.record.played} matches` : '') + `.`;
+} else {
+  $('standfirst').textContent =
+    `What every ball bowled across ${L.matches} matches last season says about how this competition ` +
+    `is won: a bat-first league decided by one number on the scoreboard — and most teams finish ` +
+    `just short of it.`;
+  $('prov').innerHTML =
+    `${L.matches} matches · ${L.teams} teams · ${SPAN} · 15 overs a side<br>` +
+    `Scores transcribed from the CricHeroes match list and reconciled against the fixture ` +
+    `spreadsheet: all ${L.matches} agree on batting order, overs, margin and result.`;
+}
 
 /* 01 — win line */
 const hi = L.hi120, lo = L.lo120;
@@ -1123,8 +1219,6 @@ sel.addEventListener('change', () => {
 });
 
 /* 07 — phases */
-const PH = DATA.phases;
-const PHNAME = {pp:'Powerplay (1–5)', mid:'Middle (6–10)', death:'Death (11–15)'};
 if (PH) {
   const g = PH.gaps, dec = PH.decisive;
   $('phase-lede').innerHTML =

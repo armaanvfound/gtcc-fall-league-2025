@@ -1,13 +1,24 @@
-# GTCC Fall League — match analysis
+# Royal Challenger Blaster — match dashboard
 
-A single-page, data-driven analysis of the Amiirtham GTCC Fall League, built to be
-shared with a team over WhatsApp and updated through the season.
+A data-driven dashboard for the GTCC Fall League, built to be shared with a team
+over WhatsApp and updated through the season as we play.
 
 **Live:** <https://armaanvfound.github.io/gtcc-fall-league-2025/>
 
-The page is one self-contained HTML file — no CDN, no fetch, no build step at load
-time. It works served from GitHub Pages and equally well opened straight off disk,
-online or off.
+Three pages, each a self-contained HTML file — no CDN, no fetch, no build step at
+load time. They work served from GitHub Pages and equally well opened straight off
+disk, online or off.
+
+| Page | What it answers |
+|---|---|
+| `index.html` — **Match plan** | Who we play and what to do on the day: fixtures, the toss call, targets, and the phase-by-phase read on the opponent |
+| `form.html` — **Our form** | How *we* have actually played: match log, phase and dot-ball splits, player careers, and what they say we should change |
+| `league.html` — **The league** | How the competition behaves: the 120 win line, bat-first edge, phase par, rankings, groups, conditions, playbook |
+
+Every page is generated from one template. `PAGES` at the top of `tools/build.py`
+says which sections and which script blocks each page gets, and which slice of the
+payload it carries — so moving a section between pages is a one-line edit there,
+not a copy-paste between files.
 
 ## Adding matches
 
@@ -72,9 +83,35 @@ analysis therefore speaks to *how* to play, not *whom* to pick.
 ## Layout
 
 ```
-index.html        generated — do not edit by hand
-tools/data.py     the match data. this is the file you edit
-tools/stats.py    computes standings, NRR, groups, win-line bands
-tools/template.html  page markup, styling and client-side JS
-tools/build.py    rebuilds index.html from the above
+index.html           generated — do not edit by hand
+form.html            generated
+league.html          generated
+
+tools/data.py        2025 league match data
+tools/stats.py       standings, NRR, groups, win-line bands
+tools/phases.py      phase-by-phase par, from phase-data/
+tools/season.py      our 2026 group, fixtures and format
+tools/ourmatches.py  our own matches: phases, dot balls, player careers
+tools/template.html  every section, all styling, all client-side JS
+tools/build.py       slices the template into the three pages
+
+phase-data/          over-by-over for the 2025 league  (see its README)
+our-matches/         over-by-over for our own matches  (see its README)
 ```
+
+## Adding one of our own matches
+
+This is the loop that matters during the season — the dashboard is meant to feed
+our own results back into the plan. Drop a file in `our-matches/`, rebuild, and
+three things update on their own:
+
+- **`form.html`** gains a match card, and every phase split, dot-ball percentage
+  and player career recomputes.
+- **The recommendations** on that page are computed, not written down: who should
+  take the new ball, who bowls the death, how many extras we are giving away.
+  They move when the numbers move.
+- **`index.html`'s toss card** picks up the new form line, so the match plan
+  reflects how we have actually bowled rather than only how the league behaves.
+
+`our-matches/README.md` has the browser console extractor, the file shape, and the
+four checks to run against the scorecard before committing.

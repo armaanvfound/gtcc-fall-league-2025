@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en" data-built="2026-08-20" data-page="form">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F2F0E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131614" media="(prefers-color-scheme: dark)">
+<title>Our form - GTCC Fall League 2026 - Royal Challenger Blaster</title>
+<meta name="description" content="Every match Royal Challenger Blaster has played, read ball by ball: phase splits, dot-ball percentages, player careers and what they say we should change.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Our form - GTCC Fall League 2026 - Royal Challenger Blaster">
+<meta property="og:description" content="Every match Royal Challenger Blaster has played, read ball by ball: phase splits, dot-ball percentages, player careers and what they say we should change.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>&#127951;</text></svg>">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#F2F0E9; --surface:#FCFBF7; --surface-2:#F7F5EE;
+    --ink:#1B1E1A; --ink-2:#4A4E45; --muted:#74786C; --rule:#DCD7CA; --rule-2:#E9E5DA;
+    --bat:#B03A2B; --chase:#0E6E9C; --gold:#8A6D1F; --gold-bg:#F0E7CC;
+    --good:#2F6B3A; --bad:#9B2C1F;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:1000px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#131614; --surface:#1B1F1C; --surface-2:#212623;
+      --ink:#E9E7DF; --ink-2:#C3C0B5; --muted:#8E9288; --rule:#2E3430; --rule-2:#262B27;
+      --bat:#DA6A57; --chase:#3E9CC4; --gold:#C9A961; --gold-bg:#2C2617;
+      --good:#79B489; --bad:#E08472;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#131614; --surface:#1B1F1C; --surface-2:#212623;
+    --ink:#E9E7DF; --ink-2:#C3C0B5; --muted:#8E9288; --rule:#2E3430; --rule-2:#262B27;
+    --bat:#DA6A57; --chase:#3E9CC4; --gold:#C9A961; --gold-bg:#2C2617;
+    --good:#79B489; --bad:#E08472;
+  }
+  :root[data-theme="light"]{
+    --paper:#F2F0E9; --surface:#FCFBF7; --surface-2:#F7F5EE;
+    --ink:#1B1E1A; --ink-2:#4A4E45; --muted:#74786C; --rule:#DCD7CA; --rule-2:#E9E5DA;
+    --bat:#B03A2B; --chase:#0E6E9C; --gold:#8A6D1F; --gold-bg:#F0E7CC;
+    --good:#2F6B3A; --bad:#9B2C1F;
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px 96px;}
+  .prose{max-width:66ch;}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;text-wrap:balance;margin:0;line-height:1.15;}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+  a{color:var(--chase);}
+  :focus-visible{outline:2px solid var(--chase);outline-offset:2px;border-radius:2px;}
+
+  /* masthead */
+  header{border-bottom:3px double var(--rule);margin-bottom:40px;padding:48px 0 24px;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+           color:var(--muted);margin-bottom:14px;}
+  h1{font-size:clamp(32px,5.2vw,52px);letter-spacing:-.015em;}
+  .standfirst{font-family:var(--serif);font-size:clamp(17px,2.2vw,21px);color:var(--ink-2);
+              margin-top:16px;max-width:60ch;line-height:1.45;}
+  .prov{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:22px;line-height:1.7;}
+
+  section{margin-top:60px;}
+  .sechead{display:flex;align-items:baseline;gap:14px;border-top:1px solid var(--rule);
+           padding-top:14px;margin-bottom:22px;}
+  .sechead .n{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;
+              padding-top:6px;white-space:nowrap;}
+  .sechead h2{font-size:clamp(22px,3vw,30px);}
+  .lede{font-size:17px;color:var(--ink-2);margin:0 0 26px;max-width:66ch;}
+  p{margin:0 0 16px;}
+
+  /* hero verdict */
+  .verdict{background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+           padding:30px 28px;display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .verdict .cell{display:flex;flex-direction:column;gap:6px;}
+  .verdict .cell + .cell{border-left:1px solid var(--rule);padding-left:28px;}
+  .big{font-family:var(--serif);font-size:clamp(44px,8vw,68px);line-height:1;letter-spacing:-.02em;
+       font-variant-numeric:tabular-nums;}
+  .big.hi{color:var(--bat);} .big.lo{color:var(--muted);}
+  .cap{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .sub{font-size:14.5px;color:var(--ink-2);}
+  @media (max-width:640px){
+    .verdict{grid-template-columns:1fr;}
+    .verdict .cell + .cell{border-left:0;padding-left:0;border-top:1px solid var(--rule);padding-top:24px;}
+  }
+
+  /* bar chart */
+  .chart{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:24px 26px 20px;}
+  .chart h3{font-size:16px;margin-bottom:4px;}
+  .chart .note{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .bandrow{display:grid;grid-template-columns:88px 1fr 78px;align-items:center;gap:14px;margin-bottom:9px;}
+  .bandrow .lab{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-align:right;}
+  .track{position:relative;height:26px;background:var(--surface-2);border-radius:3px;overflow:hidden;}
+  .bar{height:100%;border-radius:0 4px 4px 0;background:var(--bat);transition:filter .15s;}
+  .bar.dim{background:var(--muted);opacity:.55;}
+  .bandrow:hover .bar{filter:brightness(1.08);}
+  .bandrow .val{font-family:var(--mono);font-size:13px;color:var(--ink);}
+  .bandrow .val small{color:var(--muted);}
+  .cliff{border-top:1px dashed var(--bat);margin:12px 0;position:relative;}
+  .cliff span{position:absolute;top:-9px;left:102px;background:var(--surface);padding:0 8px;
+              font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--bat);text-transform:uppercase;}
+
+  /* split bar */
+  .split{display:flex;gap:2px;height:44px;margin:8px 0 12px;}
+  .split div{display:flex;align-items:center;justify-content:center;color:#fff;
+             font-family:var(--mono);font-size:13px;border-radius:3px;}
+  .sp-bat{background:var(--bat);} .sp-chase{background:var(--chase);}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:14px;}
+  .legend i{width:11px;height:11px;border-radius:2px;display:inline-block;margin-right:7px;vertical-align:baseline;}
+
+  /* stat pair */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .stat{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:20px 22px;}
+  .stat .k{font-family:var(--serif);font-size:34px;line-height:1;font-variant-numeric:tabular-nums;}
+  .stat .t{font-size:14px;color:var(--ink-2);margin-top:8px;}
+  @media (max-width:640px){.pair{grid-template-columns:1fr;}}
+
+  /* tables */
+  .scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--rule-2);white-space:nowrap;}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+     color:var(--muted);font-weight:400;background:var(--surface-2);position:sticky;top:0;}
+  td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:var(--surface-2);}
+  .team{font-weight:600;}
+  .pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+        padding:2px 7px;border-radius:10px;border:1px solid currentColor;}
+  .p-champ{color:var(--gold);background:var(--gold-bg);}
+  .p-thru{color:var(--good);} .p-out{color:var(--muted);}
+  .pos{color:var(--good);} .neg{color:var(--bad);}
+
+  /* groups */
+  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;}
+  .grp{background:var(--surface);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .grp h3{font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
+          padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--rule);color:var(--ink-2);}
+  .grp table{font-size:12.5px;width:100%;}
+  .grp td,.grp th{padding:6px 10px;}
+  .grp td.team{white-space:normal;line-height:1.35;}
+  .grp .pill{font-size:9px;padding:2px 5px;}
+  .grp tr.thru td:first-child{box-shadow:inset 3px 0 0 var(--good);}
+  .grp tr.miss td:first-child{box-shadow:inset 3px 0 0 var(--bat);}
+
+  /* quick nav */
+  html{scroll-behavior:smooth;}
+  .qnav{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);
+        font-size:11.5px;letter-spacing:.05em;}
+  .qnav a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:1px;}
+  .qnav a:hover{color:var(--bat);border-color:var(--bat);}
+
+  /* scenario toggle + match plan */
+  .seg{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+  .seg button{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:10px 16px;border:1px solid var(--rule);border-radius:3px;background:var(--surface-2);
+    color:var(--ink-2);cursor:pointer;}
+  .seg button.on{background:var(--bat);border-color:var(--bat);color:#fff;}
+  .plan{margin-top:18px;border:1px solid var(--rule);border-left:3px solid var(--bat);
+    border-radius:3px;background:var(--surface-2);padding:20px 22px;}
+  .plan h4{font-family:var(--serif);font-size:19px;margin:0 0 12px;}
+  .plan .hint{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;}
+
+  /* team picker */
+  .picker{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:22px 24px;}
+  .picker label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--muted);display:block;margin-bottom:9px;}
+  select{font-family:var(--sans);font-size:15px;padding:9px 12px;border:1px solid var(--rule);
+         border-radius:3px;background:var(--surface-2);color:var(--ink);width:100%;max-width:420px;}
+  .tprofile{margin-top:24px;}
+  .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:1px;
+         background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .tgrid div{background:var(--surface);padding:14px 16px;}
+  .tgrid .k{font-family:var(--serif);font-size:23px;line-height:1.1;font-variant-numeric:tabular-nums;}
+  .tgrid .t{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+            color:var(--muted);margin-top:5px;}
+  .reads{margin-top:20px;padding-left:0;list-style:none;}
+  .reads li{padding:11px 0 11px 26px;border-bottom:1px solid var(--rule-2);position:relative;font-size:15px;}
+  .reads li:before{content:"\25B8";position:absolute;left:6px;color:var(--bat);}
+  .reads li:last-child{border-bottom:0;}
+  /* opponent phase-by-phase profile (08) */
+  .opp-head{background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+            padding:15px 18px;margin-top:24px;font-size:15.5px;line-height:1.55;color:var(--ink-2);}
+  .opp-head b{color:var(--ink);}
+  .opp-block{margin-top:22px;}
+  .opp-block h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--bat);margin:0 0 6px;}
+  .phasetbl{width:100%;border-collapse:collapse;}
+  .phasetbl td{border-top:1px solid var(--rule-2);padding:13px 12px 13px 0;vertical-align:top;}
+  .phasetbl tr:first-child td{border-top:0;}
+  .ph-name{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+           color:var(--ink-2);white-space:nowrap;width:1%;padding-left:2px;}
+  .ph-name span{display:block;color:var(--muted);font-size:9.5px;letter-spacing:.06em;margin-top:3px;}
+  .ph-num{white-space:nowrap;width:1%;font-variant-numeric:tabular-nums;}
+  .ph-num .n{font-family:var(--serif);font-size:22px;line-height:1;}
+  .ph-num .w{font-family:var(--serif);font-size:14px;color:var(--muted);}
+  .ph-num .w i{font-style:normal;font-size:10px;}
+  .ph-num .d{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.02em;}
+  .ph-badge{width:1%;white-space:nowrap;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;
+         text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+  .badge.strong{background:var(--bad);color:#fff;}   /* their strength &#8212; respect it */
+  .badge.weak{background:var(--good);color:#fff;}    /* their weakness &#8212; our opening */
+  .badge.par{background:var(--rule);color:var(--ink-2);}
+  /* the global th,td rule sets nowrap; the directive text must wrap */
+  .ph-move{font-size:14px;line-height:1.5;color:var(--ink-2);padding-left:14px;white-space:normal;}
+  .ph-src{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.02em;}
+  .ph-src .thin{color:var(--bat);font-weight:400;}
+  /* toss recommendation */
+  .toss{display:grid;grid-template-columns:auto 1fr;gap:0;margin-top:18px;border:1px solid var(--rule);
+        border-radius:3px;overflow:hidden;background:var(--surface);}
+  .toss-main{background:var(--bat);color:#fff;padding:18px 22px;display:flex;flex-direction:column;
+             justify-content:center;min-width:150px;}
+  .toss-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;}
+  .toss-verdict{font-family:var(--serif);font-size:40px;line-height:1;margin:6px 0 4px;}
+  .toss-tgt{font-family:var(--mono);font-size:12px;letter-spacing:.04em;opacity:.95;}
+  .toss-tgt b{font-size:15px;}
+  .toss-why{padding:16px 20px;}
+  .toss-why p{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 9px;max-width:74ch;}
+  .toss-why p:last-child{margin-bottom:0;color:var(--ink);}
+  .toss-lose{margin-top:10px;border:1px solid var(--rule);border-radius:3px;background:var(--surface-2);
+             padding:13px 18px;}
+  .tl-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--muted);margin-bottom:9px;}
+  .tl-row{display:flex;gap:12px;align-items:baseline;padding:6px 0;border-top:1px solid var(--rule-2);}
+  .tl-row:first-of-type{border-top:0;}
+  .tl-k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+        color:var(--chase);white-space:nowrap;min-width:78px;}
+  .tl-v{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+  /* our own form, inside the toss card */
+  .ourform{margin-top:10px;border:1px solid var(--rule);border-left:3px solid var(--good);
+           border-radius:0 3px 3px 0;background:var(--surface);padding:13px 18px;}
+  .of-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--good);margin-bottom:9px;}
+  .of-row{display:flex;gap:12px;align-items:baseline;padding:7px 0;border-top:1px solid var(--rule-2);}
+  .of-row:first-of-type{border-top:0;}
+  .of-k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+        color:var(--muted);white-space:nowrap;min-width:78px;}
+  .of-v{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+  .of-note{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:9px;
+           border-top:1px solid var(--rule-2);padding-top:8px;}
+  .of-note a{color:var(--bat);}
+  @media (max-width:640px){ .of-row{flex-direction:column;gap:2px;} }
+  /* grouped plan notes */
+  .plan h4{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .plan-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+            color:var(--muted);font-weight:400;}
+  .plan-grp{margin-top:16px;}
+  .plan-grp h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+               margin:0 0 2px;}
+  .plan-grp.is-opp h5{color:var(--bat);}
+  .plan-grp.is-league h5{color:var(--muted);}
+  .plan-grp.is-league .reads li{color:var(--ink-2);font-size:14px;}
+  .plan-grp.is-league .reads li:before{color:var(--muted);}
+  @media (max-width:640px){
+    .toss{grid-template-columns:1fr;}
+    .toss-main{padding:14px 18px;}
+    .toss-verdict{font-size:32px;}
+    .tl-row{flex-direction:column;gap:2px;}
+  }
+  .noph-read{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 9px;max-width:78ch;}
+  .noph-edge{font-size:14.5px;line-height:1.55;color:var(--ink);margin:0;padding-left:12px;
+             border-left:2px solid var(--bat);}
+  .ph-num .thin{color:var(--bat);font-weight:400;}
+  .ph-num .nn{color:var(--muted);}
+  .opp-note{margin-top:18px;font-size:14px;color:var(--ink-2);border-left:3px solid var(--gold);
+            background:var(--gold-bg);padding:11px 14px;border-radius:0 3px 3px 0;}
+  @media (max-width:640px){
+    .phasetbl,.phasetbl tbody,.phasetbl tr,.phasetbl td{display:block;width:auto;}
+    .phasetbl td{border-top:0;padding:2px 0;}
+    .phasetbl tr{border-top:1px solid var(--rule-2);padding:13px 0;}
+    .phasetbl tr:first-child{border-top:0;}
+    .ph-name{display:inline-block;margin-right:12px;}
+    .ph-num{display:inline-block;}.ph-num .d{display:inline;margin-left:8px;}
+    .ph-badge{display:inline-block;margin:6px 0;}
+    .ph-move{padding-left:0;margin-top:2px;white-space:normal;}
+  }
+  .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
+
+  /* top-level page navigation */
+  .topnav{position:sticky;top:0;z-index:50;background:var(--paper);
+          border-bottom:1px solid var(--rule);
+          -webkit-backdrop-filter:saturate(180%) blur(8px);backdrop-filter:saturate(180%) blur(8px);}
+  .tn-in{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:flex;align-items:center;
+         gap:22px;min-height:52px;flex-wrap:wrap;}
+  .tn-brand{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+            color:var(--ink);text-decoration:none;font-weight:600;white-space:nowrap;}
+  .tn-brand span{color:var(--muted);font-weight:400;letter-spacing:.08em;}
+  .tn-links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;}
+  .tn-links a{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
+              color:var(--ink-2);text-decoration:none;padding:7px 13px;border-radius:3px;
+              border:1px solid transparent;white-space:nowrap;}
+  .tn-links a:hover{color:var(--bat);border-color:var(--rule);}
+  .tn-links a.on{background:var(--bat);border-color:var(--bat);color:#fff;}
+  @media (max-width:640px){
+    .tn-in{padding:0 16px;gap:10px;min-height:46px;}
+    .tn-brand span{display:none;}
+    .tn-links{margin-left:auto;gap:2px;}
+    .tn-links a{padding:6px 9px;font-size:10.5px;letter-spacing:.04em;}
+  }
+  /* cross-page callout card */
+  .xpage{display:block;text-decoration:none;color:inherit;margin-top:26px;
+         border:1px solid var(--rule);border-left:3px solid var(--bat);border-radius:0 3px 3px 0;
+         background:var(--surface);padding:18px 22px;transition:background .12s;}
+  .xpage:hover{background:var(--surface-2);}
+  .xp-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--bat);margin-bottom:6px;}
+  .xp-h{font-family:var(--serif);font-size:19px;margin-bottom:5px;}
+  .xp-h:after{content:" \2192";color:var(--bat);}
+  .xp-p{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0;max-width:74ch;}
+  .xp-stats{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;padding-top:12px;
+            border-top:1px solid var(--rule-2);}
+  .xp-s{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.03em;}
+  .xp-s b{font-family:var(--serif);font-size:17px;color:var(--ink);letter-spacing:0;
+          display:block;margin-bottom:2px;}
+  /* end-of-page links to the other pages */
+  .pagefoot{margin-top:56px;padding-top:26px;border-top:1px solid var(--rule);
+            display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;
+            background:var(--rule);border-radius:3px;overflow:hidden;}
+  .pagefoot a{background:var(--surface);padding:20px 22px;text-decoration:none;color:inherit;
+              transition:background .12s;}
+  .pagefoot a:hover{background:var(--surface-2);}
+  .pf-l{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+        text-transform:uppercase;color:var(--bat);margin-bottom:6px;}
+  .pf-h{display:block;font-family:var(--serif);font-size:18px;margin-bottom:6px;color:var(--ink);}
+  .pf-h:after{content:" \2192";color:var(--bat);}
+  .pf-p{display:block;font-size:13.5px;line-height:1.55;color:var(--ink-2);}
+  /* 02 &#8212; our own matches */
+  .mlog{border:1px solid var(--rule);border-radius:3px;background:var(--surface);
+        padding:16px 18px;margin-top:14px;}
+  .ml-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+  .ml-head b{font-family:var(--serif);font-size:18px;font-weight:400;}
+  .ml-res{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+          padding:3px 8px;border-radius:2px;color:#fff;}
+  .ml-res.w{background:var(--good);} .ml-res.l{background:var(--bad);}
+  .ml-res.t{background:var(--gold);}
+  .ml-meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.02em;}
+  .ml-toss{font-size:13px;color:var(--ink-2);margin-bottom:12px;line-height:1.5;}
+  .ml-toss i{color:var(--muted);}
+  .mltbl{width:100%;border-collapse:collapse;}
+  .mltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+            color:var(--muted);text-align:left;padding:0 10px 7px 0;font-weight:400;white-space:nowrap;}
+  .mltbl th span{display:block;color:var(--rule);font-size:9px;margin-top:2px;}
+  .mltbl td{padding:8px 10px 8px 0;border-top:1px solid var(--rule-2);vertical-align:top;white-space:nowrap;}
+  .mltbl tr.us td{background:var(--surface-2);}
+  .ml-t{font-family:var(--mono);font-size:11.5px;}
+  .ml-t span{display:block;color:var(--muted);font-size:9.5px;margin-top:2px;}
+  .ml-s{font-family:var(--serif);font-size:19px;line-height:1;}
+  .ml-s span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
+  .ml-p{font-family:var(--serif);font-size:16px;line-height:1;}
+  .ml-p span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
+  .ml-x{font-family:var(--serif);font-size:16px;color:var(--bat);}
+  .dottbl,.partbl{width:100%;border-collapse:collapse;}
+  .dottbl th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+             color:var(--muted);text-align:left;padding:0 12px 8px 0;font-weight:400;}
+  .dottbl td{padding:11px 12px 11px 0;border-top:1px solid var(--rule-2);vertical-align:top;}
+  .dt-l{font-size:13.5px;color:var(--ink-2);white-space:nowrap;width:1%;}
+  .dt-c b{font-family:var(--serif);font-size:21px;font-weight:400;}
+  .dt-c span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:3px;}
+  .parbox{margin-top:16px;border:1px solid var(--rule);border-left:3px solid var(--chase);
+          border-radius:0 3px 3px 0;background:var(--surface);padding:14px 18px;}
+  .parbox h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+             color:var(--chase);margin:0 0 10px;}
+  .partbl td{padding:7px 14px 7px 0;border-top:1px solid var(--rule-2);white-space:nowrap;}
+  .partbl tr:first-child td{border-top:0;}
+  .pt-l{font-size:13px;color:var(--ink-2);width:1%;}
+  .pt-c{font-family:var(--serif);font-size:18px;}
+  .pt-c span{display:block;font-family:var(--mono);font-size:9.5px;margin-top:3px;}
+  .pt-c span.good{color:var(--good);} .pt-c span.bad{color:var(--bad);}
+  .pt-par{color:var(--muted);} .pt-par span{color:var(--muted);}
+  .par-note{font-size:12.5px;line-height:1.55;color:var(--muted);margin:10px 0 0;max-width:78ch;}
+  .pltbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
+  .pltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+            color:var(--muted);text-align:left;padding:0 10px 8px 0;font-weight:400;white-space:nowrap;}
+  .pltbl th span{display:block;color:var(--rule);font-size:8.5px;margin-top:2px;text-transform:none;letter-spacing:0;}
+  .pltbl td{padding:9px 10px;border-top:1px solid var(--rule-2);white-space:nowrap;font-size:13.5px;}
+  .pltbl td:first-child{padding-left:0;}
+  .pl-n{font-size:14px;}
+  .pl-n span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
+  .pl-ph b{font-family:var(--serif);font-size:15px;font-weight:400;}
+  .pl-ph span{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+  .pl-none{color:var(--rule);}
+  .pltbl .good{color:var(--good);} .pltbl .bad{color:var(--bad);}
+  .recs{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);
+        border-radius:3px;overflow:hidden;}
+  .recs article{background:var(--surface);padding:16px 20px;}
+  .recs h4{font-size:16px;margin:0 0 6px;font-family:var(--serif);font-weight:400;}
+  .recs p{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0;max-width:80ch;}
+  @media (max-width:640px){
+    .recs article{padding:14px 16px;}
+    .dottbl td,.dottbl th{padding-right:8px;}
+  }
+  /* 2026 fixtures */
+  .fixt{width:100%;border-collapse:collapse;border:1px solid var(--rule);border-radius:3px;}
+  .fixt th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+           color:var(--muted);background:var(--surface-2);padding:9px 12px;white-space:nowrap;}
+  .fixt td{background:var(--surface);padding:13px 12px;border-top:1px solid var(--rule-2);
+           vertical-align:top;white-space:normal;}
+  /* these two must out-specify .fixt td{white-space:normal} above */
+  .fixt td.fx-d{font-family:var(--mono);font-size:12px;white-space:nowrap;width:1%;}
+  .fx-d span{display:block;color:var(--muted);font-size:10px;margin-top:3px;}
+  .fixt td.fx-o{font-family:var(--serif);font-size:17px;white-space:nowrap;width:1%;}
+  .fx-v{font-size:13px;color:var(--ink-2);min-width:150px;}
+  .fx-v span{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
+  .fx-k{font-size:13px;color:var(--ink-2);}
+  .tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;
+       text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:5px;}
+  .tag.ok{background:var(--good);color:#fff;} .tag.no{background:var(--rule);color:var(--ink-2);}
+  .tag.form{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold);}
+  .know{display:block;line-height:1.5;}
+  .seedbox{margin-top:22px;border:1px solid var(--rule);border-left:3px solid var(--chase);
+           border-radius:0 3px 3px 0;background:var(--surface);padding:18px 20px;}
+  .seedbox h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+              color:var(--chase);margin:0 0 12px;}
+  .seedtbl{width:100%;border-collapse:collapse;margin-bottom:12px;}
+  .seedtbl td{padding:8px 10px 8px 0;border-top:1px solid var(--rule-2);font-size:13.5px;
+              color:var(--ink-2);vertical-align:top;white-space:normal;}
+  .seedtbl tr:first-child td{border-top:0;}
+  .sd-a{font-family:var(--serif);font-size:15px;color:var(--ink);white-space:nowrap;width:1%;}
+  .sd-b{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap;width:1%;
+        letter-spacing:.05em;}
+  .seedbox p{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0 0 10px;max-width:75ch;}
+  .seedbox p:last-child{margin-bottom:0;}
+  .seed-scout{border-top:1px solid var(--rule-2);padding-top:11px;}
+  @media (max-width:640px){
+    .fixt,.fixt thead,.fixt tbody,.fixt tr,.fixt td{display:block;width:auto;}
+    .fixt thead{display:none;}
+    .fixt tr{border-top:1px solid var(--rule);padding:12px 0;}
+    .fixt tr:first-child{border-top:0;}
+    .fixt td{border-top:0;padding:2px 12px;}
+    .fixt td.fx-d,.fixt td.fx-o{display:inline-block;margin-right:10px;width:auto;}
+    .fx-d span{display:inline;margin-left:6px;}
+    .seedtbl td{display:block;padding:3px 0;}
+    .seedtbl tr{display:block;border-top:1px solid var(--rule-2);padding:9px 0;}
+  }
+  /* playbook &#8212; phase-by-phase operating plan */
+  .pplan{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin-bottom:14px;
+         background:var(--surface);}
+  .pplan-h{display:flex;align-items:baseline;gap:12px;padding:12px 18px;background:var(--surface-2);
+           border-bottom:1px solid var(--rule);flex-wrap:wrap;}
+  .pplan-h .pp-t{font-family:var(--serif);font-size:20px;line-height:1;}
+  .pplan-h .pp-o{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+                 color:var(--muted);}
+  .pplan-h .pp-n{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto;}
+  .pplan-b{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);}
+  .pp-side{background:var(--surface);padding:16px 18px;}
+  .pp-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          margin-bottom:8px;}
+  .pp-bat .pp-lab{color:var(--bat);} .pp-ball .pp-lab{color:var(--chase);}
+  .pp-tgt{font-family:var(--serif);font-size:24px;line-height:1.1;margin-bottom:9px;
+          font-variant-numeric:tabular-nums;}
+  .pp-bat .pp-tgt{color:var(--bat);} .pp-ball .pp-tgt{color:var(--chase);}
+  .pp-ev{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0 0 9px;}
+  .pp-rule{font-size:14px;line-height:1.55;color:var(--ink);margin:0;padding-left:12px;
+           border-left:2px solid var(--rule);}
+  .subh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+        color:var(--muted);margin:30px 0 12px;}
+  @media (max-width:640px){ .pplan-b{grid-template-columns:1fr;} }
+  /* playbook */
+  .play{counter-reset:pb;display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .play article{background:var(--surface);padding:22px 24px;counter-increment:pb;}
+  .play h3{font-size:18px;margin-bottom:8px;display:flex;gap:12px;align-items:baseline;}
+  .play h3:before{content:counter(pb,decimal-leading-zero);font-family:var(--mono);font-size:12px;
+                  color:var(--bat);letter-spacing:.05em;}
+  .play p{font-size:15px;color:var(--ink-2);margin:0;max-width:70ch;}
+  .play .ev{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;display:block;}
+
+  .caveat{background:var(--surface-2);border:1px solid var(--rule);border-left:3px solid var(--gold);
+          border-radius:3px;padding:20px 24px;font-size:14.5px;color:var(--ink-2);}
+  .caveat b{color:var(--ink);}
+  footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);
+         font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.8;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+  /* phones */
+  @media (max-width:520px){
+    body{font-size:15.5px;}
+    .wrap{padding:0 15px 72px;}
+    header{padding:32px 0 20px;}
+    .bandrow{grid-template-columns:64px 1fr 62px;gap:9px;}
+    .bandrow .lab{font-size:11px;}
+    .bandrow .val{font-size:12px;}
+    .cliff span{left:74px;font-size:9.5px;}
+    .verdict{padding:24px 20px;}
+    .chart{padding:20px 16px 16px;}
+    .picker,.stat,.play article{padding:18px 16px;}
+    .groups{grid-template-columns:1fr;}
+    .tgrid{grid-template-columns:repeat(2,1fr);}
+    .prov{font-size:10.5px;}
+    .scroll{-webkit-overflow-scrolling:touch;}
+  }
+</style>
+<nav class="topnav" aria-label="Sections">
+  <div class="tn-in">
+    <a class="tn-brand" href="index.html">RCB<span> &middot; Fall League 2026</span></a>
+    <div class="tn-links">
+      <a href="index.html" data-pg="index">Match plan</a>
+      <a href="form.html" data-pg="form" class="on" aria-current="page">Our form</a>
+      <a href="league.html" data-pg="league">The league</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="eyebrow">Royal Challenger Blaster &middot; Our matches</div>
+  <h1>How we have actually played</h1>
+  <p class="standfirst" id="standfirst"></p>
+  <div class="prov" id="prov"></div>
+  <nav class="qnav" aria-label="Jump to section"><a href="#ours">Match log</a><a href="#squad">Squad</a></nav>
+</header>
+
+<section id="ours">
+  <div class="sechead"><div class="n">02</div><h2>How we have actually played</h2></div>
+  <p class="lede" id="ours-lede"></p>
+  <div id="ours-record"></div>
+  <div id="ours-log"></div>
+  <div class="subh">Dot balls and scoring, by phase</div>
+  <div id="ours-dots"></div>
+  <div class="subh">Our bowling, by phase</div>
+  <div id="ours-bowl"></div>
+  <div class="subh">Our batting</div>
+  <div id="ours-bat"></div>
+  <div class="subh">What this changes for 2026</div>
+  <div id="ours-plan"></div>
+</section>
+
+<section id="squad">
+  <div class="sechead"><div class="n">13</div><h2>Our squad</h2></div>
+  <p class="lede" id="squad-lede"></p>
+  <div class="tgrid" id="squadgrid"></div>
+</section>
+
+<nav class="pagefoot" aria-label="Other pages"><a href="index.html"><span class="pf-l">Match plan</span><span class="pf-h">What to do on the day</span><span class="pf-p">Our 2026 fixtures and a match plan for each of them: the toss call, the target, and the phase-by-phase read on whoever we are playing.</span></a><a href="league.html"><span class="pf-l">The league</span><span class="pf-h">How this league is actually won</span><span class="pf-p">Phase-by-phase targets, opponent scouting and a ten-point playbook, built from 88 matches and every one of them read ball by ball. The win line is 120.</span></a></nav>
+<script>
+
+const DATA = {"ours": {"record": {"played": 3, "won": 1, "lost": 1, "tied": 1, "opponents": ["FERAL XI"], "oppCount": 1, "leagueCount": 0, "runsFor": 282, "oversFor": 30.67, "runsAgainst": 279, "oversAgainst": 31.67, "nrr": 0.39}, "matches": [{"mid": "26716186", "date": "2026-08-19", "opp": "FERAL XI", "venue": "Ajax Cricket Club Ground, Ajax", "competition": "Friendly", "isLeague": false, "quota": 15, "quotaNote": null, "toss": "FERAL XI won the toss and chose to bat", "result": "won", "margin": "3 wickets", "url": "https://cricheroes.com/scorecard/26716186/individual/feral-xi-vs-royal-challenger-blaster/commentary", "labels": {"pp": "1-5", "mid": "6-10", "death": "11-15"}, "us": {"order": 2, "runs": 131, "wkts": 7, "overs": "13.4", "balls": 82, "rpo": 9.59, "dots": 32, "dotPct": 39.0, "extras": 8, "phases": {"pp": [30, 15, 52, 3], "mid": [30, 7, 50, 3], "death": [22, 10, 29, 1]}}, "them": {"order": 1, "runs": 127, "wkts": 7, "overs": "15.0", "balls": 90, "rpo": 8.47, "dots": 37, "dotPct": 41.1, "extras": 11, "phases": {"pp": [30, 13, 46, 2], "mid": [30, 13, 37, 3], "death": [30, 11, 44, 2]}}, "nrr": 1.12}, {"mid": "26606596", "date": "2026-08-13", "opp": "FERAL XI", "venue": "Ajax Cricket Club Ground, Ajax", "competition": "Friendly", "isLeague": false, "quota": 12, "quotaNote": null, "toss": "FERAL XI won the toss and chose to bat", "result": "tied", "margin": "scores level", "url": "https://cricheroes.com/scorecard/26606596/individual/feral-xi-vs-royal-challenger-blaster/commentary", "labels": {"pp": "1-4", "mid": "5-8", "death": "9-12"}, "us": {"order": 2, "runs": 100, "wkts": 6, "overs": "12.0", "balls": 72, "rpo": 8.33, "dots": 29, "dotPct": 40.3, "extras": 9, "phases": {"pp": [24, 10, 28, 1], "mid": [24, 10, 31, 2], "death": [24, 9, 41, 3]}}, "them": {"order": 1, "runs": 100, "wkts": 8, "overs": "12.0", "balls": 72, "rpo": 8.33, "dots": 33, "dotPct": 45.8, "extras": 18, "phases": {"pp": [24, 5, 50, 1], "mid": [24, 16, 28, 4], "death": [24, 12, 22, 3]}}, "nrr": 0.0}, {"mid": "26606720", "date": "2026-08-13", "opp": "FERAL XI", "venue": "Ajax Cricket Club Ground, Ajax", "competition": "Friendly", "isLeague": false, "quota": 8, "quotaNote": "Billed as 8 overs; both innings ended inside 5, so it is treated as a 5-over hit-out.", "toss": "FERAL XI won the toss and chose to field", "result": "lost", "margin": "8 wickets", "url": "https://cricheroes.com/scorecard/26606720/individual/royal-challenger-blaster-vs-feral-xi/commentary", "labels": {"pp": "1-2", "mid": "3-4", "death": "5-8"}, "us": {"order": 1, "runs": 51, "wkts": 4, "overs": "5.0", "balls": 30, "rpo": 10.2, "dots": 12, "dotPct": 40.0, "extras": 3, "phases": {"pp": [12, 3, 29, 0], "mid": [12, 6, 16, 4], "death": [6, 3, 6, 0]}}, "them": {"order": 2, "runs": 52, "wkts": 3, "overs": "4.4", "balls": 28, "rpo": 11.14, "dots": 12, "dotPct": 42.9, "extras": 6, "phases": {"pp": [12, 6, 27, 0], "mid": [12, 6, 11, 3], "death": [4, 0, 14, 0]}}, "nrr": -0.94}], "all": {"matches": 3, "bat": {"pp": {"balls": 66, "dots": 28, "runs": 109, "wkts": 4, "dotPct": 42.4, "rpo": 9.91}, "mid": {"balls": 66, "dots": 23, "runs": 97, "wkts": 9, "dotPct": 34.8, "rpo": 8.82}, "death": {"balls": 52, "dots": 22, "runs": 76, "wkts": 4, "dotPct": 42.3, "rpo": 8.77}}, "bowl": {"pp": {"balls": 66, "dots": 24, "runs": 123, "wkts": 3, "dotPct": 36.4, "rpo": 11.18}, "mid": {"balls": 66, "dots": 35, "runs": 76, "wkts": 10, "dotPct": 53.0, "rpo": 6.91}, "death": {"balls": 58, "dots": 23, "runs": 80, "wkts": 5, "dotPct": 39.7, "rpo": 8.28}}, "batOverall": {"balls": 184, "dots": 73, "dotPct": 39.7}, "bowlOverall": {"balls": 190, "dots": 82, "dotPct": 43.2}}, "fifteen": {"matches": 1, "bat": {"pp": {"balls": 30, "dots": 15, "runs": 52, "wkts": 3, "dotPct": 50.0, "rpo": 10.4}, "mid": {"balls": 30, "dots": 7, "runs": 50, "wkts": 3, "dotPct": 23.3, "rpo": 10.0}, "death": {"balls": 22, "dots": 10, "runs": 29, "wkts": 1, "dotPct": 45.5, "rpo": 7.91}}, "bowl": {"pp": {"balls": 30, "dots": 13, "runs": 46, "wkts": 2, "dotPct": 43.3, "rpo": 9.2}, "mid": {"balls": 30, "dots": 13, "runs": 37, "wkts": 3, "dotPct": 43.3, "rpo": 7.4}, "death": {"balls": 30, "dots": 11, "runs": 44, "wkts": 2, "dotPct": 36.7, "rpo": 8.8}}, "batOverall": {"balls": 82, "dots": 32, "dotPct": 39.0}, "bowlOverall": {"balls": 90, "dots": 37, "dotPct": 41.1}}, "fifteenCount": 1, "bowlers": [{"name": "Jeetmanyu Bawra", "matches": 3, "overs": 7.0, "runs": 37, "wkts": 7, "econ": 5.29, "avg": 5.3, "sr": 6.0, "balls": 42, "dots": 21, "dotPct": 50.0, "ph": {"pp": {"balls": 18, "dots": 7, "runs": 22, "wkts": 2, "dotPct": 38.9, "econ": 7.33}, "mid": {"balls": 12, "dots": 6, "runs": 7, "wkts": 2, "dotPct": 50.0, "econ": 3.5}, "death": {"balls": 12, "dots": 8, "runs": 8, "wkts": 3, "dotPct": 66.7, "econ": 4.0}}}, {"name": "Kalpesh Saraiya", "matches": 2, "overs": 4.0, "runs": 34, "wkts": 3, "econ": 8.5, "avg": 11.3, "sr": 8.0, "balls": 24, "dots": 15, "dotPct": 62.5, "ph": {"pp": {"balls": 6, "dots": 3, "runs": 13, "wkts": 1, "dotPct": 50.0, "econ": 13.0}, "mid": {"balls": 12, "dots": 8, "runs": 16, "wkts": 2, "dotPct": 66.7, "econ": 8.0}, "death": {"balls": 6, "dots": 4, "runs": 5, "wkts": 0, "dotPct": 66.7, "econ": 5.0}}}, {"name": "Patel Happy", "matches": 2, "overs": 4.0, "runs": 25, "wkts": 2, "econ": 6.25, "avg": 12.5, "sr": 12.0, "balls": 24, "dots": 10, "dotPct": 41.7, "ph": {"pp": {"balls": 6, "dots": 3, "runs": 4, "wkts": 0, "dotPct": 50.0, "econ": 4.0}, "mid": {"balls": 12, "dots": 6, "runs": 11, "wkts": 2, "dotPct": 50.0, "econ": 5.5}, "death": {"balls": 6, "dots": 1, "runs": 10, "wkts": 0, "dotPct": 16.7, "econ": 10.0}}}, {"name": "Jay", "matches": 3, "overs": 6.0, "runs": 58, "wkts": 2, "econ": 9.67, "avg": 29.0, "sr": 18.0, "balls": 36, "dots": 16, "dotPct": 44.4, "ph": {"pp": {"balls": 6, "dots": 4, "runs": 12, "wkts": 0, "dotPct": 66.7, "econ": 12.0}, "mid": {"balls": 18, "dots": 9, "runs": 25, "wkts": 1, "dotPct": 50.0, "econ": 8.33}, "death": {"balls": 12, "dots": 3, "runs": 21, "wkts": 1, "dotPct": 25.0, "econ": 10.5}}}, {"name": "Jemish Virendra Patel", "matches": 3, "overs": 4.0, "runs": 46, "wkts": 1, "econ": 11.5, "avg": 46.0, "sr": 24.0, "balls": 24, "dots": 9, "dotPct": 37.5, "ph": {"pp": {"balls": 12, "dots": 4, "runs": 27, "wkts": 0, "dotPct": 33.3, "econ": 13.5}, "mid": {"balls": 6, "dots": 4, "runs": 9, "wkts": 1, "dotPct": 66.7, "econ": 9.0}, "death": {"balls": 6, "dots": 1, "runs": 10, "wkts": 0, "dotPct": 16.7, "econ": 10.0}}}, {"name": "Armaan Wadhwa", "matches": 3, "overs": 5.0, "runs": 59, "wkts": 1, "econ": 11.8, "avg": 59.0, "sr": 30.0, "balls": 30, "dots": 9, "dotPct": 30.0, "ph": {"pp": {"balls": 18, "dots": 3, "runs": 45, "wkts": 0, "dotPct": 16.7, "econ": 15.0}, "mid": {"balls": 6, "dots": 2, "runs": 8, "wkts": 1, "dotPct": 33.3, "econ": 8.0}, "death": {"balls": 6, "dots": 4, "runs": 6, "wkts": 0, "dotPct": 66.7, "econ": 6.0}}}, {"name": "Pankhil Patel", "matches": 1, "overs": 1.0, "runs": 5, "wkts": 0, "econ": 5.0, "avg": null, "sr": null, "balls": 6, "dots": 2, "dotPct": 33.3, "ph": {"pp": {"balls": 0, "dots": 0, "runs": 0, "wkts": 0, "dotPct": null, "econ": null}, "mid": {"balls": 0, "dots": 0, "runs": 0, "wkts": 0, "dotPct": null, "econ": null}, "death": {"balls": 6, "dots": 2, "runs": 6, "wkts": 0, "dotPct": 33.3, "econ": 6.0}}}, {"name": "Yash Chauhan", "matches": 1, "overs": 0.7, "runs": 12, "wkts": 0, "econ": 17.99, "avg": null, "sr": null, "balls": 4, "dots": 0, "dotPct": 0.0, "ph": {"pp": {"balls": 0, "dots": 0, "runs": 0, "wkts": 0, "dotPct": null, "econ": null}, "mid": {"balls": 0, "dots": 0, "runs": 0, "wkts": 0, "dotPct": null, "econ": null}, "death": {"balls": 4, "dots": 0, "runs": 14, "wkts": 0, "dotPct": 0.0, "econ": 21.0}}}], "batters": [{"name": "Armaan Wadhwa", "inns": 2, "runs": 50, "balls": 28, "outs": 2, "notOuts": 0, "f4": 3, "f6": 4, "best": 30, "avg": 25.0, "sr": 178.6, "bdryPct": 72.0}, {"name": "Patel Happy", "inns": 2, "runs": 40, "balls": 20, "outs": 2, "notOuts": 0, "f4": 7, "f6": 0, "best": 40, "avg": 20.0, "sr": 200.0, "bdryPct": 70.0}, {"name": "Jonty Patel", "inns": 2, "runs": 39, "balls": 28, "outs": 2, "notOuts": 0, "f4": 1, "f6": 4, "best": 26, "avg": 19.5, "sr": 139.3, "bdryPct": 71.8}, {"name": "Jay", "inns": 2, "runs": 33, "balls": 22, "outs": 1, "notOuts": 1, "f4": 4, "f6": 1, "best": 17, "avg": 33.0, "sr": 150.0, "bdryPct": 66.7}, {"name": "Kalpesh Saraiya", "inns": 3, "runs": 21, "balls": 21, "outs": 2, "notOuts": 1, "f4": 1, "f6": 0, "best": 14, "avg": 10.5, "sr": 100.0, "bdryPct": 19.0}, {"name": "Nikhil Das T", "inns": 2, "runs": 19, "balls": 13, "outs": 1, "notOuts": 1, "f4": 2, "f6": 0, "best": 17, "avg": 19.0, "sr": 146.2, "bdryPct": 42.1}, {"name": "Yash Chauhan", "inns": 3, "runs": 18, "balls": 16, "outs": 3, "notOuts": 0, "f4": 2, "f6": 1, "best": 11, "avg": 6.0, "sr": 112.5, "bdryPct": 77.8}, {"name": "Jay Vasani", "inns": 2, "runs": 17, "balls": 21, "outs": 1, "notOuts": 1, "f4": 0, "f6": 1, "best": 10, "avg": 17.0, "sr": 81.0, "bdryPct": 35.3}, {"name": "Jemish Virendra Patel", "inns": 2, "runs": 16, "balls": 6, "outs": 0, "notOuts": 2, "f4": 0, "f6": 2, "best": 10, "avg": null, "sr": 266.7, "bdryPct": 75.0}, {"name": "Pankhil Patel", "inns": 2, "runs": 6, "balls": 9, "outs": 2, "notOuts": 0, "f4": 0, "f6": 0, "best": 4, "avg": 3.0, "sr": 66.7, "bdryPct": 0.0}, {"name": "Jeetmanyu Bawra", "inns": 1, "runs": 2, "balls": 2, "outs": 1, "notOuts": 0, "f4": 0, "f6": 0, "best": 2, "avg": 2.0, "sr": 100.0, "bdryPct": 0.0}]}, "phases": {"sample": {"matches": 86, "innings": 167, "complete": 98}, "all": {"pp": 33.3, "ppw": 2.4, "ppn": 167, "mid": 35.1, "midw": 2.4, "midn": 155, "death": 42.9, "deathw": 3.4, "deathn": 98, "n": 98, "innings": 167, "total": 113.7}, "won": {"pp": 37.1, "ppw": 2.0, "ppn": 83, "mid": 39.8, "midw": 2.0, "midn": 74, "death": 49.2, "deathw": 3.4, "deathn": 51, "n": 51, "innings": 83, "total": 127.5}, "lost": {"pp": 29.6, "ppw": 2.7, "ppn": 84, "mid": 30.8, "midw": 2.7, "midn": 81, "death": 36.2, "deathw": 3.4, "deathn": 47, "n": 47, "innings": 84, "total": 98.9}, "bat1": {"pp": 33.6, "ppw": 2.2, "ppn": 83, "mid": 37.3, "midw": 2.2, "midn": 83, "death": 44.5, "deathw": 3.5, "deathn": 71, "n": 71, "innings": 83, "total": 117.9}, "bat2": {"pp": 33.0, "ppw": 2.5, "ppn": 84, "mid": 32.5, "midw": 2.6, "midn": 72, "death": 39.0, "deathw": 3.2, "deathn": 27, "n": 27, "innings": 84, "total": 102.8}, "gaps": {"pp": 7.5, "mid": 9.0, "death": 13.0}, "decisive": "death", "milestone": {"reached": {"pp": 41.7, "ppw": 1.7, "ppn": 34, "mid": 45.0, "midw": 1.8, "midn": 34, "death": 55.7, "deathw": 3.3, "deathn": 34, "n": 34, "innings": 34, "total": 142.4}, "missed": {"pp": 28.0, "ppw": 2.6, "ppn": 49, "mid": 32.0, "midw": 2.4, "midn": 49, "death": 34.1, "deathw": 3.6, "deathn": 37, "n": 37, "innings": 49, "total": 95.5}}, "teams": {"FERAL XI": {"bat": {"pp": 32.4, "ppw": 3.2, "ppn": 5, "mid": 26.8, "midw": 2.8, "midn": 5, "death": 23.0, "deathw": 2.0, "deathn": 1, "n": 1, "innings": 5, "total": 61.0}, "bowl": {"pp": 28.6, "ppw": 2.0, "ppn": 5, "mid": 33.8, "midw": 2.8, "midn": 4, "death": 33.7, "deathw": 4.7, "deathn": 3, "n": 3, "innings": 5, "total": 97.3}}, "Friends United - Fall T15": {"bat": {"pp": 32.4, "ppw": 1.6, "ppn": 5, "mid": 42.0, "midw": 2.2, "midn": 5, "death": 52.8, "deathw": 3.2, "deathn": 4, "n": 4, "innings": 5, "total": 132.0}, "bowl": {"pp": 37.5, "ppw": 1.8, "ppn": 6, "mid": 31.7, "midw": 3.2, "midn": 6, "death": 28.0, "deathw": 6.0, "deathn": 2, "n": 2, "innings": 6, "total": 100.5}}, "Trailblazers": {"bat": {"pp": 30.7, "ppw": 2.0, "ppn": 6, "mid": 33.0, "midw": 3.2, "midn": 5, "death": 51.5, "deathw": 4.5, "deathn": 2, "n": 2, "innings": 6, "total": 127.5}, "bowl": {"pp": 26.7, "ppw": 2.0, "ppn": 6, "mid": 39.7, "midw": 2.2, "midn": 6, "death": 38.3, "deathw": 5.0, "deathn": 3, "n": 3, "innings": 6, "total": 101.0}}, "Maratha Warriors - GTCC": {"bat": {"pp": 42.0, "ppw": 2.5, "ppn": 8, "mid": 39.5, "midw": 1.8, "midn": 8, "death": 55.2, "deathw": 3.5, "deathn": 4, "n": 4, "innings": 8, "total": 143.5}, "bowl": {"pp": 27.4, "ppw": 2.4, "ppn": 8, "mid": 34.9, "midw": 2.6, "midn": 7, "death": 47.3, "deathw": 2.2, "deathn": 6, "n": 6, "innings": 8, "total": 110.7}}, "Downtown Hunterz": {"bat": {"pp": 34.7, "ppw": 2.1, "ppn": 7, "mid": 33.6, "midw": 2.7, "midn": 7, "death": 52.5, "deathw": 2.5, "deathn": 4, "n": 4, "innings": 7, "total": 118.2}, "bowl": {"pp": 34.3, "ppw": 2.0, "ppn": 7, "mid": 34.1, "midw": 2.6, "midn": 7, "death": 41.6, "deathw": 2.4, "deathn": 5, "n": 5, "innings": 7, "total": 109.6}}, "Maple Eagles": {"bat": {"pp": 30.0, "ppw": 3.2, "ppn": 4, "mid": 34.5, "midw": 2.8, "midn": 4, "death": 46.3, "deathw": 2.7, "deathn": 3, "n": 3, "innings": 4, "total": 115.3}, "bowl": {"pp": 30.5, "ppw": 2.8, "ppn": 4, "mid": 29.7, "midw": 3.0, "midn": 3, "death": 0, "deathw": 0, "deathn": 0, "n": 0, "innings": 4, "total": 0}}, "TCF": {"bat": {"pp": 37.6, "ppw": 1.9, "ppn": 7, "mid": 42.1, "midw": 1.7, "midn": 7, "death": 46.6, "deathw": 3.2, "deathn": 5, "n": 5, "innings": 7, "total": 130.0}, "bowl": {"pp": 37.4, "ppw": 2.1, "ppn": 7, "mid": 28.1, "midw": 2.7, "midn": 7, "death": 32.5, "deathw": 3.2, "deathn": 4, "n": 4, "innings": 7, "total": 94.5}}, "Birthday Boys XI": {"bat": {"pp": 20.0, "ppw": 3.7, "ppn": 3, "mid": 27.0, "midw": 2.0, "midn": 3, "death": 30.0, "deathw": 2.5, "deathn": 2, "n": 2, "innings": 3, "total": 81.5}, "bowl": {"pp": 45.7, "ppw": 2.3, "ppn": 3, "mid": 59.0, "midw": 1.0, "midn": 1, "death": 78.0, "deathw": 2.0, "deathn": 1, "n": 1, "innings": 3, "total": 195.0}}, "Mavericks": {"bat": {"pp": 35.7, "ppw": 2.4, "ppn": 7, "mid": 47.2, "midw": 1.2, "midn": 5, "death": 49.8, "deathw": 4.8, "deathn": 5, "n": 5, "innings": 7, "total": 134.0}, "bowl": {"pp": 33.6, "ppw": 2.4, "ppn": 7, "mid": 25.1, "midw": 2.7, "midn": 7, "death": 32.0, "deathw": 3.5, "deathn": 2, "n": 2, "innings": 7, "total": 96.0}}, "Taunton Titans": {"bat": {"pp": 23.6, "ppw": 3.2, "ppn": 5, "mid": 25.6, "midw": 1.8, "midn": 5, "death": 44.2, "deathw": 3.2, "deathn": 4, "n": 4, "innings": 5, "total": 98.0}, "bowl": {"pp": 35.2, "ppw": 2.2, "ppn": 5, "mid": 47.8, "midw": 1.8, "midn": 4, "death": 69.7, "deathw": 3.3, "deathn": 3, "n": 3, "innings": 5, "total": 156.0}}, "Deccan Warriors": {"bat": {"pp": 28.4, "ppw": 2.8, "ppn": 5, "mid": 29.4, "midw": 3.2, "midn": 5, "death": 28.0, "deathw": 3.0, "deathn": 1, "n": 1, "innings": 5, "total": 74.0}, "bowl": {"pp": 38.2, "ppw": 2.0, "ppn": 5, "mid": 43.2, "midw": 1.2, "midn": 4, "death": 40.0, "deathw": 3.7, "deathn": 3, "n": 3, "innings": 5, "total": 127.3}}, "Panjab XI": {"bat": {"pp": 31.0, "ppw": 2.8, "ppn": 5, "mid": 33.7, "midw": 2.7, "midn": 3, "death": 43.0, "deathw": 3.0, "deathn": 3, "n": 3, "innings": 5, "total": 110.7}, "bowl": {"pp": 31.2, "ppw": 2.2, "ppn": 5, "mid": 37.2, "midw": 2.0, "midn": 5, "death": 28.0, "deathw": 4.5, "deathn": 2, "n": 2, "innings": 5, "total": 92.0}}, "Durham Strikers": {"bat": {"pp": 36.4, "ppw": 1.6, "ppn": 5, "mid": 26.2, "midw": 2.4, "midn": 5, "death": 38.3, "deathw": 4.3, "deathn": 3, "n": 3, "innings": 5, "total": 104.7}, "bowl": {"pp": 36.6, "ppw": 2.6, "ppn": 5, "mid": 28.0, "midw": 3.5, "midn": 4, "death": 38.5, "deathw": 3.0, "deathn": 4, "n": 4, "innings": 5, "total": 103.2}}, "Redwings": {"bat": {"pp": 30.4, "ppw": 2.0, "ppn": 5, "mid": 33.8, "midw": 2.6, "midn": 5, "death": 39.2, "deathw": 3.8, "deathn": 4, "n": 4, "innings": 5, "total": 101.5}, "bowl": {"pp": 33.8, "ppw": 2.2, "ppn": 5, "mid": 36.6, "midw": 2.0, "midn": 5, "death": 28.5, "deathw": 2.8, "deathn": 4, "n": 4, "innings": 5, "total": 94.5}}, "Harmony Strikers": {"bat": {"pp": 32.9, "ppw": 3.1, "ppn": 7, "mid": 41.7, "midw": 1.5, "midn": 6, "death": 50.2, "deathw": 3.0, "deathn": 4, "n": 4, "innings": 7, "total": 124.2}, "bowl": {"pp": 44.4, "ppw": 2.0, "ppn": 7, "mid": 35.7, "midw": 2.4, "midn": 7, "death": 32.8, "deathw": 3.8, "deathn": 5, "n": 5, "innings": 7, "total": 109.4}}, "Invincible Trailblazers": {"bat": {"pp": 29.9, "ppw": 2.4, "ppn": 7, "mid": 43.4, "midw": 1.7, "midn": 7, "death": 43.8, "deathw": 3.5, "deathn": 6, "n": 6, "innings": 7, "total": 119.8}, "bowl": {"pp": 31.0, "ppw": 2.6, "ppn": 7, "mid": 33.3, "midw": 1.7, "midn": 6, "death": 44.0, "deathw": 4.2, "deathn": 4, "n": 4, "innings": 7, "total": 116.2}}, "Whitby Thunderbolts Gtcc fall": {"bat": {"pp": 33.5, "ppw": 2.0, "ppn": 6, "mid": 37.0, "midw": 2.6, "midn": 5, "death": 36.8, "deathw": 3.8, "deathn": 5, "n": 5, "innings": 6, "total": 106.6}, "bowl": {"pp": 27.7, "ppw": 3.2, "ppn": 6, "mid": 31.7, "midw": 1.7, "midn": 6, "death": 57.2, "deathw": 3.2, "deathn": 4, "n": 4, "innings": 6, "total": 113.2}}, "Team Manjummel": {"bat": {"pp": 38.5, "ppw": 2.0, "ppn": 6, "mid": 39.2, "midw": 1.8, "midn": 6, "death": 46.2, "deathw": 2.8, "deathn": 5, "n": 5, "innings": 6, "total": 124.4}, "bowl": {"pp": 33.3, "ppw": 2.0, "ppn": 6, "mid": 36.5, "midw": 3.0, "midn": 6, "death": 38.0, "deathw": 5.0, "deathn": 1, "n": 1, "innings": 6, "total": 100.0}}, "Oshawa Fighters": {"bat": {"pp": 31.2, "ppw": 2.0, "ppn": 5, "mid": 32.5, "midw": 2.5, "midn": 4, "death": 38.8, "deathw": 3.5, "deathn": 4, "n": 4, "innings": 5, "total": 100.0}, "bowl": {"pp": 27.6, "ppw": 3.4, "ppn": 5, "mid": 38.2, "midw": 2.0, "midn": 5, "death": 41.3, "deathw": 3.3, "deathn": 3, "n": 3, "innings": 5, "total": 115.3}}, "DSK Friends XI": {"bat": {"pp": 38.8, "ppw": 2.6, "ppn": 5, "mid": 34.4, "midw": 2.0, "midn": 5, "death": 42.0, "deathw": 3.3, "deathn": 3, "n": 3, "innings": 5, "total": 114.3}, "bowl": {"pp": 29.8, "ppw": 3.8, "ppn": 5, "mid": 29.4, "midw": 2.8, "midn": 5, "death": 50.2, "deathw": 2.5, "deathn": 4, "n": 4, "innings": 5, "total": 107.0}}, "Royal Challengers Bowmanville": {"bat": {"pp": 45.8, "ppw": 1.3, "ppn": 6, "mid": 37.5, "midw": 2.8, "midn": 6, "death": 32.3, "deathw": 4.0, "deathn": 3, "n": 3, "innings": 6, "total": 114.3}, "bowl": {"pp": 36.2, "ppw": 2.0, "ppn": 6, "mid": 40.0, "midw": 2.5, "midn": 6, "death": 43.7, "deathw": 3.2, "deathn": 6, "n": 6, "innings": 6, "total": 119.8}}, "Toronto Nawabs": {"bat": {"pp": 22.0, "ppw": 3.8, "ppn": 4, "mid": 35.7, "midw": 3.3, "midn": 3, "death": 0, "deathw": 0, "deathn": 0, "n": 0, "innings": 4, "total": 0}, "bowl": {"pp": 30.2, "ppw": 1.2, "ppn": 4, "mid": 44.2, "midw": 2.2, "midn": 4, "death": 51.5, "deathw": 3.8, "deathn": 4, "n": 4, "innings": 4, "total": 126.0}}, "Bowmanville Cricket Club": {"bat": {"pp": 30.5, "ppw": 2.8, "ppn": 4, "mid": 26.2, "midw": 2.2, "midn": 4, "death": 14.0, "deathw": 5.5, "deathn": 2, "n": 2, "innings": 4, "total": 65.5}, "bowl": {"pp": 42.2, "ppw": 1.5, "ppn": 4, "mid": 39.3, "midw": 2.7, "midn": 3, "death": 56.3, "deathw": 2.7, "deathn": 3, "n": 3, "innings": 4, "total": 139.7}}, "Royal Punjab": {"bat": {"pp": 33.7, "ppw": 2.8, "ppn": 6, "mid": 32.2, "midw": 2.2, "midn": 4, "death": 50.5, "deathw": 2.5, "deathn": 2, "n": 2, "innings": 6, "total": 129.5}, "bowl": {"pp": 34.3, "ppw": 2.3, "ppn": 6, "mid": 39.8, "midw": 2.2, "midn": 6, "death": 40.5, "deathw": 4.5, "deathn": 2, "n": 2, "innings": 6, "total": 139.0}}, "Golden City": {"bat": {"pp": 32.4, "ppw": 2.0, "ppn": 5, "mid": 32.2, "midw": 3.6, "midn": 5, "death": 41.7, "deathw": 4.3, "deathn": 3, "n": 3, "innings": 5, "total": 109.0}, "bowl": {"pp": 26.8, "ppw": 3.0, "ppn": 4, "mid": 31.8, "midw": 3.0, "midn": 4, "death": 55.0, "deathw": 2.0, "deathn": 1, "n": 1, "innings": 4, "total": 130.0}}, "Nizam Royal Knights": {"bat": {"pp": 39.2, "ppw": 1.5, "ppn": 8, "mid": 37.2, "midw": 2.8, "midn": 8, "death": 43.0, "deathw": 2.6, "deathn": 5, "n": 5, "innings": 8, "total": 122.8}, "bowl": {"pp": 30.4, "ppw": 3.0, "ppn": 8, "mid": 27.6, "midw": 2.4, "midn": 7, "death": 41.0, "deathw": 4.0, "deathn": 4, "n": 4, "innings": 8, "total": 102.0}}, "Durham United": {"bat": {"pp": 33.6, "ppw": 1.9, "ppn": 7, "mid": 33.6, "midw": 2.3, "midn": 7, "death": 45.0, "deathw": 3.3, "deathn": 3, "n": 3, "innings": 7, "total": 96.7}, "bowl": {"pp": 33.0, "ppw": 2.3, "ppn": 7, "mid": 39.3, "midw": 1.2, "midn": 6, "death": 43.0, "deathw": 4.0, "deathn": 4, "n": 4, "innings": 7, "total": 127.2}}, "Avengers": {"bat": {"pp": 24.8, "ppw": 3.0, "ppn": 5, "mid": 36.5, "midw": 3.0, "midn": 4, "death": 28.0, "deathw": 2.0, "deathn": 2, "n": 2, "innings": 5, "total": 98.5}, "bowl": {"pp": 36.0, "ppw": 2.0, "ppn": 5, "mid": 35.2, "midw": 2.6, "midn": 5, "death": 54.8, "deathw": 2.2, "deathn": 4, "n": 4, "innings": 5, "total": 123.5}}, "Thunder Strikers": {"bat": {"pp": 33.8, "ppw": 2.5, "ppn": 4, "mid": 25.8, "midw": 2.8, "midn": 4, "death": 37.0, "deathw": 2.7, "deathn": 3, "n": 3, "innings": 4, "total": 98.3}, "bowl": {"pp": 28.2, "ppw": 2.5, "ppn": 4, "mid": 36.2, "midw": 1.8, "midn": 4, "death": 36.7, "deathw": 3.0, "deathn": 3, "n": 3, "innings": 4, "total": 102.0}}, "North Stars T15 Fall League 2025": {"bat": {"pp": 30.8, "ppw": 1.8, "ppn": 5, "mid": 32.8, "midw": 2.2, "midn": 5, "death": 42.0, "deathw": 3.7, "deathn": 3, "n": 3, "innings": 5, "total": 113.0}, "bowl": {"pp": 35.0, "ppw": 2.6, "ppn": 5, "mid": 35.0, "midw": 2.8, "midn": 5, "death": 37.5, "deathw": 3.2, "deathn": 4, "n": 4, "innings": 5, "total": 110.8}}}, "bowlTypes": {"typedOvers": 1460, "totalOvers": 2341, "pace": {"n": 1420, "econ": 7.07, "wpo": 0.54}, "spin": {"n": 40, "econ": 7.53, "wpo": 0.47}, "pacePhases": {"pp": {"n": 535, "econ": 6.61, "wpo": 0.47}, "mid": {"n": 497, "econ": 6.93, "wpo": 0.49}, "death": {"n": 388, "econ": 7.89, "wpo": 0.72}}}, "weather": [{"date": "2025-09-06", "n_matches": 9, "avg_1st_innings": 96.2, "temp_c": 15.9, "wind_kmh": 13.8, "wind_kmh_max": 19.3, "precip_mm": 0.0}, {"date": "2025-09-07", "n_matches": 7, "avg_1st_innings": 147.0, "temp_c": 15.1, "wind_kmh": 15.9, "wind_kmh_max": 19.0, "precip_mm": 0.4}, {"date": "2025-09-13", "n_matches": 10, "avg_1st_innings": 100.5, "temp_c": 19.4, "wind_kmh": 7.9, "wind_kmh_max": 15.8, "precip_mm": 0.0}, {"date": "2025-09-14", "n_matches": 6, "avg_1st_innings": 105.5, "temp_c": 20.8, "wind_kmh": 5.4, "wind_kmh_max": 8.1, "precip_mm": 0.6}, {"date": "2025-09-19", "n_matches": 1, "avg_1st_innings": 130.0, "temp_c": 17.7, "wind_kmh": 6.4, "wind_kmh_max": 10.4, "precip_mm": 0.0}, {"date": "2025-09-20", "n_matches": 10, "avg_1st_innings": 96.8, "temp_c": 14.7, "wind_kmh": 14.2, "wind_kmh_max": 15.3, "precip_mm": 0.0}, {"date": "2025-09-21", "n_matches": 7, "avg_1st_innings": 131.1, "temp_c": 19.4, "wind_kmh": 13.3, "wind_kmh_max": 16.9, "precip_mm": 0.0}, {"date": "2025-09-27", "n_matches": 10, "avg_1st_innings": 99.2, "temp_c": 19.0, "wind_kmh": 7.0, "wind_kmh_max": 10.8, "precip_mm": 0.0}, {"date": "2025-09-28", "n_matches": 10, "avg_1st_innings": 125.3, "temp_c": 20.4, "wind_kmh": 13.7, "wind_kmh_max": 16.8, "precip_mm": 0.0}, {"date": "2025-10-03", "n_matches": 2, "avg_1st_innings": 112.5, "temp_c": 16.9, "wind_kmh": 5.8, "wind_kmh_max": 9.3, "precip_mm": 0.0}, {"date": "2025-10-04", "n_matches": 5, "avg_1st_innings": 118.2, "temp_c": 19.5, "wind_kmh": 5.1, "wind_kmh_max": 8.3, "precip_mm": 0.0}, {"date": "2025-10-05", "n_matches": 4, "avg_1st_innings": 146.2, "temp_c": 20.9, "wind_kmh": 6.6, "wind_kmh_max": 9.9, "precip_mm": 0.0}, {"date": "2025-10-11", "n_matches": 2, "avg_1st_innings": 79.5, "temp_c": 13.9, "wind_kmh": 14.7, "wind_kmh_max": 18.5, "precip_mm": 4.6}, {"date": "2025-10-12", "n_matches": 1, "avg_1st_innings": 119.0, "temp_c": 15.2, "wind_kmh": 15.5, "wind_kmh_max": 18.5, "precip_mm": 0.0}]}, "squad": {"team": "Royal Challenger Blaster", "city": "Pickering", "captain": "Jemish Virendra Patel", "players": ["Jemish Virendra Patel", "Armaan Wadhwa", "Jay", "Jay Vasani", "Jeetmanyu Bawra", "Jonty Patel", "Kalpesh Saraiya", "Nikhil Das T", "Pankhil Patel", "Patel Happy", "Rudresh Bhanushali", "Sabar", "Saurabh Patel", "Yash Chauhan"]}, "league": {"matches": 88, "scored": 86, "scored15": 84, "teams": 30, "first": "2025-09-06", "last": "2025-10-12", "batFirstW": 51, "batFirstPct": 59, "avg1": 113, "med1": 108, "avg2": 88, "bands": [{"label": "under 80", "won": 0, "n": 12, "pct": 0}, {"label": "80\u201399", "won": 7, "n": 19, "pct": 37}, {"label": "100\u2013119", "won": 9, "n": 18, "pct": 50}, {"label": "120\u2013139", "won": 21, "n": 22, "pct": 95}, {"label": "140\u2013159", "won": 3, "n": 4, "pct": 75}, {"label": "160+", "won": 9, "n": 9, "pct": 100}], "venues": [{"venue": "GTCC Ajax Cricket Ground", "n": 44, "pct": 59, "avg1": 118}, {"venue": "Stone Street Park", "n": 20, "pct": 55, "avg1": 113}, {"venue": "Brooklin Memorial Park - Whitby", "n": 6, "pct": 50, "avg1": 81}, {"venue": "Stom Street Park", "n": 5, "pct": 80, "avg1": 116}], "hi120": {"w": 33, "n": 35}, "lo120": {"w": 16, "n": 49}, "outQuota": {"w": 42, "n": 63, "avg": 121}, "allOut": {"w": 7, "n": 21, "avg": 87}, "alloutPct": 30, "closePct": 15, "blowPct": 35, "scores1": [38, 60, 65, 65, 66, 70, 70, 71, 72, 74, 77, 79, 80, 81, 83, 84, 84, 87, 89, 90, 90, 90, 90, 93, 93, 94, 95, 96, 97, 97, 98, 100, 100, 100, 101, 103, 103, 103, 106, 106, 107, 107, 109, 109, 112, 113, 115, 118, 119, 120, 120, 120, 121, 122, 122, 123, 124, 126, 128, 128, 130, 131, 133, 134, 134, 135, 135, 135, 137, 137, 138, 147, 148, 150, 153, 163, 165, 165, 168, 177, 184, 185, 191, 195], "groups": [{"name": "Group A", "rows": [{"team": "Nizam Royal Knights", "W": 5, "L": 0, "nrr": 2.39, "through": true, "finish": "Runner-up"}, {"team": "Friends United - Fall T15", "W": 3, "L": 2, "nrr": 2.5, "through": true, "finish": "Pre-quarter-final"}, {"team": "Trailblazers", "W": 3, "L": 2, "nrr": -0.22, "through": true, "finish": "Pre-quarter-final"}, {"team": "Golden City", "W": 3, "L": 2, "nrr": -0.48, "through": false, "finish": "Missed knockouts"}, {"team": "Toronto Nawabs", "W": 0, "L": 4, "nrr": -3.95, "through": false, "finish": "Missed knockouts"}, {"team": "Bowmanville Cricket Club", "W": 0, "L": 4, "nrr": -4.63, "through": false, "finish": "Missed knockouts"}]}, {"name": "Group B", "rows": [{"team": "Team Manjummel", "W": 4, "L": 1, "nrr": 1.5, "through": true, "finish": "Pre-quarter-final"}, {"team": "Durham United", "W": 3, "L": 2, "nrr": 0.2, "through": true, "finish": "Quarter-final"}, {"team": "Whitby Thunderbolts Gtcc fall", "W": 3, "L": 2, "nrr": 0.18, "through": true, "finish": "Pre-quarter-final"}, {"team": "FERAL XI", "W": 3, "L": 2, "nrr": -0.75, "through": false, "finish": "Missed knockouts"}, {"team": "Redwings", "W": 2, "L": 3, "nrr": -0.02, "through": false, "finish": "Missed knockouts"}, {"team": "Avengers", "W": 0, "L": 5, "nrr": -3.45, "through": false, "finish": "Missed knockouts"}]}, {"name": "Group C", "rows": [{"team": "TCF", "W": 4, "L": 1, "nrr": 1.6, "through": true, "finish": "Semi-final"}, {"team": "Maratha Warriors - GTCC", "W": 4, "L": 1, "nrr": 1.32, "through": true, "finish": "Semi-final"}, {"team": "Harmony Strikers", "W": 3, "L": 2, "nrr": 0.61, "through": true, "finish": "Quarter-final"}, {"team": "Oshawa Fighters", "W": 2, "L": 3, "nrr": -0.25, "through": false, "finish": "Missed knockouts"}, {"team": "Thunder Strikers", "W": 2, "L": 3, "nrr": -0.51, "through": false, "finish": "Missed knockouts"}, {"team": "Birthday Boys XI", "W": 0, "L": 5, "nrr": -6.6, "through": false, "finish": "Missed knockouts"}]}, {"name": "Group D", "rows": [{"team": "Mavericks", "W": 4, "L": 1, "nrr": 3.54, "through": true, "finish": "Champion"}, {"team": "Royal Punjab", "W": 4, "L": 1, "nrr": 0.3, "through": true, "finish": "Pre-quarter-final"}, {"team": "DSK Friends XI", "W": 3, "L": 2, "nrr": -0.41, "through": true, "finish": "Pre-quarter-final"}, {"team": "Maple Eagles", "W": 2, "L": 3, "nrr": 0.43, "through": false, "finish": "Missed knockouts"}, {"team": "Durham Strikers", "W": 1, "L": 4, "nrr": -0.91, "through": false, "finish": "Missed knockouts"}, {"team": "Deccan Warriors", "W": 1, "L": 4, "nrr": -2.95, "through": false, "finish": "Missed knockouts"}]}, {"name": "Group E", "rows": [{"team": "Invincible Trailblazers", "W": 4, "L": 1, "nrr": 1.42, "through": true, "finish": "Quarter-final"}, {"team": "Downtown Hunterz", "W": 4, "L": 1, "nrr": 0.48, "through": true, "finish": "Quarter-final"}, {"team": "Panjab XI", "W": 3, "L": 2, "nrr": 0.57, "through": false, "finish": "Missed knockouts"}, {"team": "Royal Challengers Bowmanville", "W": 3, "L": 2, "nrr": -0.33, "through": true, "finish": "Pre-quarter-final"}, {"team": "North Stars T15 Fall League 2025", "W": 1, "L": 4, "nrr": -0.8, "through": false, "finish": "Missed knockouts"}, {"team": "Taunton Titans", "W": 0, "L": 5, "nrr": -3.81, "through": false, "finish": "Missed knockouts"}]}], "bubble": {"qualified": [{"team": "Friends United - Fall T15", "nrr": 2.5}, {"team": "Harmony Strikers", "nrr": 0.61}, {"team": "Durham United", "nrr": 0.2}, {"team": "Whitby Thunderbolts Gtcc fall", "nrr": 0.18}, {"team": "Trailblazers", "nrr": -0.22}, {"team": "Royal Challengers Bowmanville", "nrr": -0.33}, {"team": "DSK Friends XI", "nrr": -0.41}], "missed": [{"team": "Panjab XI", "nrr": 0.57}, {"team": "Golden City", "nrr": -0.48}, {"team": "FERAL XI", "nrr": -0.75}]}, "h2hNote": {"a": "Panjab XI", "b": "Royal Challengers Bowmanville", "winner": "Royal Challengers Bowmanville"}}};
+const PAGE = "form";
+const L = DATA.league, T = DATA.teams;
+const OURS = DATA.ours;          // shared: the match plan reads it too
+const PH = DATA.phases;          // shared: match plan and form both read it
+const PHNAME = {pp:'Powerplay (1\u20135)', mid:'Middle (6\u201310)', death:'Death (11\u201315)'};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+const fmtDate = s => {
+  const [y, m, d] = s.split('-').map(Number);
+  return `${d} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]}`;
+};
+
+/* 02 \u2014 how we have actually played */
+if (OURS) {
+  const R = OURS.record, PHK = ['pp','mid','death'];
+  const PLBL = {pp:'Powerplay', mid:'Middle', death:'Death'};
+  const pc = v => v === null || v === undefined ? '&mdash;' : v + '%';
+  const sgn = d => (d >= 0 ? '+' : '\u2212') + Math.abs(d);
+
+  $('ours-lede').innerHTML =
+    `Every match we have played, read ball by ball and reconciled against the scorecard. ` +
+    `<b>${R.played} matches, all of them friendlies against ${R.oppCount === 1 ? esc(R.opponents[0]) : R.oppCount + ' sides'}</b>, ` +
+    `across three different formats. That is enough to say something about our own habits &mdash; who bowls a ` +
+    `dot, who wastes a ball, where we leak &mdash; and not nearly enough to say how good we are. ` +
+    `Only the ${OURS.fifteenCount === 1 ? 'single' : OURS.fifteenCount} fifteen-over match is set against the ` +
+    `league par; a twelve-over innings has no fifth-over powerplay and an eight-over hit-out has no death.`;
+
+  $('ours-record').innerHTML =
+    `<div class="tgrid">` +
+    [[`${R.won}\u2013${R.lost}\u2013${R.tied}`, 'won \u2013 lost \u2013 tied'],
+     [(R.nrr >= 0 ? '+' : '') + R.nrr.toFixed(2), 'net run rate, all matches'],
+     [R.runsFor + '/' + R.runsAgainst, 'runs for / against'],
+     [R.leagueCount, 'league matches so far']
+    ].map(([k, v]) => `<div><div class="k" style="font-size:22px">${k}</div><div class="t">${v}</div></div>`).join('') +
+    `</div>`;
+
+  // ---- match log: one card per match, both innings, phase splits
+  $('ours-log').innerHTML = OURS.matches.map(m => {
+    const cls = m.result === 'won' ? 'w' : (m.result === 'lost' ? 'l' : 't');
+    const word = m.result === 'won' ? 'Won' : (m.result === 'lost' ? 'Lost' : 'Tied');
+    const side = (s, who, isUs) =>
+      `<tr class="${isUs ? 'us' : ''}"><td class="ml-t">${isUs ? 'Us' : esc(m.opp)}` +
+      `<span>${s.order === 1 ? 'batted first' : 'chased'}</span></td>` +
+      `<td class="ml-s">${s.runs}/${s.wkts}<span>${s.overs} ov &middot; ${s.rpo} rpo</span></td>` +
+      PHK.map(p => `<td class="ml-p">${s.phases[p][2]}<span>${s.phases[p][3]}w &middot; ` +
+        `${Math.round(s.phases[p][1] / s.phases[p][0] * 100)}% dot</span></td>`).join('') +
+      `<td class="ml-x">${s.extras}</td></tr>`;
+    return `<div class="mlog">
+      <div class="ml-head"><span class="ml-res ${cls}">${word}</span>
+        <b>vs ${esc(m.opp)}</b>
+        <span class="ml-meta">${fmtDate(m.date)} 2026 &middot; ${m.quota} overs &middot; ${esc(m.competition)}
+          &middot; NRR ${m.nrr >= 0 ? '+' : ''}${m.nrr.toFixed(2)}</span></div>
+      <div class="ml-toss">${esc(m.toss)}. ${word === 'Tied' ? 'Scores level' : word + ' by ' + esc(m.margin)}.` +
+      (m.quotaNote ? ` <i>${esc(m.quotaNote)}</i>` : '') + `</div>
+      <div class="scroll"><table class="mltbl"><thead><tr><th></th><th>Score</th>` +
+      PHK.map(p => `<th>${PLBL[p]}<span>${m.labels[p]}</span></th>`).join('') +
+      `<th>Extras</th></tr></thead><tbody>` +
+      side(m.us, 'Us', true) + side(m.them, m.opp, false) +
+      `</tbody></table></div></div>`;
+  }).join('');
+
+  // ---- dot balls by phase, ours batting and bowling, all matches + the 15-over one vs par
+  const dotRow = (lab, o, parRuns) => {
+    const bits = PHK.map(p => {
+      const d = o[p];
+      return `<td class="dt-c"><b>${pc(d.dotPct)}</b><span>${d.dots}/${d.balls} balls &middot; ${d.rpo} rpo</span></td>`;
+    }).join('');
+    return `<tr><td class="dt-l">${lab}</td>${bits}</tr>`;
+  };
+  const par = DATA.phases ? DATA.phases.all : null;
+  $('ours-dots').innerHTML =
+    `<div class="scroll"><table class="dottbl"><thead><tr><th></th>` +
+    PHK.map(p => `<th>${PLBL[p]}</th>`).join('') + `</tr></thead><tbody>` +
+    dotRow('We bat &mdash; dots faced', OURS.all.bat) +
+    dotRow('We bowl &mdash; dots bowled', OURS.all.bowl) +
+    `</tbody></table></div>` +
+    `<div class="ph-src">All ${R.played} matches. A dot is a legal ball off which no runs at all were ` +
+    `scored &mdash; CricHeroes counts a bye as a dot for the batter, we do not.</div>` +
+    (par && OURS.fifteenCount ? (function(){
+      // Runs per over, not runs per phase: we won that match inside 13.4, so our
+      // death phase is 22 balls rather than 30. Comparing its total against a
+      // five-over par would read as a weakness that is really just a short phase.
+      const parRpo = p => par[p] / 5;
+      const row = (lab, src, lowerIsBetter) =>
+        `<tr><td class="pt-l">${lab}</td>` + PHK.map(p => {
+          const d = +(src[p].rpo - parRpo(p)).toFixed(2);
+          const ok = lowerIsBetter ? d <= 0 : d >= 0;
+          return `<td class="pt-c">${src[p].rpo}<span class="${ok ? 'good' : 'bad'}">${sgn(d)} vs par</span></td>`;
+        }).join('') + `</tr>`;
+      return `<div class="parbox"><h5>The fifteen-over match against league par &mdash; runs per over</h5>` +
+        `<div class="scroll"><table class="partbl"><tbody>` +
+        row('We scored', OURS.fifteen.bat, false) +
+        row('We conceded', OURS.fifteen.bowl, true) +
+        `<tr><td class="pt-l">League par</td>` + PHK.map(p =>
+          `<td class="pt-c pt-par">${parRpo(p).toFixed(2)}<span>2025 average</span></td>`).join('') + `</tr>` +
+        `</tbody></table></div>` +
+        `<p class="par-note">Per over rather than per phase, because we won that match in 13.4 and so faced only ` +
+        `${OURS.fifteen.bat.death.balls} balls of our own death overs. A phase total would make a short innings ` +
+        `look like a failure to score.</p></div>`;
+    })() : '');
+
+  // ---- bowlers
+  $('ours-bowl').innerHTML =
+    `<div class="scroll"><table class="pltbl"><thead><tr><th>Bowler</th><th>Ov</th><th>R</th><th>W</th>` +
+    `<th>Econ</th><th>Avg</th><th>Dot%</th>` + PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') +
+    `</tr></thead><tbody>` +
+    OURS.bowlers.map(b => `<tr><td class="pl-n">${esc(b.name)}<span>${b.matches} match${b.matches > 1 ? 'es' : ''}</span></td>` +
+      `<td>${b.overs}</td><td>${b.runs}</td><td><b>${b.wkts}</b></td>` +
+      `<td class="${b.econ <= 7 ? 'good' : (b.econ >= 10 ? 'bad' : '')}">${b.econ}</td>` +
+      `<td>${b.avg === null ? '&mdash;' : b.avg}</td><td>${pc(b.dotPct)}</td>` +
+      PHK.map(p => {
+        const d = b.ph[p];
+        if (!d.balls) return `<td class="pl-ph pl-none">&mdash;</td>`;
+        return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
+          `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
+      }).join('') + `</tr>`).join('') +
+    `</tbody></table></div>` +
+    `<div class="ph-src">Wickets are bowler-credited: run outs sit with the fielding side, not the bowler. ` +
+    `Phase columns are economy with dot percentage and balls beneath.</div>`;
+
+  // ---- batters
+  $('ours-bat').innerHTML =
+    `<div class="scroll"><table class="pltbl"><thead><tr><th>Batter</th><th>Inns</th><th>Runs</th><th>Balls</th>` +
+    `<th>Avg</th><th>SR</th><th>Best</th><th>4s/6s</th><th>In boundaries</th></tr></thead><tbody>` +
+    OURS.batters.map(b => `<tr><td class="pl-n">${esc(b.name)}` +
+      (b.notOuts ? `<span>${b.notOuts} not out</span>` : '') + `</td>` +
+      `<td>${b.inns}</td><td><b>${b.runs}</b></td><td>${b.balls}</td>` +
+      `<td>${b.avg === null ? 'n/o' : b.avg}</td>` +
+      `<td class="${b.sr >= 150 ? 'good' : (b.sr < 100 ? 'bad' : '')}">${b.sr}</td>` +
+      `<td>${b.best}</td><td>${b.f4}/${b.f6}</td><td>${pc(b.bdryPct)}</td></tr>`).join('') +
+    `</tbody></table></div>` +
+    `<div class="ph-src">Average is runs per dismissal; a not-out never counts as one, so a batter who has ` +
+    `never been out shows n/o rather than a flattering number.</div>`;
+
+  // ---- what it changes: computed, so it moves as matches are added
+  (function(){
+    // Two overs in a phase before anyone is ranked on it. At one over a single
+    // boundary swings an economy by four, and the bowler who happened to bowl a
+    // quiet over tops the table on nothing.
+    const MIN = 12, THIN = 6;
+    const rank = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN)
+      .sort((x, y) => best ? x.ph[p].econ - y.ph[p].econ : y.ph[p].econ - x.ph[p].econ)[0];
+    const thinPick = p => OURS.bowlers
+      .filter(b => b.ph[p].balls >= THIN && b.ph[p].balls < MIN)
+      .sort((x, y) => x.ph[p].econ - y.ph[p].econ)[0];
+    const ppBest = rank('pp', true), ppWorst = rank('pp', false);
+    const deBest = rank('death', true), miBest = rank('mid', true);
+    const ppThin = thinPick('pp');
+    const extras = OURS.matches.reduce((a, m) => a + m.them.extras, 0);
+    const oversBowled = OURS.matches.reduce((a, m) => {
+      const [o, b] = String(m.them.overs).split('.'); return a + (+o) + (b ? +b / 6 : 0);
+    }, 0);
+    const perOver = extras / oversBowled;
+    const conceded = OURS.matches.reduce((a, m) => a + m.them.runs, 0);
+    const topBat = OURS.batters.filter(b => b.balls >= 10).sort((a, b) => b.sr - a.sr)[0];
+    const items = [];
+
+    if (ppWorst) {
+      items.push([`The new ball is our problem, and we know who not to give it to`,
+        `We concede <b>${OURS.all.bowl.pp.rpo}</b> an over in the powerplay against ` +
+        `${OURS.all.bowl.mid.rpo} in the middle &mdash; comfortably our worst phase. ` +
+        `<b>${esc(ppWorst.name)}</b> has gone at <b>${ppWorst.ph.pp.econ}</b> there off ` +
+        `${ppWorst.ph.pp.balls} balls (${pc(ppWorst.ph.pp.dotPct)} dots), the most expensive of anyone with ` +
+        `more than an over up front. Whatever else changes, he should not be opening.` +
+        (ppThin ? ` The one thing worth trying: ${esc(ppThin.name)}'s single powerplay over went for ` +
+          `${ppThin.ph.pp.econ * 1} &mdash; ${ppThin.ph.pp.balls} balls is not evidence, it is a reason to ` +
+          `give him the new ball next time and find out.` : '')]);
+    }
+    if (deBest) {
+      const alsoPP = ppBest && ppBest.name === deBest.name;
+      items.push([`${esc(deBest.name)} is our best bowler &mdash; spend his overs late`,
+        (alsoPP
+          ? `He is the best we have in every phase we can measure him in, so the question is not whether he ` +
+            `bowls but when. The numbers answer it: <b>${deBest.ph.death.econ}</b> an over at the death and ` +
+            `${deBest.ph.mid.econ} in the middle, against ${deBest.ph.pp.econ} with the new ball. `
+          : `<b>${deBest.ph.death.econ}</b> an over at the death with ${pc(deBest.ph.death.dotPct)} dots. `) +
+        `He has taken <b>${deBest.wkts}</b> of our wickets at ${deBest.econ} an over overall` +
+        (deBest.ph.death.wkts ? `, ${deBest.ph.death.wkts} of them in the last five` : '') +
+        `. Three overs is three overs &mdash; spending them early costs us the phase we defend best.`]);
+    }
+    items.push([`Stop giving away ${Math.round(perOver * 15)} runs an innings in extras`,
+      `We have conceded <b>${extras} extras</b> in ${oversBowled.toFixed(1)} overs bowled &mdash; ` +
+      `<b>${perOver.toFixed(2)} an over</b>, or about ${Math.round(perOver * 15)} across a full fifteen. ` +
+      `That is <b>${Math.round(extras / conceded * 100)}%</b> of every run we have conceded, handed over without a ` +
+      `ball being hit. Against a 120 win line it is the cheapest ten runs on this page.`]);
+    items.push([`Our middle overs are already the strength &mdash; keep them`,
+      `We bowl <b>${pc(OURS.all.bowl.mid.dotPct)}</b> dots in the middle against ${pc(OURS.all.bowl.pp.dotPct)} in the ` +
+      `powerplay, and concede ${OURS.all.bowl.mid.rpo} an over there. The league section below says middle-over ` +
+      `wickets are what separate winners from losers; this is the one phase where our own numbers already agree.`]);
+    if (topBat) {
+      items.push([`With the bat we accumulate better than we accelerate`,
+        `Our dot rate is lowest in the middle (<b>${pc(OURS.all.bat.mid.dotPct)}</b>) and highest at the death ` +
+        `(${pc(OURS.all.bat.death.dotPct)}) &mdash; the wrong way round for a format decided in the last five overs. ` +
+        `${esc(topBat.name)} strikes at ${topBat.sr} and should be facing more of them.`]);
+    }
+    items.push([`Treat all of this as a hint`,
+      `Three friendlies against one opponent, in three formats, none of them league cricket. Nothing here has ` +
+      `survived a different attack yet. The habits are real; the numbers around them are not yet evidence.`]);
+
+    $('ours-plan').innerHTML = `<div class="recs">` + items.map(([h, b]) =>
+      `<article><h4>${h}</h4><p>${b}</p></article>`).join('') + `</div>`;
+  })();
+}
+
+/* 11 \u2014 squad */
+const SQ = DATA.squad;
+if (SQ) {
+  $('squad-lede').innerHTML =
+    `<b>${esc(SQ.team)}</b> (${esc(SQ.city)}) \u2014 ${SQ.players.length} registered players, ` +
+    `captained by <b>${esc(SQ.captain)}</b>. We have no match history in this league yet, so every ` +
+    `number on this page is the field we are walking into, not a record of us. The 2026 squad limit ` +
+    `is 30 and additions close on <b>29 August</b> \u2014 the knockouts run five rounds in ten days, so ` +
+    `depth in bowling is what that allowance is for. Once we play, this becomes our own phase log.`;
+  $('squadgrid').innerHTML = SQ.players.map(p =>
+    `<div style="padding:12px 14px"><div class="k" style="font-size:15.5px;font-family:var(--sans);line-height:1.35">${esc(p)}</div>` +
+    (p === SQ.captain ? `<div class="t" style="margin-top:4px;color:var(--bat)">captain</div>` : '') +
+    `</div>`).join('');
+}
+
+/* provenance */
+const SPAN = `${fmtDate(L.first)} \u2013 ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
+
+if (PAGE === 'form') {
+  const r = OURS ? OURS.record : null;
+  $('standfirst').textContent = r
+    ? `Every match we have played, read ball by ball. What we do in each phase, who bowls a dot and ` +
+      `who leaks, and what that says we should change before the league starts.`
+    : `No matches recorded yet.`;
+  $('prov').innerHTML = r
+    ? `${r.played} matches \u00b7 ${r.won}W ${r.lost}L ${r.tied}T \u00b7 NRR ${r.nrr >= 0 ? '+' : ''}${r.nrr.toFixed(2)} \u00b7 ` +
+      `${r.leagueCount} league<br>Read from the CricHeroes commentary and reconciled against every ` +
+      `scorecard: runs, wickets, balls and each bowler's figures agree in all ${r.played * 2} innings.`
+    : '';
+} else if (PAGE === 'index') {
+  $('standfirst').textContent =
+    `Who we play, when, and what to do when we get there. Pick the opponent and the page turns ` +
+    `last season's ${L.matches} matches and our own form into a toss call and a set of targets.`;
+  $('prov').innerHTML =
+    `Group 5 \u00b7 5 matches \u00b7 30 Aug \u2013 27 Sep 2026<br>` +
+    `Plans below are built from ${L.matches} league matches of 2025 evidence` +
+    (OURS ? ` and our own ${OURS.record.played} matches` : '') + `.`;
+} else {
+  $('standfirst').textContent =
+    `What every ball bowled across ${L.matches} matches last season says about how this competition ` +
+    `is won: a bat-first league decided by one number on the scoreboard \u2014 and most teams finish ` +
+    `just short of it.`;
+  $('prov').innerHTML =
+    `${L.matches} matches \u00b7 ${L.teams} teams \u00b7 ${SPAN} \u00b7 15 overs a side<br>` +
+    `Scores transcribed from the CricHeroes match list and reconciled against the fixture ` +
+    `spreadsheet: all ${L.matches} agree on batting order, overs, margin and result.`;
+}
+
+/* tooltips */
+const tip = $('tip');
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest('[data-tip]');
+  if (!el) return;
+  tip.textContent = el.dataset.tip; tip.style.opacity = 1;
+});
+document.addEventListener('mousemove', e => {
+  if (tip.style.opacity === '1') {
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px';
+    tip.style.top = (e.clientY + 18) + 'px';
+  }
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest('[data-tip]')) tip.style.opacity = 0;
+});
+
+</script>
+</body>
+</html>

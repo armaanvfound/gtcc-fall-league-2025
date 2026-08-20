@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
-"""Rebuilds ../index.html from tools/data.py + tools/template.html.
+"""Builds the dashboard's pages from tools/data.py + tools/template.html.
 
     python3 tools/build.py
 
-Produces one self-contained file: no CDN, no fetch, no build step. It works
-served from GitHub Pages and equally well opened straight off disk.
-Output is pure ASCII, so it renders correctly no matter what charset a host sends.
+One template holds every section and every script block; PAGES below says which
+of them each page gets. A section is claimed by id, a script block by the
+comment that opens it, so moving something between pages is a one-line edit here
+rather than a copy-paste between files.
+
+Each page also carries only the slice of the payload it uses. That is what keeps
+them small as the season goes on: the league pages never ship our ball-by-ball
+data, and the form page never ships 88 match logs.
+
+Output is pure ASCII, so it renders correctly no matter what charset a host
+sends, and every page is self-contained: no CDN, no fetch, no build step at read
+time. They work served from GitHub Pages and equally well opened off disk.
 """
-import json, sys, datetime
+import json, re, sys, datetime
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -16,9 +25,57 @@ sys.path.insert(0, str(HERE))
 
 from stats import build_payload
 
-TITLE = "GTCC Fall League — Royal Challenger Blaster Match Dashboard"
-DESC = ("Phase-by-phase targets, opponent scouting and a ten-point playbook, built from "
-        "88 matches, all read ball by ball. The win line is 120; the death overs decide it.")
+SITE = "GTCC Fall League 2026 - Royal Challenger Blaster"
+
+# file -> what it is made of.
+#   sections: <section id="..."> blocks, in the order given
+#   js:       script blocks, named by the comment that opens them
+#   data:     top-level payload keys this page needs
+#   nav:      in-page jump links, as (label, element id)
+PAGES = {
+    "index": dict(
+        title="Match plan",
+        eyebrow="Royal Challenger Blaster &middot; GTCC Fall League 2026",
+        h1="What to do on the day",
+        desc=("Our 2026 fixtures and a match plan for each of them: the toss call, the target, "
+              "and the phase-by-phase read on whoever we are playing."),
+        sections=["season", "plan"],
+        js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
+        data=["league", "phases", "season", "ours"],
+        nav=[("Fixtures", "season"), ("Match plan", "plan")],
+        footHide=("form",),   # section 01 already carries a full card for it
+    ),
+    "form": dict(
+        title="Our form",
+        eyebrow="Royal Challenger Blaster &middot; Our matches",
+        h1="How we have actually played",
+        desc=("Every match Royal Challenger Blaster has played, read ball by ball: phase splits, "
+              "dot-ball percentages, player careers and what they say we should change."),
+        sections=["ours", "squad"],
+        js=["02 - how we have actually played", "11 - squad"],
+        data=["ours", "phases", "squad", "league"],
+        nav=[("Match log", "ours"), ("Squad", "squad")],
+    ),
+    "league": dict(
+        title="The league",
+        eyebrow="GTCC Fall League &middot; 2025 season, read in full",
+        h1="How this league is actually won",
+        desc=("Phase-by-phase targets, opponent scouting and a ten-point playbook, built from 88 "
+              "matches and every one of them read ball by ball. The win line is 120."),
+        sections=["winline", "batfirst", "wickets", "teamlookup", "qualify", "sec-ranks",
+                  "phases", "conditions", "playbook", "sources"],
+        js=["01 - win line", "02 - bat first", "03 - wickets in hand", "05 - groups",
+            "06 - ranks", "04 - team picker", "07 - phases",
+            "09 - conditions", "10 - playbook", "12 - method"],
+        data=["league", "teams", "phases", "ours"],
+        nav=[("Win line", "winline"), ("Phase targets", "phases"), ("Playbook", "playbook"),
+             ("Rankings", "sec-ranks"), ("Groups", "qualify"), ("Conditions", "conditions"),
+             ("Sources", "sources")],
+    ),
+}
+
+# Script blocks every page needs: the shared head (helpers) is handled separately.
+ALWAYS_JS = ["provenance", "tooltips"]
 
 
 def to_entities(s):
@@ -29,55 +86,128 @@ def to_jsesc(s):
     return ''.join(c if ord(c) < 128 else '\\u%04x' % ord(c) for c in s)
 
 
+def split_template(tpl):
+    """Pull the template apart into style, header, sections and script blocks."""
+    style = re.search(r'<style>.*?</style>', tpl, re.S).group(0)
+    topnav = re.search(r'<nav class="topnav".*?</nav>\n', tpl, re.S).group(0)
+    header = re.search(r'<header>.*?</header>', tpl, re.S).group(0)
+
+    sections = {}
+    for m in re.finditer(r'<section id="([^"]+)">.*?</section>', tpl, re.S):
+        sections[m.group(1)] = m.group(0)
+
+    script = re.search(r'<script>(.*?)</script>', tpl, re.S).group(1)
+    # Everything before the first column-0 block comment is the shared head.
+    parts = re.split(r'\n(?=/\* )', script)
+    head, blocks = parts[0], {}
+    for p in parts[1:]:
+        name = re.match(r'/\* (.*?) \*/', p, re.S)
+        if not name:
+            continue
+        # normalise the dashes so PAGES can be written in plain ASCII, and key on
+        # the part before any colon so a block can carry a longer explanation
+        key = name.group(1).replace('—', '-').replace('–', '-').strip()
+        blocks[key] = p
+        short = key.split(':')[0].strip()
+        if short != key:
+            blocks[short] = p
+    return style, topnav, header, sections, head, blocks
+
+
+def slice_payload(payload, keys):
+    return {k: payload[k] for k in keys if k in payload}
+
+
 def main():
     payload = build_payload()
-    data = json.dumps(payload)          # ensure_ascii=True by default
-    assert data.isascii()
-
     tpl = (HERE / "template.html").read_text(encoding="utf-8")
-    if "/*__DATA__*/" not in tpl:
-        sys.exit("template.html is missing the /*__DATA__*/ placeholder")
-    body = tpl.replace("/*__DATA__*/", data)
+    style, topnav, header, sections, jshead, blocks = split_template(tpl)
 
-    # Character references are not decoded inside <script>, so escape the two
-    # regions differently: \uXXXX in JS, numeric references in the markup.
-    i, j = body.index("<script>"), body.index("</script>")
-    body = to_entities(body[:i]) + to_jsesc(body[i:j]) + to_entities(body[j:])
+    missing = []
+    for name, cfg in PAGES.items():
+        missing += [("section", name, s) for s in cfg["sections"] if s not in sections]
+        missing += [("js", name, j) for j in cfg["js"] if j not in blocks]
+    missing += [("js", "*", j) for j in ALWAYS_JS if j not in blocks]
+    if missing:
+        sys.exit("template is missing:\n" + "\n".join("  %s %s: %s" % m for m in missing))
 
-    # The template carries its own <title>; the standalone page needs a full head.
-    body = body.replace(f"<title>{to_entities(TITLE)}</title>", "", 1)
+    # A block can be registered under both its full name and a short alias, so
+    # compare by the block text rather than by key or every alias reads as unused.
+    claimed_text = {blocks[j] for j in ALWAYS_JS}
+    for cfg in PAGES.values():
+        claimed_text |= {blocks[j] for j in cfg["js"]}
+    orphan_js = sorted({k for k, v in blocks.items() if v not in claimed_text})
+    orphan_sec = sorted(set(sections) - {s for c in PAGES.values() for s in c["sections"]})
+
     built = datetime.date.today().isoformat()
+    for name, cfg in PAGES.items():
+        data = json.dumps(slice_payload(payload, cfg["data"]))
+        assert data.isascii()
 
-    html = f"""<!doctype html>
-<html lang="en" data-built="{built}">
+        qnav = ''.join('<a href="#%s">%s</a>' % (i, lbl) for lbl, i in cfg["nav"])
+        head = (header
+                .replace("/*__EYEBROW__*/", cfg["eyebrow"])
+                .replace("/*__H1__*/", cfg["h1"])
+                .replace('<nav class="qnav" id="qnav" aria-label="Jump to section"></nav>',
+                         '<nav class="qnav" aria-label="Jump to section">%s</nav>' % qnav))
+        nav = topnav.replace('data-pg="%s"' % name, 'data-pg="%s" class="on" aria-current="page"' % name)
+
+        # Every page ends with a way on to the others. index already carries a
+        # richer, data-filled card for the form page, so it is not repeated here.
+        others = [p for p in PAGES if p != name and p not in cfg.get("footHide", ())]
+        foot = ('<nav class="pagefoot" aria-label="Other pages">' +
+                ''.join('<a href="%s.html"><span class="pf-l">%s</span>'
+                        '<span class="pf-h">%s</span><span class="pf-p">%s</span></a>'
+                        % (p, PAGES[p]["title"], PAGES[p]["h1"], PAGES[p]["desc"])
+                        for p in others) + '</nav>') if others else ''
+
+        body = (nav + "\n" + head + "\n\n"
+                + "\n\n".join(sections[s] for s in cfg["sections"]) + "\n\n" + foot)
+        js = jshead + "\n" + "\n".join(
+            blocks[b] for b in cfg["js"] + [j for j in ALWAYS_JS if j not in cfg["js"]])
+        js = js.replace("/*__DATA__*/", data).replace("/*__PAGE__*/", name)
+
+        # Character references are not decoded inside <script>, so the two regions
+        # are escaped differently: numeric references in the markup, \uXXXX in JS.
+        page = to_entities(style + "\n" + body) + "\n<script>\n" + to_jsesc(js) + "\n</script>"
+        title = "%s - %s" % (cfg["title"], SITE)
+        html = f"""<!doctype html>
+<html lang="en" data-built="{built}" data-page="{name}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F2F0E9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131614" media="(prefers-color-scheme: dark)">
-<title>{to_entities(TITLE)}</title>
-<meta name="description" content="{to_entities(DESC)}">
+<title>{to_entities(title)}</title>
+<meta name="description" content="{to_entities(cfg['desc'])}">
 <meta property="og:type" content="article">
-<meta property="og:title" content="{to_entities(TITLE)}">
-<meta property="og:description" content="{to_entities(DESC)}">
+<meta property="og:title" content="{to_entities(title)}">
+<meta property="og:description" content="{to_entities(cfg['desc'])}">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>&#127951;</text></svg>">
 </head>
 <body>
-{body}
+{page}
 </body>
 </html>
 """
-    assert html.isascii(), "output must be pure ASCII"
-    out = ROOT / "index.html"
-    out.write_text(html, encoding="utf-8")
+        assert html.isascii(), "output must be pure ASCII"
+        out = ROOT / ("%s.html" % name)
+        out.write_text(html, encoding="utf-8")
+        print("built %-12s %7s bytes  (%d sections, %d payload keys)" % (
+            out.name, format(len(html), ','), len(cfg["sections"]), len(cfg["data"])))
 
     lg = payload["league"]
-    print(f"built {out}  ({len(html):,} bytes)")
-    print(f"  {lg['matches']} matches · {lg['teams']} teams · {lg['first']} to {lg['last']}")
-    print(f"  bat-first {lg['batFirstPct']}% · avg 1st innings {lg['avg1']} · "
-          f"120+ defended {lg['hi120']['w']}/{lg['hi120']['n']}")
+    print("  %d matches | %d teams | %s to %s" % (lg['matches'], lg['teams'], lg['first'], lg['last']))
+    if payload.get("ours"):
+        r = payload["ours"]["record"]
+        print("  our record %dW %dL %dT in %d | NRR %+.2f" % (
+            r['won'], r['lost'], r['tied'], r['played'], r['nrr']))
+    if orphan_js:
+        print("  note: script blocks on no page: " + ", ".join(orphan_js))
+    if orphan_sec:
+        print("  note: sections on no page: " + ", ".join(orphan_sec))
 
 
 if __name__ == "__main__":
