@@ -10,18 +10,21 @@ ALLOWED_ORIGINS = "https://armaanvfound.github.io,http://localhost:8899"
 # pushing updates the assistant on its own - no redeploy needed here.
 FACTS_URL = "https://armaanvfound.github.io/gtcc-fall-league-2025/facts.json"
 
-# The cheap one, and the right default here: the model is looking numbers up in a
-# brief we already computed, not working anything out, so the extra capability of
-# deepseek-v4-pro buys little. Roughly 3,000 questions per dollar against ~700.
-# Switch to "deepseek-v4-pro" if answers ever feel thin.
-MODEL = "deepseek-v4-flash"
+# The capable model. This is the team's match-day reference, so it is worth the
+# difference: roughly 0.3c a question against 0.03c on deepseek-v4-flash - still
+# hundreds of questions per dollar. Drop to "deepseek-v4-flash" to spend less.
+MODEL = "deepseek-v4-pro"
 
-# Reasoning is enabled in worker.js; this is how hard it thinks first, and the
-# main cost lever: low | medium | high. Low is plenty for a lookup.
-REASONING_EFFORT = "low"
+# Reasoning is enabled in worker.js; this is how hard it thinks before answering.
+# low | medium | high. High, because multi-part questions ("where are we weakest,
+# and who fixes it") are exactly what this gets asked.
+REASONING_EFFORT = "high"
 
-# Thinking and the answer share this budget, so it sits above reply length.
-MAX_TOKENS = "1500"
+# Thinking and the answer share this budget. It is a ceiling, not a spend - you
+# pay for tokens used - so it is set well clear of a long think. Running out mid
+# thought is what produced an empty answer; the worker also retries once at
+# double this if it ever happens again.
+MAX_TOKENS = "8000"
 
 # Spend guards. Only enforced when the KV namespace below is bound.
 MAX_PER_IP_HOUR = "40"

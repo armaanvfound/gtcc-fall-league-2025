@@ -277,8 +277,12 @@
           cursor:pointer;box-shadow:0 3px 14px rgba(0,0,0,.18);display:flex;align-items:center;gap:8px;}
   #askbtn:hover{filter:brightness(1.08);}
   #askbtn .ask-i{font-size:8px;opacity:.9;}
-  #askpanel{position:fixed;right:22px;bottom:22px;z-index:61;width:min(430px,calc(100vw - 32px));
-            max-height:min(660px,calc(100vh - 44px));display:flex;flex-direction:column;
+  /* The launcher stays put and the panel opens above it, so there is always an
+     obvious way to collapse this again - hiding the launcher left only a small
+     close cross, which is easy to miss. */
+  #askbtn.open{background:var(--ink);border-color:var(--ink);}
+  #askpanel{position:fixed;right:22px;bottom:76px;z-index:61;width:min(430px,calc(100vw - 32px));
+            max-height:min(620px,calc(100vh - 104px));display:flex;flex-direction:column;
             background:var(--paper);border:1px solid var(--rule);border-radius:6px;
             box-shadow:0 10px 40px rgba(0,0,0,.22);overflow:hidden;}
   .ask-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -286,9 +290,10 @@
   .ask-head b{font-family:var(--serif);font-size:16px;font-weight:400;display:block;}
   .ask-head #ask-sub{font-family:var(--mono);font-size:10px;color:var(--muted);
                      letter-spacing:.05em;display:block;margin-top:2px;}
-  #askclose{background:none;border:0;color:var(--muted);font-size:22px;line-height:1;
-            cursor:pointer;padding:0 4px;}
-  #askclose:hover{color:var(--ink);}
+  #askclose{background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2);
+            font-size:18px;line-height:1;cursor:pointer;width:30px;height:30px;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;flex:none;}
+  #askclose:hover{color:#fff;background:var(--bat);border-color:var(--bat);}
   #ask-setup,#ask-pass{padding:16px;border-bottom:1px solid var(--rule-2);}
   #ask-setup p,#ask-pass p{font-size:13px;line-height:1.55;color:var(--ink-2);margin:0 0 9px;}
   #ask-setup .ask-note,#ask-pass .ask-note{font-size:11.5px;color:var(--muted);line-height:1.5;}
@@ -314,6 +319,7 @@
   .ask-empty{color:var(--muted);font-size:13px;line-height:1.6;}
   .ask-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;
                  background:var(--muted);margin-right:3px;animation:askb 1s infinite;}
+  .ask-wait{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:6px;letter-spacing:.03em;}
   .ask-dots span:nth-child(2){animation-delay:.15s;}
   .ask-dots span:nth-child(3){animation-delay:.3s;}
   @keyframes askb{0%,60%,100%{opacity:.25;}30%{opacity:1;}}
@@ -338,7 +344,7 @@
              font-size:9.5px;cursor:pointer;text-decoration:underline;letter-spacing:.04em;}
   @media (max-width:640px){
     #askbtn{right:12px;bottom:12px;padding:10px 14px;font-size:11px;}
-    #askpanel{right:8px;left:8px;bottom:8px;width:auto;max-height:calc(100vh - 20px);}
+    #askpanel{right:8px;left:8px;bottom:62px;width:auto;max-height:calc(100vh - 78px);}
   }
   @media print{ #askbtn,#askpanel{display:none!important;} }
   /* top-level page navigation */
@@ -2245,18 +2251,29 @@ document.addEventListener('mouseout', e => {
     if (!on) setTimeout(() => qIn.focus(), 30);
   }
 
-  btn.addEventListener('click', async () => {
-    const open = !panel.hidden;
-    panel.hidden = open;
-    btn.setAttribute('aria-expanded', String(!open));
-    btn.style.display = open ? '' : 'none';
-    if (open) return;
-    if (!log.children.length) greet();
-    showSetup(!ready());
+  // The launcher is a toggle and stays visible, so collapsing is always one
+  // obvious click. Escape, the panel's close button and a click outside all do
+  // the same thing.
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.classList.toggle('open', open);
+    btn.innerHTML = open
+      ? '<span class="ask-i" aria-hidden="true">&times;</span> Close'
+      : '<span class="ask-i" aria-hidden="true">&#9679;</span> Ask the data';
+    if (open) {
+      if (!log.children.length) greet();
+      showSetup(!ready());
+    }
+  };
+  btn.addEventListener('click', () => setOpen(panel.hidden));
+  $('askclose').addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) setOpen(false); });
+  document.addEventListener('mousedown', e => {
+    if (panel.hidden) return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    setOpen(false);
   });
-  const close = () => { panel.hidden = true; btn.style.display = ''; btn.setAttribute('aria-expanded','false'); };
-  $('askclose').addEventListener('click', close);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) close(); });
 
   $('asspasssave').addEventListener('click', () => {
     const v = $('askpass').value.trim();
@@ -2295,6 +2312,17 @@ document.addEventListener('mouseout', e => {
     say('me', esc(q));
     busy = true; send.disabled = true;
     const thinking = say('bot', `<span class="ask-dots"><span></span><span></span><span></span></span>`);
+    // It reasons before answering, and a hard question can genuinely take a
+    // minute. Silent dots for that long read as broken, so show the clock.
+    const t0 = Date.now();
+    const tick = setInterval(() => {
+      const s = Math.round((Date.now() - t0) / 1000);
+      if (s < 4) return;
+      thinking.innerHTML =
+        `<span class="ask-dots"><span></span><span></span><span></span></span>` +
+        `<span class="ask-wait">thinking&hellip; ${s}s` +
+        (s > 25 ? ' &middot; a detailed question, still working' : '') + `</span>`;
+    }, 1000);
 
     history.push({role: 'user', content: q});
     try {
@@ -2343,6 +2371,7 @@ document.addEventListener('mouseout', e => {
       history.pop();
       say('err', `Could not reach the API — check the connection. (${esc(err.message || err)})`);
     } finally {
+      clearInterval(tick);
       busy = false; send.disabled = false; qIn.focus();
     }
   });

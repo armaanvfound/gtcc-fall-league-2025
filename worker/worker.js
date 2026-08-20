@@ -134,27 +134,47 @@ export default {
     try { system = await systemPrompt(env); }
     catch (e) { return json({ error: "Could not load the dashboard data: " + e.message }, 502, cors); }
 
+    const maxTokens = parseInt(env.MAX_TOKENS || "8000", 10);
+
+    // Reasoning is drawn from the same budget as the answer, so a long think can
+    // consume the lot and leave content empty with finish_reason "length" - that
+    // is what an "empty answer" actually was. The ceiling is set well clear of
+    // it, and if a question still runs long we retry once with the budget
+    // doubled. Reasoning stays on through the retry: it is the point of this
+    // assistant, so a thought-through answer is worth one extra call.
+    const call = (budget) => fetch(API, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: "Bearer " + env.DEEPSEEK_API_KEY,
+      },
+      body: JSON.stringify({
+        model: env.MODEL || "deepseek-v4-pro",
+        thinking: { type: "enabled" },
+        reasoning_effort: env.REASONING_EFFORT || "high",
+        max_tokens: budget,
+        stream: false,
+        messages: [{ role: "system", content: system }, ...turns],
+      }),
+    });
+
+    const emptyAndTruncated = (raw) => {
+      try {
+        const c = (JSON.parse(raw).choices || [])[0] || {};
+        return !((c.message && c.message.content) || "").trim() && c.finish_reason === "length";
+      } catch (e) { return false; }
+    };
+
     let upstream, raw;
     try {
-      upstream = await fetch(API, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: "Bearer " + env.DEEPSEEK_API_KEY,
-        },
-        body: JSON.stringify({
-          model: env.MODEL || "deepseek-v4-flash",
-          // Reasoning on, but low: the model is looking up numbers in a brief we
-          // already computed, not deriving them. Thinking is drawn from the same
-          // budget as the answer, so the ceiling sits above reply length.
-          thinking: { type: "enabled" },
-          reasoning_effort: env.REASONING_EFFORT || "low",
-          max_tokens: parseInt(env.MAX_TOKENS || "1500", 10),
-          stream: false,
-          messages: [{ role: "system", content: system }, ...turns],
-        }),
-      });
-      raw = await upstream.text();
+      let res = await call(maxTokens);
+      raw = await res.text();
+      if (res.ok && emptyAndTruncated(raw)) {
+        const res2 = await call(maxTokens * 2);
+        const raw2 = await res2.text();
+        if (res2.ok && !emptyAndTruncated(raw2)) { res = res2; raw = raw2; }
+      }
+      upstream = res;
     } catch (e) {
       return json({ error: "Could not reach DeepSeek: " + e.message }, 502, cors);
     }
@@ -175,9 +195,18 @@ export default {
     // Normalise so the page never has to know which provider answered.
     let data;
     try { data = JSON.parse(raw); } catch (e) { return json({ error: "bad reply from DeepSeek" }, 502, cors); }
-    const m = (data.choices && data.choices[0] && data.choices[0].message) || {};
-    const text = (m.content || "").trim();
-    if (!text) return json({ error: "The model returned an empty answer. Try rephrasing." }, 502, cors);
+    const choice = (data.choices && data.choices[0]) || {};
+    const text = ((choice.message && choice.message.content) || "").trim();
+    if (!text) {
+      // Say which failure it was. "Empty answer" on its own sent us looking in
+      // the wrong place once already.
+      return json({
+        error: choice.finish_reason === "length"
+          ? "That question needed more room than the assistant has, even after retrying. Try asking it in two parts."
+          : "The model returned an empty answer. Try rephrasing.",
+        finish_reason: choice.finish_reason || null,
+      }, 502, cors);
+    }
 
     return json({ text, usage: data.usage || null }, 200, cors);
   },
