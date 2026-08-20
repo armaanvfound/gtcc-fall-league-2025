@@ -217,6 +217,20 @@
   .tl-k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
         color:var(--chase);white-space:nowrap;min-width:78px;}
   .tl-v{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+  /* our own form, inside the toss card */
+  .ourform{margin-top:10px;border:1px solid var(--rule);border-left:3px solid var(--good);
+           border-radius:0 3px 3px 0;background:var(--surface);padding:13px 18px;}
+  .of-lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--good);margin-bottom:9px;}
+  .of-row{display:flex;gap:12px;align-items:baseline;padding:7px 0;border-top:1px solid var(--rule-2);}
+  .of-row:first-of-type{border-top:0;}
+  .of-k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+        color:var(--muted);white-space:nowrap;min-width:78px;}
+  .of-v{font-size:13.5px;line-height:1.5;color:var(--ink-2);}
+  .of-note{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:9px;
+           border-top:1px solid var(--rule-2);padding-top:8px;}
+  .of-note a{color:var(--bat);}
+  @media (max-width:640px){ .of-row{flex-direction:column;gap:2px;} }
   /* grouped plan notes */
   .plan h4{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
   .plan-sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
@@ -253,6 +267,71 @@
   }
   .won{color:var(--good);font-weight:600;} .lost{color:var(--bad);font-weight:600;}
 
+  /* 02 — our own matches */
+  .mlog{border:1px solid var(--rule);border-radius:3px;background:var(--surface);
+        padding:16px 18px;margin-top:14px;}
+  .ml-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+  .ml-head b{font-family:var(--serif);font-size:18px;font-weight:400;}
+  .ml-res{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+          padding:3px 8px;border-radius:2px;color:#fff;}
+  .ml-res.w{background:var(--good);} .ml-res.l{background:var(--bad);}
+  .ml-res.t{background:var(--gold);}
+  .ml-meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.02em;}
+  .ml-toss{font-size:13px;color:var(--ink-2);margin-bottom:12px;line-height:1.5;}
+  .ml-toss i{color:var(--muted);}
+  .mltbl{width:100%;border-collapse:collapse;}
+  .mltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+            color:var(--muted);text-align:left;padding:0 10px 7px 0;font-weight:400;white-space:nowrap;}
+  .mltbl th span{display:block;color:var(--rule);font-size:9px;margin-top:2px;}
+  .mltbl td{padding:8px 10px 8px 0;border-top:1px solid var(--rule-2);vertical-align:top;white-space:nowrap;}
+  .mltbl tr.us td{background:var(--surface-2);}
+  .ml-t{font-family:var(--mono);font-size:11.5px;}
+  .ml-t span{display:block;color:var(--muted);font-size:9.5px;margin-top:2px;}
+  .ml-s{font-family:var(--serif);font-size:19px;line-height:1;}
+  .ml-s span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
+  .ml-p{font-family:var(--serif);font-size:16px;line-height:1;}
+  .ml-p span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
+  .ml-x{font-family:var(--serif);font-size:16px;color:var(--bat);}
+  .dottbl,.partbl{width:100%;border-collapse:collapse;}
+  .dottbl th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+             color:var(--muted);text-align:left;padding:0 12px 8px 0;font-weight:400;}
+  .dottbl td{padding:11px 12px 11px 0;border-top:1px solid var(--rule-2);vertical-align:top;}
+  .dt-l{font-size:13.5px;color:var(--ink-2);white-space:nowrap;width:1%;}
+  .dt-c b{font-family:var(--serif);font-size:21px;font-weight:400;}
+  .dt-c span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:3px;}
+  .parbox{margin-top:16px;border:1px solid var(--rule);border-left:3px solid var(--chase);
+          border-radius:0 3px 3px 0;background:var(--surface);padding:14px 18px;}
+  .parbox h5{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+             color:var(--chase);margin:0 0 10px;}
+  .partbl td{padding:7px 14px 7px 0;border-top:1px solid var(--rule-2);white-space:nowrap;}
+  .partbl tr:first-child td{border-top:0;}
+  .pt-l{font-size:13px;color:var(--ink-2);width:1%;}
+  .pt-c{font-family:var(--serif);font-size:18px;}
+  .pt-c span{display:block;font-family:var(--mono);font-size:9.5px;margin-top:3px;}
+  .pt-c span.good{color:var(--good);} .pt-c span.bad{color:var(--bad);}
+  .pt-par{color:var(--muted);} .pt-par span{color:var(--muted);}
+  .par-note{font-size:12.5px;line-height:1.55;color:var(--muted);margin:10px 0 0;max-width:78ch;}
+  .pltbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
+  .pltbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+            color:var(--muted);text-align:left;padding:0 10px 8px 0;font-weight:400;white-space:nowrap;}
+  .pltbl th span{display:block;color:var(--rule);font-size:8.5px;margin-top:2px;text-transform:none;letter-spacing:0;}
+  .pltbl td{padding:9px 10px;border-top:1px solid var(--rule-2);white-space:nowrap;font-size:13.5px;}
+  .pltbl td:first-child{padding-left:0;}
+  .pl-n{font-size:14px;}
+  .pl-n span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
+  .pl-ph b{font-family:var(--serif);font-size:15px;font-weight:400;}
+  .pl-ph span{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+  .pl-none{color:var(--rule);}
+  .pltbl .good{color:var(--good);} .pltbl .bad{color:var(--bad);}
+  .recs{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);
+        border-radius:3px;overflow:hidden;}
+  .recs article{background:var(--surface);padding:16px 20px;}
+  .recs h4{font-size:16px;margin:0 0 6px;font-family:var(--serif);font-weight:400;}
+  .recs p{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0;max-width:80ch;}
+  @media (max-width:640px){
+    .recs article{padding:14px 16px;}
+    .dottbl td,.dottbl th{padding-right:8px;}
+  }
   /* 2026 fixtures */
   .fixt{width:100%;border-collapse:collapse;border:1px solid var(--rule);border-radius:3px;}
   .fixt th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
@@ -364,6 +443,7 @@
     <a href="#plan">Match plan</a>
     <a href="#phases">Phase targets</a>
     <a href="#season">2026 fixtures</a>
+    <a href="#ours">Our form</a>
     <a href="#playbook">Playbook</a>
     <a href="#sec-ranks">Rankings</a>
     <a href="#squad">Squad</a>
@@ -377,8 +457,23 @@
   <div id="seeding"></div>
 </section>
 
+<section id="ours">
+  <div class="sechead"><div class="n">02</div><h2>How we have actually played</h2></div>
+  <p class="lede" id="ours-lede"></p>
+  <div id="ours-record"></div>
+  <div id="ours-log"></div>
+  <div class="subh">Dot balls and scoring, by phase</div>
+  <div id="ours-dots"></div>
+  <div class="subh">Our bowling, by phase</div>
+  <div id="ours-bowl"></div>
+  <div class="subh">Our batting</div>
+  <div id="ours-bat"></div>
+  <div class="subh">What this changes for 2026</div>
+  <div id="ours-plan"></div>
+</section>
+
 <section>
-  <div class="sechead"><div class="n">02</div><h2>The win line is 120</h2></div>
+  <div class="sechead"><div class="n">03</div><h2>The win line is 120</h2></div>
   <p class="lede">First-innings totals do not produce a gentle gradient of win probability.
      They produce a cliff, and it sits between 119 and 120.</p>
 
@@ -409,7 +504,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">03</div><h2>Bat first</h2></div>
+  <div class="sechead"><div class="n">04</div><h2>Bat first</h2></div>
   <p class="lede">If you win the toss, bat. The edge is real, it is consistent across the two
      grounds that host most of the cricket, and it grows in knockout matches.
      Put in to field instead? The <a href="#plan">match plan</a> builds the bowling-first job.</p>
@@ -430,7 +525,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">04</div><h2>Wickets in hand are worth 35 runs</h2></div>
+  <div class="sechead"><div class="n">05</div><h2>Wickets in hand are worth 35 runs</h2></div>
   <p class="lede">Nearly a third of all innings in this league ended all out. Simply batting
      out your 15 overs — regardless of how fast you score — is the single largest lever on
      the scoreboard.</p>
@@ -448,7 +543,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">05</div><h2>Your team</h2></div>
+  <div class="sechead"><div class="n">06</div><h2>Your team</h2></div>
   <p class="lede">Pick your side to see its record, its scoring rates, and the specific gap
      between where it finished and the win line.</p>
   <div class="picker">
@@ -468,7 +563,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">06</div><h2>Qualification is a group of six</h2></div>
+  <div class="sechead"><div class="n">07</div><h2>Qualification is a group of six</h2></div>
   <p class="lede">The 30 teams played five round-robin matches inside five groups of six.
      The top three in each group went through — fifteen teams, exactly half the field.
      Three wins from five put you on the bubble, and the bubble was broken by
@@ -478,7 +573,7 @@
 </section>
 
 <section id="sec-ranks">
-  <div class="sechead"><div class="n">07</div><h2>The field, ranked</h2></div>
+  <div class="sechead"><div class="n">08</div><h2>The field, ranked</h2></div>
   <p class="lede">Sorted by how far each side went, then by group record. Runs per over for
      and against are computed across all matches, with an all-out innings charged the full
      quota — the same convention net run rate uses.</p>
@@ -491,7 +586,7 @@
 </section>
 
 <section id="phases">
-  <div class="sechead"><div class="n">08</div><h2>Phase by phase: where matches are won</h2></div>
+  <div class="sechead"><div class="n">09</div><h2>Phase by phase: where matches are won</h2></div>
   <p class="lede" id="phase-lede"></p>
 
   <div class="chart">
@@ -539,7 +634,7 @@
 </section>
 
 <section id="plan">
-  <div class="sechead"><div class="n">09</div><h2>Match plan: scout your opponent</h2></div>
+  <div class="sechead"><div class="n">10</div><h2>Match plan: scout your opponent</h2></div>
   <p class="lede">Pick the side you are about to play &mdash; all five of our 2026 group are listed
      first. Where we have a 2025 profile you get their phase-by-phase read, with bat and with ball,
      each turned into the move it dictates for our powerplay, middle and death. Where we do not,
@@ -558,7 +653,7 @@
 </section>
 
 <section>
-  <div class="sechead"><div class="n">10</div><h2>Conditions: what actually matters</h2></div>
+  <div class="sechead"><div class="n">11</div><h2>Conditions: what actually matters</h2></div>
   <p class="lede" id="wx-lede"></p>
   <div class="scroll">
     <table><thead><tr>
@@ -570,7 +665,7 @@
 </section>
 
 <section id="playbook">
-  <div class="sechead"><div class="n">11</div><h2>The playbook</h2></div>
+  <div class="sechead"><div class="n">12</div><h2>The playbook</h2></div>
   <p class="lede">Section 08 is who we are playing. This is how <i>we</i> play, whoever it is:
      what winning sides in this league actually do in each phase, with bat and with ball, and
      the number to call from the boundary at every break.</p>
@@ -580,13 +675,13 @@
 </section>
 
 <section id="squad">
-  <div class="sechead"><div class="n">12</div><h2>Our squad</h2></div>
+  <div class="sechead"><div class="n">13</div><h2>Our squad</h2></div>
   <p class="lede" id="squad-lede"></p>
   <div class="tgrid" id="squadgrid"></div>
 </section>
 
 <section>
-  <div class="sechead"><div class="n">13</div><h2>Where these numbers come from</h2></div>
+  <div class="sechead"><div class="n">14</div><h2>Where these numbers come from</h2></div>
   <div class="caveat" id="method"></div>
 </section>
 
@@ -629,7 +724,7 @@ if (SEA) {
       let know;
       if (f.tier === 'scouted') {
         know = `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
-               `pick them in section 09 for the plan.</span>`;
+               `pick them in section 10 for the plan.</span>`;
       } else if (f.tier === 'form') {
         const fm = f.form;
         know = `<span class="tag form">Form only</span><span class="know">` +
@@ -658,6 +753,199 @@ if (SEA) {
     `this competition or anything near its format — five-over and twelve-over cricket, some of it with a ` +
     `tennis ball. Those give a form guide and nothing finer: their phase splits are deliberately absent ` +
     `rather than estimated, because a number that looks precise and means nothing is worse than a blank.</p></div>`;
+}
+
+/* 02 — how we have actually played */
+const OURS = DATA.ours;
+if (OURS) {
+  const R = OURS.record, PHK = ['pp','mid','death'];
+  const PLBL = {pp:'Powerplay', mid:'Middle', death:'Death'};
+  const pc = v => v === null || v === undefined ? '&mdash;' : v + '%';
+  const sgn = d => (d >= 0 ? '+' : '−') + Math.abs(d);
+
+  $('ours-lede').innerHTML =
+    `Every match we have played, read ball by ball and reconciled against the scorecard. ` +
+    `<b>${R.played} matches, all of them friendlies against ${R.oppCount === 1 ? esc(R.opponents[0]) : R.oppCount + ' sides'}</b>, ` +
+    `across three different formats. That is enough to say something about our own habits &mdash; who bowls a ` +
+    `dot, who wastes a ball, where we leak &mdash; and not nearly enough to say how good we are. ` +
+    `Only the ${OURS.fifteenCount === 1 ? 'single' : OURS.fifteenCount} fifteen-over match is set against the ` +
+    `league par; a twelve-over innings has no fifth-over powerplay and an eight-over hit-out has no death.`;
+
+  $('ours-record').innerHTML =
+    `<div class="tgrid">` +
+    [[`${R.won}–${R.lost}–${R.tied}`, 'won – lost – tied'],
+     [(R.nrr >= 0 ? '+' : '') + R.nrr.toFixed(2), 'net run rate, all matches'],
+     [R.runsFor + '/' + R.runsAgainst, 'runs for / against'],
+     [R.leagueCount, 'league matches so far']
+    ].map(([k, v]) => `<div><div class="k" style="font-size:22px">${k}</div><div class="t">${v}</div></div>`).join('') +
+    `</div>`;
+
+  // ---- match log: one card per match, both innings, phase splits
+  $('ours-log').innerHTML = OURS.matches.map(m => {
+    const cls = m.result === 'won' ? 'w' : (m.result === 'lost' ? 'l' : 't');
+    const word = m.result === 'won' ? 'Won' : (m.result === 'lost' ? 'Lost' : 'Tied');
+    const side = (s, who, isUs) =>
+      `<tr class="${isUs ? 'us' : ''}"><td class="ml-t">${isUs ? 'Us' : esc(m.opp)}` +
+      `<span>${s.order === 1 ? 'batted first' : 'chased'}</span></td>` +
+      `<td class="ml-s">${s.runs}/${s.wkts}<span>${s.overs} ov &middot; ${s.rpo} rpo</span></td>` +
+      PHK.map(p => `<td class="ml-p">${s.phases[p][2]}<span>${s.phases[p][3]}w &middot; ` +
+        `${Math.round(s.phases[p][1] / s.phases[p][0] * 100)}% dot</span></td>`).join('') +
+      `<td class="ml-x">${s.extras}</td></tr>`;
+    return `<div class="mlog">
+      <div class="ml-head"><span class="ml-res ${cls}">${word}</span>
+        <b>vs ${esc(m.opp)}</b>
+        <span class="ml-meta">${fmtDate(m.date)} 2026 &middot; ${m.quota} overs &middot; ${esc(m.competition)}
+          &middot; NRR ${m.nrr >= 0 ? '+' : ''}${m.nrr.toFixed(2)}</span></div>
+      <div class="ml-toss">${esc(m.toss)}. ${word === 'Tied' ? 'Scores level' : word + ' by ' + esc(m.margin)}.` +
+      (m.quotaNote ? ` <i>${esc(m.quotaNote)}</i>` : '') + `</div>
+      <div class="scroll"><table class="mltbl"><thead><tr><th></th><th>Score</th>` +
+      PHK.map(p => `<th>${PLBL[p]}<span>${m.labels[p]}</span></th>`).join('') +
+      `<th>Extras</th></tr></thead><tbody>` +
+      side(m.us, 'Us', true) + side(m.them, m.opp, false) +
+      `</tbody></table></div></div>`;
+  }).join('');
+
+  // ---- dot balls by phase, ours batting and bowling, all matches + the 15-over one vs par
+  const dotRow = (lab, o, parRuns) => {
+    const bits = PHK.map(p => {
+      const d = o[p];
+      return `<td class="dt-c"><b>${pc(d.dotPct)}</b><span>${d.dots}/${d.balls} balls &middot; ${d.rpo} rpo</span></td>`;
+    }).join('');
+    return `<tr><td class="dt-l">${lab}</td>${bits}</tr>`;
+  };
+  const par = DATA.phases ? DATA.phases.all : null;
+  $('ours-dots').innerHTML =
+    `<div class="scroll"><table class="dottbl"><thead><tr><th></th>` +
+    PHK.map(p => `<th>${PLBL[p]}</th>`).join('') + `</tr></thead><tbody>` +
+    dotRow('We bat &mdash; dots faced', OURS.all.bat) +
+    dotRow('We bowl &mdash; dots bowled', OURS.all.bowl) +
+    `</tbody></table></div>` +
+    `<div class="ph-src">All ${R.played} matches. A dot is a legal ball off which no runs at all were ` +
+    `scored &mdash; CricHeroes counts a bye as a dot for the batter, we do not.</div>` +
+    (par && OURS.fifteenCount ? (function(){
+      // Runs per over, not runs per phase: we won that match inside 13.4, so our
+      // death phase is 22 balls rather than 30. Comparing its total against a
+      // five-over par would read as a weakness that is really just a short phase.
+      const parRpo = p => par[p] / 5;
+      const row = (lab, src, lowerIsBetter) =>
+        `<tr><td class="pt-l">${lab}</td>` + PHK.map(p => {
+          const d = +(src[p].rpo - parRpo(p)).toFixed(2);
+          const ok = lowerIsBetter ? d <= 0 : d >= 0;
+          return `<td class="pt-c">${src[p].rpo}<span class="${ok ? 'good' : 'bad'}">${sgn(d)} vs par</span></td>`;
+        }).join('') + `</tr>`;
+      return `<div class="parbox"><h5>The fifteen-over match against league par &mdash; runs per over</h5>` +
+        `<div class="scroll"><table class="partbl"><tbody>` +
+        row('We scored', OURS.fifteen.bat, false) +
+        row('We conceded', OURS.fifteen.bowl, true) +
+        `<tr><td class="pt-l">League par</td>` + PHK.map(p =>
+          `<td class="pt-c pt-par">${parRpo(p).toFixed(2)}<span>2025 average</span></td>`).join('') + `</tr>` +
+        `</tbody></table></div>` +
+        `<p class="par-note">Per over rather than per phase, because we won that match in 13.4 and so faced only ` +
+        `${OURS.fifteen.bat.death.balls} balls of our own death overs. A phase total would make a short innings ` +
+        `look like a failure to score.</p></div>`;
+    })() : '');
+
+  // ---- bowlers
+  $('ours-bowl').innerHTML =
+    `<div class="scroll"><table class="pltbl"><thead><tr><th>Bowler</th><th>Ov</th><th>R</th><th>W</th>` +
+    `<th>Econ</th><th>Avg</th><th>Dot%</th>` + PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') +
+    `</tr></thead><tbody>` +
+    OURS.bowlers.map(b => `<tr><td class="pl-n">${esc(b.name)}<span>${b.matches} match${b.matches > 1 ? 'es' : ''}</span></td>` +
+      `<td>${b.overs}</td><td>${b.runs}</td><td><b>${b.wkts}</b></td>` +
+      `<td class="${b.econ <= 7 ? 'good' : (b.econ >= 10 ? 'bad' : '')}">${b.econ}</td>` +
+      `<td>${b.avg === null ? '&mdash;' : b.avg}</td><td>${pc(b.dotPct)}</td>` +
+      PHK.map(p => {
+        const d = b.ph[p];
+        if (!d.balls) return `<td class="pl-ph pl-none">&mdash;</td>`;
+        return `<td class="pl-ph"><b class="${d.econ <= 7 ? 'good' : (d.econ >= 10 ? 'bad' : '')}">${d.econ}</b>` +
+          `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`;
+      }).join('') + `</tr>`).join('') +
+    `</tbody></table></div>` +
+    `<div class="ph-src">Wickets are bowler-credited: run outs sit with the fielding side, not the bowler. ` +
+    `Phase columns are economy with dot percentage and balls beneath.</div>`;
+
+  // ---- batters
+  $('ours-bat').innerHTML =
+    `<div class="scroll"><table class="pltbl"><thead><tr><th>Batter</th><th>Inns</th><th>Runs</th><th>Balls</th>` +
+    `<th>Avg</th><th>SR</th><th>Best</th><th>4s/6s</th><th>In boundaries</th></tr></thead><tbody>` +
+    OURS.batters.map(b => `<tr><td class="pl-n">${esc(b.name)}` +
+      (b.notOuts ? `<span>${b.notOuts} not out</span>` : '') + `</td>` +
+      `<td>${b.inns}</td><td><b>${b.runs}</b></td><td>${b.balls}</td>` +
+      `<td>${b.avg === null ? 'n/o' : b.avg}</td>` +
+      `<td class="${b.sr >= 150 ? 'good' : (b.sr < 100 ? 'bad' : '')}">${b.sr}</td>` +
+      `<td>${b.best}</td><td>${b.f4}/${b.f6}</td><td>${pc(b.bdryPct)}</td></tr>`).join('') +
+    `</tbody></table></div>` +
+    `<div class="ph-src">Average is runs per dismissal; a not-out never counts as one, so a batter who has ` +
+    `never been out shows n/o rather than a flattering number.</div>`;
+
+  // ---- what it changes: computed, so it moves as matches are added
+  (function(){
+    // Two overs in a phase before anyone is ranked on it. At one over a single
+    // boundary swings an economy by four, and the bowler who happened to bowl a
+    // quiet over tops the table on nothing.
+    const MIN = 12, THIN = 6;
+    const rank = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN)
+      .sort((x, y) => best ? x.ph[p].econ - y.ph[p].econ : y.ph[p].econ - x.ph[p].econ)[0];
+    const thinPick = p => OURS.bowlers
+      .filter(b => b.ph[p].balls >= THIN && b.ph[p].balls < MIN)
+      .sort((x, y) => x.ph[p].econ - y.ph[p].econ)[0];
+    const ppBest = rank('pp', true), ppWorst = rank('pp', false);
+    const deBest = rank('death', true), miBest = rank('mid', true);
+    const ppThin = thinPick('pp');
+    const extras = OURS.matches.reduce((a, m) => a + m.them.extras, 0);
+    const oversBowled = OURS.matches.reduce((a, m) => {
+      const [o, b] = String(m.them.overs).split('.'); return a + (+o) + (b ? +b / 6 : 0);
+    }, 0);
+    const perOver = extras / oversBowled;
+    const conceded = OURS.matches.reduce((a, m) => a + m.them.runs, 0);
+    const topBat = OURS.batters.filter(b => b.balls >= 10).sort((a, b) => b.sr - a.sr)[0];
+    const items = [];
+
+    if (ppWorst) {
+      items.push([`The new ball is our problem, and we know who not to give it to`,
+        `We concede <b>${OURS.all.bowl.pp.rpo}</b> an over in the powerplay against ` +
+        `${OURS.all.bowl.mid.rpo} in the middle &mdash; comfortably our worst phase. ` +
+        `<b>${esc(ppWorst.name)}</b> has gone at <b>${ppWorst.ph.pp.econ}</b> there off ` +
+        `${ppWorst.ph.pp.balls} balls (${pc(ppWorst.ph.pp.dotPct)} dots), the most expensive of anyone with ` +
+        `more than an over up front. Whatever else changes, he should not be opening.` +
+        (ppThin ? ` The one thing worth trying: ${esc(ppThin.name)}'s single powerplay over went for ` +
+          `${ppThin.ph.pp.econ * 1} &mdash; ${ppThin.ph.pp.balls} balls is not evidence, it is a reason to ` +
+          `give him the new ball next time and find out.` : '')]);
+    }
+    if (deBest) {
+      const alsoPP = ppBest && ppBest.name === deBest.name;
+      items.push([`${esc(deBest.name)} is our best bowler &mdash; spend his overs late`,
+        (alsoPP
+          ? `He is the best we have in every phase we can measure him in, so the question is not whether he ` +
+            `bowls but when. The numbers answer it: <b>${deBest.ph.death.econ}</b> an over at the death and ` +
+            `${deBest.ph.mid.econ} in the middle, against ${deBest.ph.pp.econ} with the new ball. `
+          : `<b>${deBest.ph.death.econ}</b> an over at the death with ${pc(deBest.ph.death.dotPct)} dots. `) +
+        `He has taken <b>${deBest.wkts}</b> of our wickets at ${deBest.econ} an over overall` +
+        (deBest.ph.death.wkts ? `, ${deBest.ph.death.wkts} of them in the last five` : '') +
+        `. Three overs is three overs &mdash; spending them early costs us the phase we defend best.`]);
+    }
+    items.push([`Stop giving away ${Math.round(perOver * 15)} runs an innings in extras`,
+      `We have conceded <b>${extras} extras</b> in ${oversBowled.toFixed(1)} overs bowled &mdash; ` +
+      `<b>${perOver.toFixed(2)} an over</b>, or about ${Math.round(perOver * 15)} across a full fifteen. ` +
+      `That is <b>${Math.round(extras / conceded * 100)}%</b> of every run we have conceded, handed over without a ` +
+      `ball being hit. Against a 120 win line it is the cheapest ten runs on this page.`]);
+    items.push([`Our middle overs are already the strength &mdash; keep them`,
+      `We bowl <b>${pc(OURS.all.bowl.mid.dotPct)}</b> dots in the middle against ${pc(OURS.all.bowl.pp.dotPct)} in the ` +
+      `powerplay, and concede ${OURS.all.bowl.mid.rpo} an over there. The league section below says middle-over ` +
+      `wickets are what separate winners from losers; this is the one phase where our own numbers already agree.`]);
+    if (topBat) {
+      items.push([`With the bat we accumulate better than we accelerate`,
+        `Our dot rate is lowest in the middle (<b>${pc(OURS.all.bat.mid.dotPct)}</b>) and highest at the death ` +
+        `(${pc(OURS.all.bat.death.dotPct)}) &mdash; the wrong way round for a format decided in the last five overs. ` +
+        `${esc(topBat.name)} strikes at ${topBat.sr} and should be facing more of them.`]);
+    }
+    items.push([`Treat all of this as a hint`,
+      `Three friendlies against one opponent, in three formats, none of them league cricket. Nothing here has ` +
+      `survived a different attack yet. The habits are real; the numbers around them are not yet evidence.`]);
+
+    $('ours-plan').innerHTML = `<div class="recs">` + items.map(([h, b]) =>
+      `<article><h4>${h}</h4><p>${b}</p></article>`).join('') + `</div>`;
+  })();
 }
 
 /* provenance */
@@ -1123,7 +1411,36 @@ if (PH && PH.teams) {
              <b>We bowl first</b> plan below.</span></div>
          <div class="tl-row"><span class="tl-k">They bowl</span>
            <span class="tl-v">We bat first anyway — this is the plan we wanted. Use <b>We bat first</b> below.</span></div>
-       </div>`;
+       </div>` + ourFormBlock();
+  }
+
+  // What our own matches say about executing any of this. Computed from
+  // section 02 so it moves as we play, rather than being written down once.
+  function ourFormBlock(){
+    if (!OURS || !OURS.bowlers.length) return '';
+    const MIN = 12;                      // two overs, same bar as section 02
+    const pick = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN)
+      .sort((x, y) => best ? x.ph[p].econ - y.ph[p].econ : y.ph[p].econ - x.ph[p].econ)[0];
+    const ppW = pick('pp', false), deB = pick('death', true);
+    const extras = OURS.matches.reduce((a, m) => a + m.them.extras, 0);
+    const ovs = OURS.matches.reduce((a, m) => {
+      const s = String(m.them.overs).split('.'); return a + (+s[0]) + (s[1] ? +s[1] / 6 : 0);
+    }, 0);
+    const perInns = Math.round(extras / ovs * 15);
+    const rows = [];
+    if (ppW) rows.push(['New ball',
+      `We concede <b>${OURS.all.bowl.pp.rpo}</b> an over in the powerplay — our weakest phase, and where a ` +
+      `match gets away from us. <b>${esc(ppW.name)}</b> has gone at ${ppW.ph.pp.econ} there: not with the new ball.`]);
+    if (deB) rows.push(['Last five',
+      `<b>${esc(deB.name)}</b> bowls the death — ${deB.ph.death.econ} an over with ` +
+      `${deB.ph.death.dotPct}% dots. Do not spend his overs early.`]);
+    rows.push(['Discipline',
+      `We give away about <b>${perInns} extras an innings</b>. Against a 120 line that is a seventh of the ` +
+      `target, conceded without a shot being played.`]);
+    return `<div class="ourform"><div class="of-lab">From our own ${OURS.record.played} matches</div>` +
+      rows.map(([k, v]) => `<div class="of-row"><span class="of-k">${k}</span><span class="of-v">${v}</span></div>`).join('') +
+      `<div class="of-note">Friendlies against one opponent — habits, not proof. Full breakdown in
+         <a href="#ours">section 02</a>.</div></div>`;
   }
 
   function renderPlan(){
@@ -1471,7 +1788,16 @@ $('method').innerHTML =
     `Innings that ended early (all out, or a chase won inside the quota) are excluded from phase ` +
     `averages because they have no comparable death phase; that is why the phase sample ` +
     `(${PH.sample.innings}) is smaller than the match count.</p>` : '') +
-  `<p><b>Weather (section 09).</b> Daily temperature, wind and rainfall from the Open-Meteo public ` +
+  (OURS ? `<p><b>Our own matches (section 02).</b> All ${OURS.record.played} matches we have played, read ` +
+    `ball by ball from the CricHeroes commentary and reconciled against the scorecard: runs, wickets, legal ` +
+    `deliveries and every bowler's figures match the published card in all ` +
+    `${OURS.record.played * 2} innings. Wickets are bowler-credited, so a run out sits with the fielding side ` +
+    `rather than whoever bowled the ball. A dot is a legal delivery off which no runs at all were scored — ` +
+    `CricHeroes counts a bye as a dot for the batter, we do not. Only fifteen-over matches are set against ` +
+    `the league par above, because a twelve-over innings has no fifth-over powerplay and an eight-over ` +
+    `hit-out has no death; the rest still count toward player careers, where a ball faced means the same ` +
+    `thing whatever the quota.</p>` : '') +
+  `<p><b>Weather (section 11).</b> Daily temperature, wind and rainfall from the Open-Meteo public ` +
   `archive, averaged across daytime hours for the Durham Region. Match start times are not in our ` +
   `data, so this is a day-level reading, not a per-match one.</p>` +
   `<p><b>What this page cannot tell you.</b> There are no individual batting or bowling figures ` +

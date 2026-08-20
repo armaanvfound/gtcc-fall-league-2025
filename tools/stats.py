@@ -176,4 +176,9 @@ def build_payload():
         out['season'] = build_season(out['phases'], LEAGUE['venues'])
     except Exception:
         out['season'] = None
+    try:
+        from ourmatches import build_ours
+        out['ours'] = build_ours()
+    except Exception:
+        out['ours'] = None
     return out

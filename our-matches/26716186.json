@@ -1,0 +1,51 @@
+{
+ "mid": "26716186",
+ "date": "2026-08-19",
+ "opp": "FERAL XI",
+ "venue": "Ajax Cricket Club Ground, Ajax",
+ "competition": "Friendly",
+ "isLeague": false,
+ "quota": 15,
+ "phaseBounds": [5, 10],
+ "toss": "FERAL XI won the toss and chose to bat",
+ "result": "won",
+ "margin": "3 wickets",
+ "url": "https://cricheroes.com/scorecard/26716186/individual/feral-xi-vs-royal-challenger-blaster/commentary",
+ "ourInnings": {
+  "order": 2,
+  "runs": 131, "wkts": 7, "oversText": "13.4", "balls": 82,
+  "wideRuns": 7, "noBalls": 1,
+  "phases": {"pp": [30, 15, 52, 3], "mid": [30, 7, 50, 3], "death": [22, 10, 29, 1]},
+  "batting": [
+   ["Kalpesh Saraiya", 0, 1, 0, 0, true],
+   ["Yash Chauhan", 6, 6, 0, 1, true],
+   ["Nikhil Das T", 17, 12, 2, 0, true],
+   ["Armaan Wadhwa", 20, 12, 3, 1, true],
+   ["Patel Happy", 40, 19, 7, 0, true],
+   ["Pankhil Patel", 4, 6, 0, 0, true],
+   ["Jay", 16, 10, 3, 0, false],
+   ["Jay Vasani", 10, 13, 0, 1, true],
+   ["Jemish Virendra Patel", 10, 4, 0, 1, false]
+  ]
+ },
+ "theirInnings": {
+  "order": 1,
+  "runs": 127, "wkts": 7, "oversText": "15.0", "balls": 90,
+  "wideRuns": 10, "noBalls": 1,
+  "phases": {"pp": [30, 13, 46, 2], "mid": [30, 13, 37, 3], "death": [30, 11, 44, 2]},
+  "ourBowling": {
+   "Jeetmanyu Bawra": {"o": 3, "r": 16, "w": 2,
+     "ph": {"pp": [6, 3, 7, 1], "mid": [6, 2, 4, 0], "death": [6, 4, 5, 1]}},
+   "Patel Happy": {"o": 3, "r": 19, "w": 0,
+     "ph": {"pp": [6, 3, 4, 0], "mid": [6, 3, 5, 0], "death": [6, 1, 10, 0]}},
+   "Jemish Virendra Patel": {"o": 2, "r": 22, "w": 0,
+     "ph": {"pp": [6, 2, 12, 0], "mid": [0, 0, 0, 0], "death": [6, 1, 10, 0]}},
+   "Armaan Wadhwa": {"o": 2, "r": 16, "w": 0,
+     "ph": {"pp": [6, 2, 10, 0], "mid": [0, 0, 0, 0], "death": [6, 4, 6, 0]}},
+   "Kalpesh Saraiya": {"o": 2, "r": 25, "w": 2,
+     "ph": {"pp": [6, 3, 13, 1], "mid": [6, 2, 12, 1], "death": [0, 0, 0, 0]}},
+   "Jay": {"o": 3, "r": 29, "w": 2,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [12, 6, 16, 1], "death": [6, 1, 13, 1]}}
+  }
+ }
+}

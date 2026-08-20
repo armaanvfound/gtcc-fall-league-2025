@@ -1,0 +1,52 @@
+{
+ "mid": "26606596",
+ "date": "2026-08-13",
+ "opp": "FERAL XI",
+ "venue": "Ajax Cricket Club Ground, Ajax",
+ "competition": "Friendly",
+ "isLeague": false,
+ "quota": 12,
+ "phaseBounds": [4, 8],
+ "toss": "FERAL XI won the toss and chose to bat",
+ "result": "tied",
+ "margin": "scores level",
+ "url": "https://cricheroes.com/scorecard/26606596/individual/feral-xi-vs-royal-challenger-blaster/commentary",
+ "ourInnings": {
+  "order": 2,
+  "runs": 100, "wkts": 6, "oversText": "12.0", "balls": 72,
+  "wideRuns": 8, "noBalls": 1,
+  "phases": {"pp": [24, 10, 28, 1], "mid": [24, 10, 31, 2], "death": [24, 9, 41, 3]},
+  "batting": [
+   ["Jonty Patel", 13, 16, 0, 1, true],
+   ["Kalpesh Saraiya", 14, 13, 1, 0, true],
+   ["Yash Chauhan", 1, 3, 0, 0, true],
+   ["Armaan Wadhwa", 30, 16, 0, 3, true],
+   ["Jay", 17, 12, 1, 1, true],
+   ["Pankhil Patel", 2, 3, 0, 0, true],
+   ["Jay Vasani", 7, 8, 0, 0, false],
+   ["Jemish Virendra Patel", 6, 2, 0, 1, false]
+  ]
+ },
+ "theirInnings": {
+  "order": 1,
+  "runs": 100, "wkts": 8, "oversText": "12.0", "balls": 72,
+  "wideRuns": 17, "noBalls": 1,
+  "phases": {"pp": [24, 5, 50, 1], "mid": [24, 16, 28, 4], "death": [24, 12, 22, 3]},
+  "ourBowling": {
+   "Jeetmanyu Bawra": {"o": 3, "r": 18, "w": 3,
+     "ph": {"pp": [12, 4, 15, 1], "mid": [0, 0, 0, 0], "death": [6, 4, 3, 2]}},
+   "Armaan Wadhwa": {"o": 2, "r": 35, "w": 0,
+     "ph": {"pp": [12, 1, 35, 0], "mid": [0, 0, 0, 0], "death": [0, 0, 0, 0]}},
+   "Jemish Virendra Patel": {"o": 1, "r": 9, "w": 1,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [6, 4, 9, 1], "death": [0, 0, 0, 0]}},
+   "Patel Happy": {"o": 1, "r": 6, "w": 2,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [6, 3, 6, 2], "death": [0, 0, 0, 0]}},
+   "Kalpesh Saraiya": {"o": 2, "r": 9, "w": 1,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [6, 6, 4, 1], "death": [6, 4, 5, 0]}},
+   "Jay": {"o": 2, "r": 17, "w": 0,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [6, 3, 9, 0], "death": [6, 2, 8, 0]}},
+   "Pankhil Patel": {"o": 1, "r": 5, "w": 0,
+     "ph": {"pp": [0, 0, 0, 0], "mid": [0, 0, 0, 0], "death": [6, 2, 6, 0]}}
+  }
+ }
+}
