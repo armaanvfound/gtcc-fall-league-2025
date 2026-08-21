@@ -101,13 +101,22 @@ def main():
         if "**" in text or re.search(r"^[ \t]*#{1,6}[ \t]+", text, re.M):
             problems.append("markdown in reply")
 
-        # 3. the toss call is BAT, always - the pages say so
+        # 3. the toss call is BAT, always - the pages say so.
+        #    Judge the OPENING, not the whole answer: the prompt requires the call
+        #    in the first sentence, and a later "if we lose the toss they bat and
+        #    we bowl first" is correct advice, not a contradiction. Scanning the
+        #    whole text failed a verbatim-correct answer for exactly that reason.
         if kind == "toss":
-            low = plain.lower()
-            if not re.search(r"\bbat(ting)? first\b|\bwe bat\b|^\s*bat\b", low):
-                problems.append("toss answer does not say bat")
-            if re.search(r"\b(bowl first|field first)\b", low) and "lose the toss" not in low:
-                problems.append("toss answer suggests bowling")
+            low = plain.lower().strip()
+            # first two sentences: "Should we chase?" is correctly answered
+            # "No. We bat first." - the call is there, just not in sentence one.
+            opening = " ".join(re.split(r"(?<=[.!?])\s", low)[:2])[:200]
+            says_bat = re.search(r"\bbat(ting)?\b", opening)
+            says_bowl = re.search(r"\b(bowl|field)(ing)?\s*(first)?\b", opening)
+            if not says_bat:
+                problems.append("toss answer does not open with bat: %r" % opening[:70])
+            elif says_bowl and says_bowl.start() < says_bat.start():
+                problems.append("toss answer leads with bowling: %r" % opening[:70])
 
         # 4. the threat list must never be sold as a season average
         if kind == "notavg":

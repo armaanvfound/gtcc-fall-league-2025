@@ -203,7 +203,17 @@ export default {
     let data;
     try { data = JSON.parse(raw); } catch (e) { return json({ error: "bad reply from DeepSeek" }, 502, cors); }
     const choice = (data.choices && data.choices[0]) || {};
-    const text = ((choice.message && choice.message.content) || "").trim();
+    let text = ((choice.message && choice.message.content) || "").trim();
+
+    // The prompt forbids markdown - the page renders HTML - but the model still
+    // reaches for **bold** now and then, and asterisks on screen look broken.
+    // Converting here rather than in the page means every caller gets it right,
+    // and it makes "no markdown" checkable from the API response itself.
+    text = text
+      .replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>")
+      .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s.,;:)]|$)/g, "$1<b>$2</b>")
+      .replace(/^[ \t]*#{1,6}[ \t]+/gm, "")
+      .replace(/^[ \t]*[-*][ \t]+/gm, "\u2022 ");
     if (!text) {
       // Say which failure it was. "Empty answer" on its own sent us looking in
       // the wrong place once already.

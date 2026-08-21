@@ -186,6 +186,24 @@ def _players_block(pl):
     return out
 
 
+def _with_rpo(block, overs=5):
+    """Add runs-per-over beside each phase total.
+
+    The pack's phase figures are runs per phase, but people ask "how many an
+    over", and the assistant is forbidden to calculate. It was dividing by five
+    anyway - correct arithmetic, wrong rule, and the number it produced could
+    not be traced back to the pack. So ship both.
+    """
+    if not isinstance(block, dict):
+        return block
+    out = copy.deepcopy(block)
+    for k in ("pp", "mid", "death"):
+        v = out.get(k)
+        if isinstance(v, (int, float)):
+            out[k] = {"runs": v, "perOver": round(v / overs, 2)}
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -268,7 +286,7 @@ def build_factpack(payload):
                     "(Friends United 184/6 v Golden City, 2025-09-28) and sits outside "
                     "phase averages, though it counts in results and win-line bands. "
                     "Powerplay = overs 1-5, middle = 6-10, death = 11-15.",
-            "all": _phase_block(ph.get("all", {})),
+            "all": _with_rpo(_phase_block(ph.get("all", {}))),
             "winners": _phase_block(ph.get("won", {})),
             "losers": _phase_block(ph.get("lost", {})),
             "decisivePhase": ph.get("decisive"),
