@@ -26,10 +26,34 @@ def read(path):
         return [r for r in csv.reader(fh, delimiter="\t") if r]
 
 
+def merge_add(new_path, dest):
+    """Append a new competition's rows, replacing that competition if re-synced.
+
+    Each competition arrives as its own file now, so a sync of one league must
+    not wipe the others. Rows are keyed by competition id (third-from-last
+    column); re-importing a competition replaces just its rows.
+    """
+    new = [r for r in csv.reader(open(new_path, encoding="utf-8"), delimiter="\t") if r]
+    if not new:
+        print("nothing in %s" % new_path)
+        return None
+    tid = new[0][-4]
+    keep = []
+    if dest.exists():
+        keep = [r for r in csv.reader(dest.open(encoding="utf-8"), delimiter="\t")
+                if r and r[-4] != tid]
+    out = keep + new
+    with dest.open("w", encoding="utf-8", newline="") as fh:
+        csv.writer(fh, delimiter="\t").writerows(out)
+    print("merged competition %s: %d new rows, %d kept -> %d total"
+          % (tid, len(new), len(keep), len(out)))
+    return out
+
+
 def check(rows, label):
     # batting rows carry 13 fields, bowling rows 16 - a mismatch means a merged
     # or truncated line, which is how a missing trailing newline showed up once.
-    want = {"B": 13, "W": 16}
+    want = {"B": 17, "W": 20}
     bad = [i for i, r in enumerate(rows, 1)
            if r[0] not in want or len(r) != want[r[0]]]
     matches = {r[1] for r in rows if len(r) > 1}

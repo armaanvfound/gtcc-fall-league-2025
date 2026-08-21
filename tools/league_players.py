@@ -111,19 +111,23 @@ def build_players():
         inns=0, runs=0, balls=0, fours=0, sixes=0, best=0, notout=0,
         ducks=0, fifties=0, hand=collections.Counter(),
         outs=collections.Counter(), matches=set(),
-        names=collections.Counter(), teams=collections.Counter(), roles=set()))
+        names=collections.Counter(), teams=collections.Counter(), roles=set(),
+        tours=collections.Counter()))
     bowl = collections.defaultdict(lambda: dict(
         inns=0, wkts=0, runs=0, balls=0, dots=0, maidens=0,
         fours=0, sixes=0, wides=0, noballs=0, bestW=0, bestR=999, matches=set(),
-        names=collections.Counter(), teams=collections.Counter()))
+        names=collections.Counter(), teams=collections.Counter(),
+        tours=collections.Counter()))
 
     for r in rows:
-        if r[0] == "B" and len(r) == 13:
-            _, mid, _inn, team, name, runs, balls, f4, f6, _sr, hand, how, pid = r
+        if r[0] == "B" and len(r) == 17:
+            (_, mid, _inn, team, name, runs, balls, f4, f6, _sr, hand, how, pid,
+             tid, tname, tovers, tball) = r
             clean, role = split_role(name)
             d = bat[pid]
             d["names"][clean] += 1
             d["teams"][team] += 1
+            d["tours"][tname] += 1
             if role:
                 d["roles"].add(role)
             d["inns"] += 1
@@ -145,15 +149,18 @@ def build_players():
                 d["ducks"] += 1
             if _n(runs) >= 50:
                 d["fifties"] += 1
-        elif r[0] == "W" and len(r) == 16:
-            _, mid, _inn, team, name, ov, md, runs, wk, dots, f4, f6, wd, nb, _er, pid = r
-            clean, _role = split_role(name)
-            d = bowl[pid]
+        elif r[0] == "W" and len(r) == 20:
+            (_, mid, _inn, team, name, ov, md, runs, wk, dots, f4, f6, wd, nb, _er,
+             pid, tid, tname, tovers, tball) = r
             bl = _balls(ov)
             if bl == 0:
-                continue
+                continue    # before touching bowl[pid]: a defaultdict lookup
+                            # would otherwise leave an empty record behind
+            clean, _role = split_role(name)
+            d = bowl[pid]
             d["names"][clean] += 1
             d["teams"][team] += 1
+            d["tours"][tname] += 1
             d["inns"] += 1
             d["matches"].add(mid)
             d["balls"] += bl
@@ -184,6 +191,7 @@ def build_players():
             "boundaryPct": round((d["fours"] * 4 + d["sixes"] * 6) / d["runs"] * 100, 1)
                            if d["runs"] else None,
             "role": ("wk" if "wk" in d["roles"] else None) or ("c" if "c" in d["roles"] else None),
+            "seasons": len(d["tours"]),
             "usuallyOut": top[0][0] if top else None,
             "usuallyOutPct": round(top[0][1] / outs * 100) if top and outs else None,
         }
@@ -203,6 +211,7 @@ def build_players():
             "sr": round(d["balls"] / d["wkts"], 1) if d["wkts"] else None,
             "dotPct": round(d["dots"] / d["balls"] * 100, 1) if d["balls"] else None,
             "best": "%d-%d" % (d["bestW"], d["bestR"]) if d["bestR"] < 999 else "-",
+            "seasons": len(d["tours"]),
         }
 
     batters = [bat_row(k, v) for k, v in bat.items()]
@@ -226,7 +235,24 @@ def build_players():
 
     qual_b = [b for b in batters if b["inns"] >= MIN_BAT_INNS]
     qual_w = [w for w in bowlers if w["inns"] >= MIN_BOWL_INNS]
+    # Group by competition, not by (competition, overs): a rain-reduced game
+    # carries a smaller overs figure and would otherwise split one league into
+    # three. The headline format is the most common one played.
+    comps = collections.defaultdict(lambda: dict(matches=set(), overs=collections.Counter(), ball=collections.Counter()))
+    for r in rows:
+        c = comps[r[-3]]
+        c["matches"].add(r[1])
+        if r[-2]:
+            c["overs"][_n(r[-2])] += 1
+        if r[-1]:
+            c["ball"][r[-1].title()] += 1
     return {
+        "competitions": [
+            {"name": n, "matches": len(c["matches"]),
+             "overs": c["overs"].most_common(1)[0][0] if c["overs"] else None,
+             "ball": c["ball"].most_common(1)[0][0] if c["ball"] else None}
+            for n, c in sorted(comps.items(), key=lambda x: -len(x[1]["matches"]))
+        ],
         "matches": len({r[1] for r in rows if r}),
         "battingInnings": sum(1 for r in rows if r and r[0] == "B"),
         "bowlingSpells": sum(1 for r in rows if r and r[0] == "W"),

@@ -2040,11 +2040,13 @@ if (PH && PH.teams) {
              </tr></thead><tbody>${bowl}</tbody></table></div>
            </div>
          </div>
-         <p class="dm-caveat">Every innings of every match across <b>${P.matches}</b> games, so these
-            are real season figures &mdash; averages and economies mean what they normally mean. Ranked
-            by runs and wickets rather than by rate, because a strike rate off two innings flatters.
-            There are no LBWs in this competition, and <b>76%</b> of all dismissals are caught, so
-            field placement is the lever.</p>
+         <p class="dm-caveat">Every innings of every match across <b>${P.matches}</b> games &mdash;
+            ${(P.competitions||[]).map(c => `${esc(c.name)} (<b>${c.matches}</b>, ${c.overs}-over)`).join(' and ')}.
+            Real figures, so averages and economies mean what they normally mean. Ranked by runs and
+            wickets rather than by rate, because a rate off two innings flatters, and the two
+            competitions are different lengths so a blended rate is indicative rather than exact.
+            There are no LBWs here and <b>76%</b> of dismissals are caught &mdash; field placement is
+            the lever.</p>
        </div>`;
   }
 

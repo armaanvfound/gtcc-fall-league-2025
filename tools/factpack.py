@@ -169,16 +169,24 @@ def _players_block(pl):
         return None
     out = {
         "_legend": {
-            "bat": "[name, runs, innings, average, strikeRate, highScore, hand, usuallyOutBy]",
-            "bowl": "[name, wickets, innings, economy, average, strikeRate, dotPct, bestFigures]",
+            "bat": "[name, runs, innings, average, strikeRate, highScore, hand, usuallyOutBy, competitions]",
+            "bowl": "[name, wickets, innings, economy, average, strikeRate, dotPct, bestFigures, competitions]",
         },
         "whatThisIs": (
             "Every innings by every player across %d matches - %d batting innings "
-            "and %d bowling spells. These ARE real season figures: averages, "
-            "strike rates and economies mean what they normally mean. Ranked by "
-            "runs and wickets rather than by rate, since a rate off two innings "
-            "flatters. Watch the innings count before leaning on any rate."
-        ) % (pl["matches"], pl["battingInnings"], pl["bowlingSpells"]),
+            "and %d bowling spells - drawn from %s. These ARE real figures: "
+            "averages, strike rates and economies mean what they normally mean. "
+            "Ranked by runs and wickets rather than by rate, since a rate off two "
+            "innings flatters. Watch the innings count before leaning on any rate."
+        ) % (pl["matches"], pl["battingInnings"], pl["bowlingSpells"],
+             " and ".join("%s (%d matches, %s-over)" % (c["name"], c["matches"], c["overs"])
+                          for c in pl.get("competitions", []))),
+        "mixedFormats": (
+            "These competitions are not the same length, so a combined economy or "
+            "strike rate blends formats. Prefer it for WHO is dangerous; be careful "
+            "using it as an exact rate. Each player's `seasons` says how many "
+            "competitions their record spans."
+        ),
         "noLbw": ("There are no LBW dismissals in this competition and 76% of all "
                   "dismissals are caught, so plans should be about catching, not "
                   "about trapping batters in front."),
@@ -187,9 +195,9 @@ def _players_block(pl):
     for name, t in pl["teams"].items():
         out["teams"][name] = {
             "bat": [[b["name"], b["runs"], b["inns"], b["avg"], b["sr"], b["best"],
-                     b["hand"], b["usuallyOut"]] for b in t["batters"][:4]],
+                     b["hand"], b["usuallyOut"], b["seasons"]] for b in t["batters"][:4]],
             "bowl": [[w["name"], w["wkts"], w["inns"], w["econ"], w["avg"], w["sr"],
-                      w["dotPct"], w["best"]] for w in t["bowlers"][:4]],
+                      w["dotPct"], w["best"], w["seasons"]] for w in t["bowlers"][:4]],
             "leftHanders": t["leftHanders"],
         }
     return out
