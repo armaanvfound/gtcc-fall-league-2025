@@ -14,7 +14,7 @@ that has already passed the challenge, where same-origin `fetch` works fine.
 3. Paste the whole of `tools/collector.js` and press Enter.
 
 It scrolls until every match has loaded, fetches each one, and downloads
-`rcb-performances.tsv`. Progress prints as it goes.
+`rcb-scorecards.tsv`. Progress prints as it goes.
 
 If the download is blocked (Chrome refuses more than one automatic download per
 page), the data is still there — run this in the same console:
@@ -23,7 +23,7 @@ page), the data is still there — run this in the same console:
 copy(window.__rcb.text)
 ```
 
-and paste into `league-raw/performances.tsv` yourself.
+and paste into `league-raw/scorecards.tsv` yourself.
 
 ## 2. Install and rebuild
 
@@ -31,7 +31,7 @@ and paste into `league-raw/performances.tsv` yourself.
 python3 tools/sync.py
 ```
 
-It takes the newest `rcb-performances.tsv` from `~/Downloads`, checks it, copies
+It takes the newest `rcb-scorecards.tsv` from `~/Downloads`, checks it, copies
 it in, and rebuilds every page and `facts.json`. Then commit and push.
 
 `sync.py` refuses a file that has fewer matches than the one already installed,
@@ -41,26 +41,34 @@ with a partial scrape is the mistake you would not notice for weeks. Use
 
 ## What is in the file
 
-Tab-separated, one row per standout performance:
+Tab-separated. Batting rows have 13 fields, bowling rows 16:
 
 ```
-B  <match>  <inning>  <team>  <player>  runs  balls  4s  6s  strikeRate  isOut   playerId
-W  <match>  <inning>  <team>  <player>  overs runs   wkts econ dots      maidens playerId
+B  <match> <inning> <battingTeam>  <player> runs  balls   4s 6s SR   hand howOut     playerId
+W  <match> <inning> <bowlingTeam>  <player> overs maidens runs wkts dots 4s 6s wides noballs econ playerId
 ```
 
-## What this data is, and is not
+Currently 86 matches: **1,574 batting innings and 1,030 bowling spells**, 562
+players, 30 teams.
 
-Each match page publishes its **top three batting and top three bowling
-performances**. That is what this collects — 258 of each across 86 matches.
+## What this data is
 
-The full scorecard is never sent to the browser, and the tournament's own
-leaderboard and stats pages are behind CricHeroes PRO. So this is the deepest
-per-player data actually reachable without a subscription.
+Each match page embeds `scoreCardData` — both innings, in full. So this is the
+**real scorecard**, and the stats built from it are real season figures:
+averages, strike rates and economies mean what they normally mean.
 
-It is a **threat list, not a set of averages**. A player's quiet matches are not
-in here, and players who never had a standout day do not appear at all. Read as
-an average it flatters everybody. Every label on the dashboard and every line in
-`facts.json` is worded to keep that straight, and the assistant is told the same.
+Two things it is not. It is not the three-best-performances summary that also
+sits on the page (that is a highlight reel and flatters everyone). And it is not
+the tournament's own leaderboard, which is behind CricHeroes PRO — we never see
+it, and do not need to.
+
+The one thing to watch is **sample size**, not honesty: a strike rate off two
+innings is noise. Team tables rank by runs and wickets before rate for exactly
+that reason, and every row carries its innings count.
+
+Worth knowing about this competition: there are **no LBW dismissals at all**
+(these are tennis-ball matches), and **76% of dismissals are caught**. Plans
+should be about catching, not about trapping people in front.
 
 ## Please keep the request rate where it is
 

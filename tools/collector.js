@@ -1,16 +1,16 @@
-/* Collects per-player league data from CricHeroes. Paste into the browser console.
+/* Collects full scorecards from CricHeroes. Paste into the browser console.
  *
  * WHY IT RUNS IN A BROWSER. CricHeroes is behind Cloudflare - plain curl gets a
- * 403 challenge - and it renders its detail client-side, so there is no JSON API
- * to call. Inside a tab that has already passed the challenge, same-origin fetch
- * works perfectly: 30 team pages came back in 2.8 seconds. So this runs there.
+ * 403 challenge - and it renders detail client-side, so there is no JSON API to
+ * call. Inside a tab that has already passed the challenge, same-origin fetch
+ * works perfectly. 86 matches came back in 89 seconds.
  *
- * WHAT IT COLLECTS. Each match page carries a `best_performances` block in its
- * HTML: the top three batting and top three bowling efforts of that match. The
- * full scorecard and the tournament leaderboard are not available to us - the
- * leaderboard is behind CricHeroes PRO - so this is the deepest per-player data
- * that is actually reachable. It is a threat list, not a set of averages, and
- * everything downstream is labelled that way.
+ * WHAT IT COLLECTS. Each match page embeds `scoreCardData`: both innings in
+ * full. Every batter with runs, balls, boundaries, batting hand and how they got
+ * out; every bowler with overs, maidens, runs, wickets, dots, boundaries
+ * conceded and extras. That is the real scorecard, so the stats built from it
+ * are real season figures - not the three-best-performances summary that is also
+ * on the page, and not the tournament leaderboard, which is behind CricHeroes PRO.
  *
  * HOW TO RUN
  *   1. Open the tournament's Matches tab and click "Completed".
@@ -31,7 +31,29 @@
     return;
   }
 
-  // ---- 1. discover every completed match on the page -------------------------
+  async function get(url, tries = 4) {
+    for (let a = 0; a < tries; a++) {
+      const r = await fetch(url, { credentials: 'include' });
+      if (r.status === 429) { await sleep(800 * (a + 1)); continue; }   // backoff
+      return r.ok ? await r.text() : null;
+    }
+    return null;
+  }
+
+  // ---- 1. a reliable team_id -> name map -------------------------------------
+  // Built from the tournament's own teams page. Reading names out of each match
+  // instead leaves gaps: a match whose best performers all came from one side
+  // never names the other, which silently produced "team10750303" rows once.
+  const tourney = (location.pathname.match(/^\/tournament\/\d+\/[^/]+/) || [])[0];
+  const TEAM = {};
+  if (tourney) {
+    const tp = await get(tourney + '/teams');
+    if (tp) for (const m of tp.replace(/\\"/g, '"').matchAll(/"team_id":(\d+),"team_name":"([^"]+)"/g))
+      TEAM[m[1]] = m[2];
+  }
+  log(Object.keys(TEAM).length + ' teams mapped');
+
+  // ---- 2. discover every completed match --------------------------------------
   const ids = () => [...new Set([...document.querySelectorAll('a')]
     .map(a => (a.getAttribute('href') || '').split('?')[0])
     .filter(h => h.startsWith('/scorecard/'))
@@ -52,31 +74,48 @@
   }
   log('found ' + MATCHES.length + ' matches');
 
-  // ---- 2. fetch each and pull out best_performances ---------------------------
-  async function get(url, tries = 4) {
-    for (let a = 0; a < tries; a++) {
-      const r = await fetch(url, { credentials: 'include' });
-      if (r.status === 429) { await sleep(800 * (a + 1)); continue; }   // backoff
-      return r.ok ? await r.text() : null;
-    }
-    return null;
-  }
+  // ---- 3. parse each scorecard -------------------------------------------------
+  const clean = v => String(v == null ? '' : v).replace(/[\t\r\n]/g, ' ');
+  const rows = [];
 
-  function bestPerformances(html) {
-    // the payload is embedded with escaped quotes; brace-match the object out
+  function parse(html, id) {
     const un = html.replace(/\\"/g, '"');
-    const i = un.indexOf('"best_performances":');
-    if (i < 0) return null;
-    let depth = 0, start = un.indexOf('{', i), end = -1;
-    for (let k = start; k < un.length; k++) {
-      const c = un[k];
-      if (c === '{') depth++;
-      else if (c === '}') { depth--; if (!depth) { end = k + 1; break; } }
-    }
-    try { return JSON.parse(un.slice(start, end)); } catch (e) { return null; }
+    const arrAt = idx => {
+      let d = 0, e = -1;
+      for (let k = idx; k < un.length; k++) {
+        const c = un[k];
+        if (c === '[') d++;
+        else if (c === ']') { d--; if (!d) { e = k + 1; break; } }
+      }
+      try { return JSON.parse(un.slice(idx, e)); } catch (x) { return null; }
+    };
+    const i = un.indexOf('"scoreCardData":[');
+    if (i < 0) return false;
+    const sc = arrAt(un.indexOf('[', i));
+    if (!sc || !sc.length) return false;
+
+    // per-match fallback for any id the tournament page did not list
+    const local = {};
+    for (const m of un.matchAll(/"team_id":(\d+),"team_name":"([^"]+)"/g)) local[m[1]] = m[2];
+    const nameOf = tid => TEAM[String(tid)] || local[String(tid)] || ('team' + tid);
+
+    sc.forEach((inn, idx) => {
+      const batTeam = nameOf(inn.team_id);
+      const other = sc[(idx + 1) % sc.length];
+      const bowlTeam = other ? nameOf(other.team_id) : '?';
+      for (const b of (inn.batting || []))
+        rows.push(['B', id, idx + 1, clean(batTeam), clean(b.name), b.runs, b.balls,
+                   b['4s'], b['6s'], b.SR, clean(b.batting_hand), clean(b.how_to_out),
+                   b.player_id].join('\t'));
+      for (const w of (inn.bowling || []))
+        rows.push(['W', id, idx + 1, clean(bowlTeam), clean(w.name), w.overs, w.maidens,
+                   w.runs, w.wickets, w['0s'], w['4s'], w['6s'], w.wide, w.noball,
+                   w.economy_rate, w.player_id].join('\t'));
+    });
+    return true;
   }
 
-  const lines = [], failed = [];
+  const failed = [];
   let idx = 0, done = 0;
   const t0 = Date.now();
 
@@ -85,54 +124,37 @@
       const id = MATCHES[idx++];
       try {
         const html = await get('/scorecard/' + id + '/x/y/scorecard');
-        const bp = html && bestPerformances(html);
-        if (!bp) { failed.push(id); }
-        else {
-          for (const b of (bp.batting || []))
-            lines.push(['B', id, b.inning, b.team_name, b.player_name, b.runs, b.balls,
-                        b['4s'], b['6s'], b.strike_rate, b.is_out, b.player_id].join('\t'));
-          for (const w of (bp.bowling || []))
-            lines.push(['W', id, w.inning, w.team_name, w.player_name, w.overs, w.runs,
-                        w.wickets, w.economy_rate, w['0s'], w.maidens, w.player_id].join('\t'));
+        if (html && parse(html, id)) {
           done++;
           if (done % 10 === 0) log('  ' + done + '/' + MATCHES.length);
-        }
+        } else failed.push(id);
       } catch (e) { failed.push(id); }
       await sleep(GAP);
     }
   }
   await Promise.all(Array.from({ length: CONC }, worker));
 
-  // one retry pass - the failures are nearly always transient rate limits
+  // one slower retry pass - failures are nearly always transient rate limits
   if (failed.length) {
-    log('retrying ' + failed.length + ' that failed...');
-    const again = failed.splice(0, failed.length);
-    for (const id of again) {
+    log('retrying ' + failed.length + '...');
+    for (const id of failed.splice(0, failed.length)) {
       const html = await get('/scorecard/' + id + '/x/y/scorecard', 5);
-      const bp = html && bestPerformances(html);
-      if (!bp) { failed.push(id); continue; }
-      for (const b of (bp.batting || []))
-        lines.push(['B', id, b.inning, b.team_name, b.player_name, b.runs, b.balls,
-                    b['4s'], b['6s'], b.strike_rate, b.is_out, b.player_id].join('\t'));
-      for (const w of (bp.bowling || []))
-        lines.push(['W', id, w.inning, w.team_name, w.player_name, w.overs, w.runs,
-                    w.wickets, w.economy_rate, w['0s'], w.maidens, w.player_id].join('\t'));
-      done++;
+      if (html && parse(html, id)) done++; else failed.push(id);
       await sleep(600);
     }
   }
 
-  // ---- 3. hand the file to the browser ---------------------------------------
-  const text = lines.join('\n') + '\n';
+  // ---- 4. hand the file to the browser ----------------------------------------
+  const text = rows.join('\n') + '\n';
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([text], { type: 'text/tab-separated-values' }));
-  a.download = 'rcb-performances.tsv';
+  a.download = 'rcb-scorecards.tsv';
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 
-  log('done: ' + done + '/' + MATCHES.length + ' matches, ' + lines.length + ' rows, ' +
+  log('done: ' + done + '/' + MATCHES.length + ' matches, ' + rows.length + ' rows, ' +
       ((Date.now() - t0) / 1000).toFixed(0) + 's');
   if (failed.length) console.warn('[rcb] still missing:', failed.join(','));
-  log('saved rcb-performances.tsv - now run:  python3 tools/sync.py');
-  window.__rcb = { text, lines, failed };   // in case the download is blocked
+  log('saved rcb-scorecards.tsv - now run:  python3 tools/sync.py');
+  window.__rcb = { text, rows, failed };   // in case the download is blocked
 })();

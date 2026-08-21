@@ -159,29 +159,38 @@ def _target_for(t, death_par):
 # question; the tuples plus one legend line cost about a third of that and the
 # model reads them just as well.
 def _players_block(pl):
+    """Per-team player stats for the assistant, as fixed-order tuples.
+
+    Thirty teams of named fields would add ~30k characters to a pack that rides
+    on every question; tuples plus one legend line cost a third of that and the
+    model reads them just as well.
+    """
     if not pl or not pl.get("teams"):
         return None
     out = {
         "_legend": {
-            "bat": "[name, runs, standoutInnings, bestScore, strikeRate]",
-            "bowl": "[name, wickets, spells, bestFigures, economy, dotPct]",
+            "bat": "[name, runs, innings, average, strikeRate, highScore, hand, usuallyOutBy]",
+            "bowl": "[name, wickets, innings, economy, average, strikeRate, dotPct, bestFigures]",
         },
         "whatThisIs": (
-            "The top three batting and top three bowling performances of each of "
-            "%d matches - %d batting and %d bowling efforts in all. These are NOT "
-            "season averages: a player's quiet matches are not in here and players "
-            "who never had a standout day do not appear. Runs mean 'runs when he "
-            "went big'. Use it to say who is dangerous and how, never to quote "
-            "anyone's average."
-        ) % (pl["matches"], pl["battingPerformances"], pl["bowlingPerformances"]),
+            "Every innings by every player across %d matches - %d batting innings "
+            "and %d bowling spells. These ARE real season figures: averages, "
+            "strike rates and economies mean what they normally mean. Ranked by "
+            "runs and wickets rather than by rate, since a rate off two innings "
+            "flatters. Watch the innings count before leaning on any rate."
+        ) % (pl["matches"], pl["battingInnings"], pl["bowlingSpells"]),
+        "noLbw": ("There are no LBW dismissals in this competition and 76% of all "
+                  "dismissals are caught, so plans should be about catching, not "
+                  "about trapping batters in front."),
         "teams": {},
     }
     for name, t in pl["teams"].items():
         out["teams"][name] = {
-            "bat": [[b["name"], b["runs"], b["inns"], b["best"], b["sr"]]
-                    for b in t["batters"][:3]],
-            "bowl": [[w["name"], w["wkts"], w["inns"], w["best"], w["econ"], w["dotPct"]]
-                     for w in t["bowlers"][:3]],
+            "bat": [[b["name"], b["runs"], b["inns"], b["avg"], b["sr"], b["best"],
+                     b["hand"], b["usuallyOut"]] for b in t["batters"][:4]],
+            "bowl": [[w["name"], w["wkts"], w["inns"], w["econ"], w["avg"], w["sr"],
+                      w["dotPct"], w["best"]] for w in t["bowlers"][:4]],
+            "leftHanders": t["leftHanders"],
         }
     return out
 
@@ -239,11 +248,11 @@ def build_factpack(payload):
             "has no fifth-over powerplay and an 8-over hit-out has no death.",
             "A dot ball here is a legal delivery off which no runs at all were "
             "scored. CricHeroes counts a bye as a dot for the batter; we do not.",
-            "`dangerMen2025` is a threat list, not a form guide: each match's "
-            "three best batting and three best bowling efforts. Quiet games are "
-            "absent, so never present those runs as an average or those figures "
-            "as a season record. Say 'when he has gone big' or 'his standout "
-            "spells'.",
+            "`players2025` holds every innings by every player in the 2025 "
+            "league, so its averages, strike rates and economies are real season "
+            "figures and can be quoted as such. Check the innings count before "
+            "leaning on a rate: a strike rate off two innings is noise. There "
+            "are no LBWs in this competition and 76% of dismissals are caught.",
             "Two wicket counts appear and they differ. In phase blocks "
             "(phaseSplits, fifteenOverVsPar) the field is `wktsAll`: every wicket "
             "that fell in those overs, run outs included. In a bowler's own figures "
@@ -331,7 +340,7 @@ def build_factpack(payload):
         "paceVsSpin2025": ph.get("bowlTypes"),
 
         # Who actually hurts you, by team. See _legend for the tuple order.
-        "dangerMen2025": _players_block(payload.get("players")),
+        "players2025": _players_block(payload.get("players")),
 
         # THE STANDING CALL. Quote this; do not re-derive it.
         "tossPolicy": {

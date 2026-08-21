@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DEST = ROOT / "league-raw" / "performances.tsv"
+DEST = ROOT / "league-raw" / "scorecards.tsv"
 DOWNLOADS = Path.home() / "Downloads"
 
 
@@ -27,9 +27,16 @@ def read(path):
 
 
 def check(rows, label):
-    bad = [i for i, r in enumerate(rows, 1) if len(r) != 12 or r[0] not in ("B", "W")]
+    # batting rows carry 13 fields, bowling rows 16 - a mismatch means a merged
+    # or truncated line, which is how a missing trailing newline showed up once.
+    want = {"B": 13, "W": 16}
+    bad = [i for i, r in enumerate(rows, 1)
+           if r[0] not in want or len(r) != want[r[0]]]
     matches = {r[1] for r in rows if len(r) > 1}
     teams = {r[3] for r in rows if len(r) > 3}
+    unresolved = {t for t in teams if t.startswith("team")}
+    if unresolved:
+        print("    unresolved team ids: %s" % ", ".join(sorted(unresolved)[:5]))
     print("  %-9s %5d rows | %3d matches | %2d teams | %d malformed"
           % (label, len(rows), len(matches), len(teams), len(bad)))
     if bad:
@@ -43,10 +50,10 @@ def main():
     if args:
         src = Path(args[0])
     else:
-        found = sorted(DOWNLOADS.glob("rcb-performances*.tsv"),
+        found = sorted(DOWNLOADS.glob("rcb-scorecards*.tsv"),
                        key=lambda p: p.stat().st_mtime, reverse=True)
         if not found:
-            print("No rcb-performances.tsv in ~/Downloads.")
+            print("No rcb-scorecards.tsv in ~/Downloads.")
             print("Run tools/collector.js in the browser first - see league-raw/README.md")
             return 1
         src = found[0]

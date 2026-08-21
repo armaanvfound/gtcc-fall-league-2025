@@ -494,9 +494,25 @@
   .dmtbl .dm-n{font-family:var(--serif);font-size:14px;white-space:normal;
                min-width:104px;line-height:1.35;}
   .dmtbl tbody tr:first-child td{background:var(--surface-2);}
+  .dm-lhb{color:var(--bat);font-family:var(--mono);font-size:11px;letter-spacing:.04em;}
+  .dm-x{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:1px;}
+  .dm-out{font-size:12px;color:var(--ink-2);}
+  .dm-out span{font-family:var(--mono);font-size:10px;color:var(--muted);}
   .dm-caveat{font-size:12px;line-height:1.6;color:var(--muted);margin:14px 0 0;
              padding-left:11px;border-left:2px solid var(--rule);}
-  @media (max-width:720px){ .dm-tables{grid-template-columns:1fr;gap:18px;} }
+  /* Each table scrolls inside its own box. The cells are nowrap so figures stay
+     on one line, which on a phone makes the table wider than the screen - and a
+     fixed-position page that scrolls sideways drags the header out of view with
+     it. Contain the scroll here and the page never moves. */
+  .dm-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .dm-tables>div{min-width:0;}
+  @media (max-width:720px){
+    .dm-tables{grid-template-columns:1fr;gap:18px;}
+    .dmtbl .dm-n{min-width:0;}
+    .dmtbl th,.dmtbl td{padding:8px 7px;}
+    .dmtbl th:first-child,.dmtbl td:first-child{padding-left:11px;}
+    .dmtbl th:last-child,.dmtbl td:last-child{padding-right:11px;}
+  }
   .pl-total .pl-n{font-family:var(--serif);}
   .pl-total .pl-n span{font-family:var(--mono);}
   .pl-n{font-size:14px;}
@@ -1964,12 +1980,11 @@ if (PH && PH.teams) {
       `</div>`;
   }
 
-  // Who on this side has actually taken a match away from someone.
+  // Their players, from every innings of every match - real season figures.
   //
-  // These are standout performances - the top three batting and top three
-  // bowling efforts of each match - not season averages. A quiet game is not in
-  // here, so the runs column is "runs when he went big", never an average. The
-  // panel says so, because presented as an average it flatters everyone.
+  // Ranked on weight (runs, wickets) rather than rate, because a strike rate off
+  // two innings will always beat a good player who batted twelve times, and the
+  // top of a scouting table has to be the man who actually hurts you.
   function renderDanger(){
     const box = $('dangerbox');
     const P = (typeof PLAYERS !== 'undefined' && PLAYERS) ? PLAYERS : null;
@@ -1978,41 +1993,58 @@ if (PH && PH.teams) {
       box.hidden = true; box.innerHTML = ''; return;
     }
     box.hidden = false;
-    const bat = t.batters.slice(0, 4).map(b =>
-      `<tr><td class="dm-n">${esc(b.name)}</td><td>${b.runs}</td><td>${b.inns}</td>` +
-      `<td>${b.best}</td><td>${b.sr == null ? '&mdash;' : b.sr}</td>` +
-      `<td>${b.fours}/${b.sixes}</td></tr>`).join('');
-    const bowl = t.bowlers.slice(0, 4).map(w =>
-      `<tr><td class="dm-n">${esc(w.name)}</td><td>${w.wkts}</td><td>${w.inns}</td>` +
-      `<td>${esc(w.best)}</td><td>${w.econ == null ? '&mdash;' : w.econ}</td>` +
-      `<td>${w.dotPct == null ? '&mdash;' : w.dotPct + '%'}</td></tr>`).join('');
+    const n = v => (v === null || v === undefined) ? '&mdash;' : v;
+    const hand = h => h === 'LHB' ? '<span class="dm-lhb">LHB</span>' : (h || '&mdash;');
+
+    const bat = t.batters.slice(0, 5).map(b =>
+      `<tr><td class="dm-n">${esc(b.name)}</td>` +
+      `<td>${b.runs}</td><td>${b.inns}</td><td>${n(b.avg)}</td><td>${n(b.sr)}</td>` +
+      `<td>${b.best}${b.fifties ? '<span class="dm-x">' + b.fifties + '&times;50</span>' : ''}</td>` +
+      `<td>${b.fours}/${b.sixes}</td><td>${hand(b.hand)}</td>` +
+      `<td class="dm-out">${b.usuallyOut ? esc(b.usuallyOut) + ' <span>' + b.usuallyOutPct + '%</span>' : '&mdash;'}</td></tr>`).join('');
+
+    const bowl = t.bowlers.slice(0, 5).map(w =>
+      `<tr><td class="dm-n">${esc(w.name)}</td>` +
+      `<td>${w.wkts}</td><td>${w.inns}</td><td>${n(w.econ)}</td><td>${n(w.avg)}</td>` +
+      `<td>${n(w.sr)}</td><td>${n(w.dotPct)}%</td><td>${esc(w.best)}</td>` +
+      `<td>${w.overs}</td></tr>`).join('');
+
     const top = t.batters[0], topw = t.bowlers[0];
+    const lhb = t.leftHanders;
     box.innerHTML =
       `<div class="opp-block dm">
-         <h4>Their danger men</h4>
-         <p class="dm-lede">The players who have produced a match-defining performance against
-            somebody in this league. ${top ? `<b>${esc(top.name)}</b> is the bat to plan for` : ''}${
-              topw ? ` and <b>${esc(topw.name)}</b> the bowler` : ''}.</p>
+         <h4>Their players</h4>
+         <p class="dm-lede">${top ? `<b>${esc(top.name)}</b> is the bat to plan for &mdash;
+            ${top.runs} runs at ${n(top.sr)} from ${top.inns} innings` : ''}${
+            topw ? `, and <b>${esc(topw.name)}</b> the bowler, ${topw.wkts} wickets at
+            ${n(topw.econ)} an over` : ''}.
+            ${lhb ? `They have <b>${lhb}</b> left-hander${lhb > 1 ? 's' : ''} in the sides we have seen.`
+                  : 'Every batter we have seen from them is right-handed.'}</p>
          <div class="dm-tables">
            <div>
-             <h5>With the bat</h5>
-             <table class="dmtbl"><thead><tr>
-               <th>Player</th><th>Runs<span>in these</span></th><th>Inns<span>standout</span></th>
-               <th>Best<span>score</span></th><th>SR<span>strike rate</span></th>
-               <th>4s/6s<span>boundaries</span></th></tr></thead><tbody>${bat}</tbody></table>
+             <h5>Batting</h5>
+             <div class="dm-scroll"><table class="dmtbl"><thead><tr>
+               <th>Player</th><th>R<span>runs</span></th><th>I<span>innings</span></th>
+               <th>Avg<span>average</span></th><th>SR<span>strike rate</span></th>
+               <th>HS<span>highest</span></th><th>4s/6s<span>boundaries</span></th>
+               <th>Hand<span>bats</span></th><th>Out<span>usually</span></th>
+             </tr></thead><tbody>${bat}</tbody></table></div>
            </div>
            <div>
-             <h5>With the ball</h5>
-             <table class="dmtbl"><thead><tr>
-               <th>Player</th><th>W<span>wickets</span></th><th>Sp<span>spells</span></th>
-               <th>Best<span>figures</span></th><th>Econ<span>per over</span></th>
-               <th>Dot%<span>dot balls</span></th></tr></thead><tbody>${bowl}</tbody></table>
+             <h5>Bowling</h5>
+             <div class="dm-scroll"><table class="dmtbl"><thead><tr>
+               <th>Player</th><th>W<span>wickets</span></th><th>I<span>innings</span></th>
+               <th>Econ<span>per over</span></th><th>Avg<span>runs/wkt</span></th>
+               <th>SR<span>balls/wkt</span></th><th>Dot%<span>dot balls</span></th>
+               <th>Best<span>figures</span></th><th>Ov<span>overs</span></th>
+             </tr></thead><tbody>${bowl}</tbody></table></div>
            </div>
          </div>
-         <p class="dm-caveat">Read as a threat list, not a form guide. These are each match's
-            three best batting and three best bowling efforts across
-            <b>${P.matches}</b> matches, so a player's quiet games are not counted and his
-            runs here are the runs he made when he went big. Nobody's average is in this table.</p>
+         <p class="dm-caveat">Every innings of every match across <b>${P.matches}</b> games, so these
+            are real season figures &mdash; averages and economies mean what they normally mean. Ranked
+            by runs and wickets rather than by rate, because a strike rate off two innings flatters.
+            There are no LBWs in this competition, and <b>76%</b> of all dismissals are caught, so
+            field placement is the lever.</p>
        </div>`;
   }
 
