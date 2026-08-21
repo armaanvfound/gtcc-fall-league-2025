@@ -78,6 +78,28 @@ def dismissal(how):
     return "other", bowler
 
 
+# Clubs re-register each season, so one side appears under several names:
+# "South Warriors" and "South Warriors 2026", "Maratha Warriors" and "Maratha
+# Warriors - GTCC", "Nizam Royal Knights" and "Nizam royal knights". Left alone
+# these split a club's players in two, exactly as the (wk) suffix split players.
+# Only trailing season/competition decoration is stripped - never a leading word,
+# because "Royal Punjab" and "United Punjab" are genuinely different teams.
+_TEAM_TAIL = re.compile(
+    r"\s*(?:-\s*)?(?:GTCC|Fall\s*T?\d*|Summer|Spring|Winter)?\s*(?:20\d\d)?\s*$", re.I)
+
+
+def canon_team(name):
+    """Canonical club name: strip season/competition decoration, fix casing."""
+    n = (name or "").strip()
+    prev = None
+    while n and n != prev:                 # peel one decoration at a time
+        prev = n
+        n = _TEAM_TAIL.sub("", n).strip(" -")
+    n = n or (name or "").strip()
+    return " ".join(w if w.isupper() and len(w) > 1 else w.capitalize()
+                    for w in n.split())
+
+
 ROLE_RE = re.compile(r"\s*\((c|wk|c\s*&\s*wk|wk\s*&\s*c)\)\s*$", re.I)
 
 
@@ -126,7 +148,7 @@ def build_players():
             clean, role = split_role(name)
             d = bat[pid]
             d["names"][clean] += 1
-            d["teams"][team] += 1
+            d["teams"][canon_team(team)] += 1
             d["tours"][tname] += 1
             if role:
                 d["roles"].add(role)
@@ -159,7 +181,7 @@ def build_players():
             clean, _role = split_role(name)
             d = bowl[pid]
             d["names"][clean] += 1
-            d["teams"][team] += 1
+            d["teams"][canon_team(team)] += 1
             d["tours"][tname] += 1
             d["inns"] += 1
             d["matches"].add(mid)
@@ -218,7 +240,7 @@ def build_players():
     bowlers = [bowl_row(k, v) for k, v in bowl.items()]
 
     teams = {}
-    for t in sorted({r[3] for r in rows if r}):
+    for t in sorted({canon_team(r[3]) for r in rows if r}):
         tb = [b for b in batters if b["team"] == t]
         tw = [b for b in bowlers if b["team"] == t]
         # rank on weight of runs/wickets, not on a rate off two innings

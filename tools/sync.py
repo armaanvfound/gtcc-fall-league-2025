@@ -69,6 +69,22 @@ def check(rows, label):
 
 
 def main():
+    # --add merges ONE competition's file into the combined store, replacing just
+    # that competition's rows. Each league is collected separately now, so a plain
+    # overwrite would drop every other one.
+    if "--add" in sys.argv:
+        i = sys.argv.index("--add")
+        src = sys.argv[i + 1] if len(sys.argv) > i + 1 else None
+        if not src or not Path(src).exists():
+            print("usage: python3 tools/sync.py --add <file.tsv>")
+            return 1
+        rows = merge_add(src, DEST)
+        if rows is None:
+            return 1
+        if not check(rows, "merged"):
+            return 1
+        return rebuild()
+
     args = [a for a in sys.argv[1:] if a != "--force"]
     force = "--force" in sys.argv
     if args:
@@ -117,13 +133,16 @@ def main():
     else:
         print("\nalready in place -> %s" % DEST.relative_to(ROOT))
 
+    return rebuild()
+
+
+def rebuild():
     print("\nrebuilding...")
     r = subprocess.run([sys.executable, str(ROOT / "tools" / "build.py")],
                        cwd=ROOT, capture_output=True, text=True)
     print(r.stdout.strip() or r.stderr.strip())
     if r.returncode:
         return r.returncode
-
     print("\nNow commit and push to publish:")
     print('  git add -A && git commit -m "Sync league data" && git push')
     return 0

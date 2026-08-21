@@ -158,7 +158,20 @@ def _target_for(t, death_par):
 # fields would add roughly 25k characters to a pack that rides on every single
 # question; the tuples plus one legend line cost about a third of that and the
 # model reads them just as well.
-def _players_block(pl):
+def _priority_teams(payload):
+    """Teams worth carrying in the pack: our group, our fixtures, and us."""
+    sea = payload.get("season") or {}
+    names = set(sea.get("groupTeams") or [])
+    for f in (sea.get("fixtures") or []):
+        if f.get("opp"):
+            names.add(f["opp"])
+    for m in ((payload.get("ours") or {}).get("matches") or []):
+        if m.get("opp"):
+            names.add(m["opp"])
+    return names
+
+
+def _players_block(pl, priority=None):
     """Per-team player stats for the assistant, as fixed-order tuples.
 
     Thirty teams of named fields would add ~30k characters to a pack that rides
@@ -197,7 +210,18 @@ def _players_block(pl):
                   "about trapping batters in front."),
         "teams": {},
     }
+    # Keep the pack lean. With several competitions collected there are ~90 teams,
+    # most of which we will never play. The ones that earn their place are the
+    # five in our 2026 group plus anyone we have actually met; the rest are on the
+    # pages for anyone who wants them, and the assistant says so rather than
+    # pretending they do not exist.
+    keep = set(priority or [])
+    out["teamsIncluded"] = ("our 2026 group and sides we have played; %d other "
+                            "teams are on the dashboard but not in this pack"
+                            % max(0, len(pl["teams"]) - len(keep & set(pl["teams"]))))
     for name, t in pl["teams"].items():
+        if keep and name not in keep:
+            continue
         out["teams"][name] = {
             "bat": [[b["name"], b["runs"], b["inns"], b["avg"], b["sr"], b["best"],
                      b["hand"], b["usuallyOut"], b["seasons"]] for b in t["batters"][:4]],
@@ -356,7 +380,7 @@ def build_factpack(payload):
         "paceVsSpin2025": ph.get("bowlTypes"),
 
         # Who actually hurts you, by team. See _legend for the tuple order.
-        "playerRecords": _players_block(payload.get("players")),
+        "playerRecords": _players_block(payload.get("players"), _priority_teams(payload)),
 
         # THE STANDING CALL. Quote this; do not re-derive it.
         "tossPolicy": {
