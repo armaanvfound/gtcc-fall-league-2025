@@ -47,7 +47,7 @@ PAGES = {
               "and the phase-by-phase read on whoever we are playing."),
         sections=["season", "plan"],
         js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours"],
+        data=["league", "phases", "season", "ours", "players"],
         nav=[("Fixtures", "season"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
     ),
@@ -73,7 +73,7 @@ PAGES = {
         js=["01 - win line", "02 - bat first", "03 - wickets in hand", "05 - groups",
             "06 - ranks", "04 - team picker", "07 - phases",
             "09 - conditions", "10 - playbook", "12 - method"],
-        data=["league", "teams", "phases", "ours"],
+        data=["league", "teams", "phases", "ours", "players"],
         nav=[("Win line", "winline"), ("Phase targets", "phases"), ("Playbook", "playbook"),
              ("Rankings", "sec-ranks"), ("Groups", "qualify"), ("Conditions", "conditions"),
              ("Sources", "sources")],

@@ -476,6 +476,27 @@
   .pltbl th:first-child,.pltbl td:first-child{padding-left:16px;}
   .pltbl th:last-child,.pltbl td:last-child{padding-right:16px;}
   .pltbl tfoot td{border-top:2px solid var(--rule);background:var(--surface-2);}
+  /* opponent danger men - two small tables, side by side on a wide screen */
+  .dm-lede{font-size:14px;line-height:1.6;color:var(--ink-2);margin:0 0 14px;}
+  .dm-tables{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .dm-tables h5{font-family:var(--mono);font-size:10px;letter-spacing:.09em;
+                text-transform:uppercase;color:var(--muted);font-weight:400;margin:0 0 8px;}
+  .dmtbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;
+         background:var(--surface);border:1px solid var(--rule-2);border-radius:4px;}
+  .dmtbl th{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+            color:var(--muted);text-align:left;padding:9px 8px 7px;font-weight:400;
+            white-space:nowrap;vertical-align:bottom;}
+  .dmtbl th span{display:block;font-size:8.5px;margin-top:2px;text-transform:none;
+                 letter-spacing:0;opacity:.85;}
+  .dmtbl td{padding:8px;border-top:1px solid var(--rule-2);font-size:13px;white-space:nowrap;}
+  .dmtbl th:first-child,.dmtbl td:first-child{padding-left:14px;}
+  .dmtbl th:last-child,.dmtbl td:last-child{padding-right:14px;}
+  .dmtbl .dm-n{font-family:var(--serif);font-size:14px;white-space:normal;
+               min-width:104px;line-height:1.35;}
+  .dmtbl tbody tr:first-child td{background:var(--surface-2);}
+  .dm-caveat{font-size:12px;line-height:1.6;color:var(--muted);margin:14px 0 0;
+             padding-left:11px;border-left:2px solid var(--rule);}
+  @media (max-width:720px){ .dm-tables{grid-template-columns:1fr;gap:18px;} }
   .pl-total .pl-n{font-family:var(--serif);}
   .pl-total .pl-n span{font-family:var(--mono);}
   .pl-n{font-size:14px;}
@@ -817,6 +838,7 @@
     </div>
     <div id="planbox" hidden></div>
     <div class="tprofile" id="oppprofile" hidden></div>
+    <div id="dangerbox" hidden></div>
   </div>
 </section>
 
@@ -936,6 +958,7 @@ const SPAN = `${fmtDate(L.first)} – ${fmtDate(L.last)} ${L.last.slice(0,4)}`;
 
 /* 01 — our 2026 campaign */
 const SEA = DATA.season;
+const PLAYERS = DATA.players;   // per-player league data; null until collected
 if (SEA) {
   const F = SEA.format, nS = SEA.scoutedCount, nF = SEA.fixtures.length;
   $('season-lede').innerHTML =
@@ -1941,9 +1964,62 @@ if (PH && PH.teams) {
       `</div>`;
   }
 
+  // Who on this side has actually taken a match away from someone.
+  //
+  // These are standout performances - the top three batting and top three
+  // bowling efforts of each match - not season averages. A quiet game is not in
+  // here, so the runs column is "runs when he went big", never an average. The
+  // panel says so, because presented as an average it flatters everyone.
+  function renderDanger(){
+    const box = $('dangerbox');
+    const P = (typeof PLAYERS !== 'undefined' && PLAYERS) ? PLAYERS : null;
+    const t = P && P.teams ? P.teams[osel.value] : null;
+    if (!t || (!t.batters.length && !t.bowlers.length)) {
+      box.hidden = true; box.innerHTML = ''; return;
+    }
+    box.hidden = false;
+    const bat = t.batters.slice(0, 4).map(b =>
+      `<tr><td class="dm-n">${esc(b.name)}</td><td>${b.runs}</td><td>${b.inns}</td>` +
+      `<td>${b.best}</td><td>${b.sr == null ? '&mdash;' : b.sr}</td>` +
+      `<td>${b.fours}/${b.sixes}</td></tr>`).join('');
+    const bowl = t.bowlers.slice(0, 4).map(w =>
+      `<tr><td class="dm-n">${esc(w.name)}</td><td>${w.wkts}</td><td>${w.inns}</td>` +
+      `<td>${esc(w.best)}</td><td>${w.econ == null ? '&mdash;' : w.econ}</td>` +
+      `<td>${w.dotPct == null ? '&mdash;' : w.dotPct + '%'}</td></tr>`).join('');
+    const top = t.batters[0], topw = t.bowlers[0];
+    box.innerHTML =
+      `<div class="opp-block dm">
+         <h4>Their danger men</h4>
+         <p class="dm-lede">The players who have produced a match-defining performance against
+            somebody in this league. ${top ? `<b>${esc(top.name)}</b> is the bat to plan for` : ''}${
+              topw ? ` and <b>${esc(topw.name)}</b> the bowler` : ''}.</p>
+         <div class="dm-tables">
+           <div>
+             <h5>With the bat</h5>
+             <table class="dmtbl"><thead><tr>
+               <th>Player</th><th>Runs<span>in these</span></th><th>Inns<span>standout</span></th>
+               <th>Best<span>score</span></th><th>SR<span>strike rate</span></th>
+               <th>4s/6s<span>boundaries</span></th></tr></thead><tbody>${bat}</tbody></table>
+           </div>
+           <div>
+             <h5>With the ball</h5>
+             <table class="dmtbl"><thead><tr>
+               <th>Player</th><th>W<span>wickets</span></th><th>Sp<span>spells</span></th>
+               <th>Best<span>figures</span></th><th>Econ<span>per over</span></th>
+               <th>Dot%<span>dot balls</span></th></tr></thead><tbody>${bowl}</tbody></table>
+           </div>
+         </div>
+         <p class="dm-caveat">Read as a threat list, not a form guide. These are each match's
+            three best batting and three best bowling efforts across
+            <b>${P.matches}</b> matches, so a player's quiet games are not counted and his
+            runs here are the runs he made when he went big. Nobody's average is in this table.</p>
+       </div>`;
+  }
+
   osel.addEventListener('change', () => {
     renderToss();
     renderPlan();
+    renderDanger();
     const t = PH.teams[osel.value];
     const box = $('oppprofile');
     const fx = OPP26[osel.value];
