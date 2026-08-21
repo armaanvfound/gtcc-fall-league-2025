@@ -78,6 +78,23 @@ def dismissal(how):
     return "other", bowler
 
 
+ROLE_RE = re.compile(r"\s*\((c|wk|c\s*&\s*wk|wk\s*&\s*c)\)\s*$", re.I)
+
+
+def split_role(name):
+    """CricHeroes appends (c) or (wk) in the matches where a player captained or
+    kept wicket - so the same person appears under two different names.
+
+    Keying stats on the name therefore splits 66 players in this league into two
+    part-records each, understating both. Everything is keyed on player_id
+    instead, and the suffix is kept as what it actually is: a role.
+    """
+    m = ROLE_RE.search(name or "")
+    role = (m.group(1).lower().replace(" ", "") if m else None)
+    clean = ROLE_RE.sub("", name or "").strip()
+    return clean, role
+
+
 def load_rows():
     if not SRC.exists():
         return []
@@ -93,15 +110,22 @@ def build_players():
     bat = collections.defaultdict(lambda: dict(
         inns=0, runs=0, balls=0, fours=0, sixes=0, best=0, notout=0,
         ducks=0, fifties=0, hand=collections.Counter(),
-        outs=collections.Counter(), matches=set()))
+        outs=collections.Counter(), matches=set(),
+        names=collections.Counter(), teams=collections.Counter(), roles=set()))
     bowl = collections.defaultdict(lambda: dict(
         inns=0, wkts=0, runs=0, balls=0, dots=0, maidens=0,
-        fours=0, sixes=0, wides=0, noballs=0, bestW=0, bestR=999, matches=set()))
+        fours=0, sixes=0, wides=0, noballs=0, bestW=0, bestR=999, matches=set(),
+        names=collections.Counter(), teams=collections.Counter()))
 
     for r in rows:
         if r[0] == "B" and len(r) == 13:
-            _, mid, _inn, team, name, runs, balls, f4, f6, _sr, hand, how, _pid = r
-            d = bat[(team, name)]
+            _, mid, _inn, team, name, runs, balls, f4, f6, _sr, hand, how, pid = r
+            clean, role = split_role(name)
+            d = bat[pid]
+            d["names"][clean] += 1
+            d["teams"][team] += 1
+            if role:
+                d["roles"].add(role)
             d["inns"] += 1
             d["matches"].add(mid)
             d["runs"] += _n(runs)
@@ -122,11 +146,14 @@ def build_players():
             if _n(runs) >= 50:
                 d["fifties"] += 1
         elif r[0] == "W" and len(r) == 16:
-            _, mid, _inn, team, name, ov, md, runs, wk, dots, f4, f6, wd, nb, _er, _pid = r
-            d = bowl[(team, name)]
+            _, mid, _inn, team, name, ov, md, runs, wk, dots, f4, f6, wd, nb, _er, pid = r
+            clean, _role = split_role(name)
+            d = bowl[pid]
             bl = _balls(ov)
             if bl == 0:
                 continue
+            d["names"][clean] += 1
+            d["teams"][team] += 1
             d["inns"] += 1
             d["matches"].add(mid)
             d["balls"] += bl
@@ -142,7 +169,8 @@ def build_players():
                 d["bestW"], d["bestR"] = _n(wk), _n(runs)
 
     def bat_row(key, d):
-        team, name = key
+        name = d["names"].most_common(1)[0][0]
+        team = d["teams"].most_common(1)[0][0]
         outs = sum(d["outs"].values())
         top = d["outs"].most_common(1)
         return {
@@ -155,12 +183,14 @@ def build_players():
             "sr": round(d["runs"] / d["balls"] * 100, 1) if d["balls"] else None,
             "boundaryPct": round((d["fours"] * 4 + d["sixes"] * 6) / d["runs"] * 100, 1)
                            if d["runs"] else None,
+            "role": ("wk" if "wk" in d["roles"] else None) or ("c" if "c" in d["roles"] else None),
             "usuallyOut": top[0][0] if top else None,
             "usuallyOutPct": round(top[0][1] / outs * 100) if top and outs else None,
         }
 
     def bowl_row(key, d):
-        team, name = key
+        name = d["names"].most_common(1)[0][0]
+        team = d["teams"].most_common(1)[0][0]
         ov = d["balls"] / 6
         return {
             "name": name, "team": team, "inns": d["inns"], "wkts": d["wkts"],

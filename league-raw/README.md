@@ -66,6 +66,12 @@ The one thing to watch is **sample size**, not honesty: a strike rate off two
 innings is noise. Team tables rank by runs and wickets before rate for exactly
 that reason, and every row carries its innings count.
 
+The last field of every row is CricHeroes' `player_id`, and **that is the key to
+aggregate on, never the name**. In the matches where someone captained or kept
+wicket their name comes through as `Kushal Reddy  (c)` or `Santosh Natarajan
+(wk)`, so keying on the name splits one player into two part-records. It did:
+66 names, 61 real players, each with their runs divided between two rows.
+
 Worth knowing about this competition: there are **no LBW dismissals at all**
 (these are tennis-ball matches), and **76% of dismissals are caught**. Plans
 should be about catching, not about trapping people in front.
