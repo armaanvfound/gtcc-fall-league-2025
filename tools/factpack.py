@@ -181,6 +181,11 @@ def _players_block(pl):
         ) % (pl["matches"], pl["battingInnings"], pl["bowlingSpells"],
              " and ".join("%s (%d matches, %s-over)" % (c["name"], c["matches"], c["overs"])
                           for c in pl.get("competitions", []))),
+        "cannotCompareSeasons": (
+            "Figures are pooled across competitions, not split by season. If asked "
+            "whether a player has improved or declined, say the pack holds combined "
+            "figures and cannot separate the seasons - do not infer a trend."
+        ),
         "mixedFormats": (
             "These competitions are not the same length, so a combined economy or "
             "strike rate blends formats. Prefer it for WHO is dangerous; be careful "
@@ -256,11 +261,14 @@ def build_factpack(payload):
             "has no fifth-over powerplay and an 8-over hit-out has no death.",
             "A dot ball here is a legal delivery off which no runs at all were "
             "scored. CricHeroes counts a bye as a dot for the batter; we do not.",
-            "`players2025` holds every innings by every player in the 2025 "
-            "league, so its averages, strike rates and economies are real season "
-            "figures and can be quoted as such. Check the innings count before "
-            "leaning on a rate: a strike rate off two innings is noise. There "
-            "are no LBWs in this competition and 76% of dismissals are caught.",
+            "`playerRecords` holds every innings by every player across BOTH "
+            "competitions we have read - it is not 2025 only, so never say we "
+            "lack recent data. Its averages, strike rates and economies are real "
+            "and can be quoted as such. Two limits: a player's figures are "
+            "COMBINED across competitions, so we cannot say whether someone has "
+            "improved since last season - say that plainly if asked; and check "
+            "the innings count before leaning on a rate. There are no LBWs in "
+            "these competitions and 76% of dismissals are caught.",
             "Two wicket counts appear and they differ. In phase blocks "
             "(phaseSplits, fifteenOverVsPar) the field is `wktsAll`: every wicket "
             "that fell in those overs, run outs included. In a bowler's own figures "
@@ -348,7 +356,7 @@ def build_factpack(payload):
         "paceVsSpin2025": ph.get("bowlTypes"),
 
         # Who actually hurts you, by team. See _legend for the tuple order.
-        "players2025": _players_block(payload.get("players")),
+        "playerRecords": _players_block(payload.get("players")),
 
         # THE STANDING CALL. Quote this; do not re-derive it.
         "tossPolicy": {
