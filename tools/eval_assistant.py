@@ -139,7 +139,15 @@ def main():
             if "caught" not in low:
                 problems.append("did not mention caught, which is 76% of dismissals")
 
-        # 6. off-topic stays refused
+        # 6. NO answer may recommend bowling first, not just toss answers. This
+        #    escaped once on a scouting question that ended "bowling first, keep
+        #    them under 120" - the dashboard says bat, always.
+        low_all = plain.lower()
+        if re.search(r"\b(bowl|field)(ing)? first\b", low_all) and \
+           not re.search(r"lose the toss|if they bat|they choose to bat|forced to", low_all):
+            problems.append("recommended bowling first, contradicting the toss policy")
+
+        # 7. off-topic stays refused
         if kind == "offtopic" and "only answer questions about" not in plain.lower():
             problems.append("answered an off-topic request")
 
