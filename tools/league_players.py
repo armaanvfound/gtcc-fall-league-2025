@@ -124,10 +124,21 @@ def load_rows():
         return [r for r in csv.reader(fh, delimiter="\t") if r]
 
 
+# Pooled stats cover tennis-ball cricket only. The Hardball league is played with
+# a leather ball, which is a materially different game - averages and economies
+# from it do not belong in the same column as the tennis-ball leagues. Its rows
+# stay in the raw file, tagged, and are simply left out of the pooled figures.
+POOLED_BALL = "TENNIS"
+
+
 def build_players():
-    rows = load_rows()
-    if not rows:
+    all_rows = load_rows()
+    if not all_rows:
         return None
+    rows = [r for r in all_rows if (r[-1] or "").upper() == POOLED_BALL]
+    excluded = len(all_rows) - len(rows)
+    excluded_comps = sorted({r[-3] for r in all_rows
+                             if (r[-1] or "").upper() != POOLED_BALL})
 
     bat = collections.defaultdict(lambda: dict(
         inns=0, runs=0, balls=0, fours=0, sixes=0, best=0, notout=0,
@@ -269,6 +280,11 @@ def build_players():
         if r[-1]:
             c["ball"][r[-1].title()] += 1
     return {
+        "excludedFromPooled": ({"rows": excluded, "competitions": excluded_comps,
+                                "why": "played with a leather ball, not tennis - "
+                                       "a different game, so its averages are not "
+                                       "pooled with the rest"}
+                               if excluded else None),
         "competitions": [
             {"name": n, "matches": len(c["matches"]),
              "overs": c["overs"].most_common(1)[0][0] if c["overs"] else None,

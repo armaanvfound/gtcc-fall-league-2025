@@ -41,40 +41,53 @@ with a partial scrape is the mistake you would not notice for weeks. Use
 
 ## What is in the file
 
-Tab-separated. Batting rows have 13 fields, bowling rows 16:
+Tab-separated. Batting rows have 17 fields, bowling rows 20 - the last four on
+every row are the competition, so formats are never silently blended:
 
 ```
-B  <match> <inning> <battingTeam>  <player> runs  balls   4s 6s SR   hand howOut     playerId
-W  <match> <inning> <bowlingTeam>  <player> overs maidens runs wkts dots 4s 6s wides noballs econ playerId
+B <match> <inn> <battingTeam> <player> runs balls 4s 6s SR hand howOut playerId  <tourId> <tournament> <overs> <ball>
+W <match> <inn> <bowlingTeam> <player> overs maidens runs wkts dots 4s 6s wides noballs econ playerId  <tourId> <tournament> <overs> <ball>
 ```
 
-Currently 86 matches: **1,574 batting innings and 1,030 bowling spells**, 562
-players, 30 teams.
+Currently **498 matches across seven competitions**, 1,315 players, 93 clubs:
 
-## What this data is
+| Matches | Competition | Format |
+|---|---|---|
+| 110 | GTCC Spring League 2026 | 12-over tennis |
+| 90 | Dosa & Biryani House GTCC T20 2025 | 20-over tennis |
+| 87 | GTCC Madhuram Summer League 2025 | 12-over tennis |
+| 86 | Amiirtham GTCC Fall League 2025 | 15-over tennis |
+| 78 | GTCC Summer T12 League 2026 | 12-over tennis |
+| 35 | GTCC Hardball T20 League 2025 | 20-over **leather** |
+| 12 | EKCT v8 2026 Champions Division | tennis |
 
-Each match page embeds `scoreCardData` — both innings, in full. So this is the
-**real scorecard**, and the stats built from it are real season figures:
-averages, strike rates and economies mean what they normally mean.
+## Two aggregation rules that are not optional
 
-Two things it is not. It is not the three-best-performances summary that also
-sits on the page (that is a highlight reel and flatters everyone). And it is not
-the tournament's own leaderboard, which is behind CricHeroes PRO — we never see
-it, and do not need to.
+**Aggregate on `player_id`, never the name.** CricHeroes appends `(c)` or `(wk)`
+in the matches where someone captained or kept wicket, so the same person arrives
+under two names. Keying on the name split 61 players into two part-records each.
 
-The one thing to watch is **sample size**, not honesty: a strike rate off two
-innings is noise. Team tables rank by runs and wickets before rate for exactly
-that reason, and every row carries its innings count.
+**Canonicalise the club name.** Clubs re-register every season, so one side
+appears as `South Warriors` and `South Warriors 2026`, `Maratha Warriors` and
+`Maratha Warriors - GTCC`. Only trailing season decoration is stripped - never a
+leading word, because `Royal Punjab` and `United Punjab` are different teams.
 
-The last field of every row is CricHeroes' `player_id`, and **that is the key to
-aggregate on, never the name**. In the matches where someone captained or kept
-wicket their name comes through as `Kushal Reddy  (c)` or `Santosh Natarajan
-(wk)`, so keying on the name splits one player into two part-records. It did:
-66 names, 61 real players, each with their runs divided between two rows.
+## What is deliberately left out of the pooled stats
 
-Worth knowing about this competition: there are **no LBW dismissals at all**
-(these are tennis-ball matches), and **76% of dismissals are caught**. Plans
-should be about catching, not about trapping people in front.
+The **Hardball league is played with a leather ball**. That is a materially
+different game and its averages do not belong in the same column as the
+tennis-ball leagues, so its rows stay in this file, tagged, but are excluded from
+the pooled player figures.
+
+Two competitions were **not collected**: LISA Indoor Cricket and Weekend Cricket
+Recreational. Indoor is a different sport, and a check of the small competitions
+showed they contain **none** of our 2026 opponents - Hardball and EKCT contain
+none either. The big five tennis-ball leagues are where our opponents actually
+play.
+
+Also worth knowing: **Lisa Challengers and United Punjab**, two sides in our 2026
+group, appear in none of these competitions. We have no data on them at all, and
+scraping more of these leagues will not produce any.
 
 ## Please keep the request rate where it is
 
