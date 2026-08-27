@@ -11,7 +11,7 @@
     10
   ],
   "phaseData": false,
-  "phaseDataNote": "CricHeroes did not publish ball-by-ball commentary for this match, only the scorecard. Every batting and bowling figure here is complete and reconciled; the phase split (powerplay/middle/death) is the one thing that cannot be derived from a scorecard, so this match is excluded from phase tables and counted everywhere else.",
+  "phaseDataNote": "We do not yet have the ball-by-ball for this match. The scorecard (every batting and bowling figure) is complete and reconciled; the phase split needs the over-by-over commentary, which is on CricHeroes but was not captured for this match. It counts everywhere except the phase tables.",
   "toss": "Royal Challenger Blaster won the toss and chose to bat",
   "result": "lost",
   "margin": "7 wickets",

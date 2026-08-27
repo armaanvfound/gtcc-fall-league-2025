@@ -1105,8 +1105,8 @@ if (OURS) {
         <span class="ml-meta">${fmtDate(m.date)} 2026 &middot; ${m.quota} overs &middot; ${esc(m.competition)}
           &middot; NRR ${m.nrr >= 0 ? '+' : ''}${m.nrr.toFixed(2)}</span></div>` +
       (m.hasPhases === false
-        ? `<p class="ml-note">No ball-by-ball commentary was published for this match, so there is no
-             phase split. The scores, the result and every player's figures are complete.</p>`
+        ? `<p class="ml-note">We don't yet have the ball-by-ball for this match, so there is no phase
+             split. The scores, the result and every player's figures are complete.</p>`
         : '') + `
       <div class="ml-toss">${esc(m.toss)}. ${word === 'Tied' ? 'Scores level' : word + ' by ' + esc(m.margin)}.` +
       (m.quotaNote ? ` <i>${esc(m.quotaNote)}</i>` : '') + `</div>

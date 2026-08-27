@@ -281,7 +281,7 @@ def build_factpack(payload):
 
         # Read these first - they bound what any answer may claim.
         "caveats": [
-            "One of our matches (26 Aug 2026) has a scorecard but no ball-by-ball "
+            "One of our matches (26 Aug 2026) does not yet have ball-by-ball "
             "commentary. Its result, net run rate and every player's figures are "
             "complete and count in full; it is the phase split (powerplay/middle/"
             "death) that does not exist for it, so our phase averages rest on "
