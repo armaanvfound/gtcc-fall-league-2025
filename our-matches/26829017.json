@@ -10,8 +10,6 @@
     5,
     10
   ],
-  "phaseData": false,
-  "phaseDataNote": "We do not yet have the ball-by-ball for this match. The scorecard (every batting and bowling figure) is complete and reconciled; the phase split needs the over-by-over commentary, which is on CricHeroes but was not captured for this match. It counts everywhere except the phase tables.",
   "toss": "Royal Challenger Blaster won the toss and chose to bat",
   "result": "lost",
   "margin": "7 wickets",
@@ -25,7 +23,26 @@
     "wideRuns": 15,
     "noBalls": 4,
     "byeRuns": 0,
-    "phases": null,
+    "phases": {
+      "pp": [
+        30,
+        15,
+        39,
+        3
+      ],
+      "mid": [
+        30,
+        17,
+        30,
+        4
+      ],
+      "death": [
+        30,
+        11,
+        41,
+        2
+      ]
+    },
     "batting": [
       [
         "Jonty Patel",
@@ -115,7 +132,262 @@
         0,
         false
       ]
-    ]
+    ],
+    "battingPhases": {
+      "Jonty Patel": {
+        "pp": [
+          18,
+          9,
+          26,
+          0,
+          3
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Yash Chauhan": {
+        "pp": [
+          9,
+          5,
+          6,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Pankhil Patel": {
+        "pp": [
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Armaan Wadhwa": {
+        "pp": [
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        "mid": [
+          3,
+          2,
+          1,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Mithilesh Patel": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          4,
+          1,
+          3,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Jay": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          4,
+          2,
+          5,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Kalpesh Saraiya": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          15,
+          9,
+          11,
+          1,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Jeetmanyu Bawra": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          4,
+          3,
+          1,
+          0,
+          0
+        ],
+        "death": [
+          5,
+          2,
+          4,
+          0,
+          0
+        ]
+      },
+      "Saurabh Patel": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "death": [
+          18,
+          6,
+          21,
+          1,
+          0
+        ]
+      },
+      "Jemish Virendra Patel": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          2,
+          1,
+          6,
+          0,
+          1
+        ]
+      },
+      "Jay Vasani": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          5,
+          2,
+          4,
+          0,
+          0
+        ]
+      }
+    }
   },
   "theirInnings": {
     "order": 2,
@@ -126,56 +398,201 @@
     "wideRuns": 17,
     "noBalls": 2,
     "byeRuns": 1,
-    "phases": null,
+    "phases": {
+      "pp": [
+        30,
+        17,
+        40,
+        2
+      ],
+      "mid": [
+        30,
+        11,
+        65,
+        1
+      ],
+      "death": [
+        3,
+        0,
+        7,
+        0
+      ]
+    },
     "ourBowling": {
       "Jemish Virendra Patel": {
         "o": 2,
         "r": 10,
         "w": 2,
-        "dots": 9,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            4,
+            6,
+            1
+          ],
+          "mid": [
+            6,
+            4,
+            5,
+            1
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Kalpesh Saraiya": {
         "o": 2,
         "r": 12,
         "w": 1,
-        "dots": 6,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            4,
+            5,
+            1
+          ],
+          "mid": [
+            6,
+            2,
+            7,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Saurabh Patel": {
         "o": 1,
         "r": 5,
         "w": 0,
-        "dots": 4,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            4,
+            5,
+            0
+          ],
+          "mid": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Armaan Wadhwa": {
         "o": 1,
         "r": 15,
         "w": 0,
-        "dots": 2,
-        "ph": null
+        "ph": {
+          "pp": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mid": [
+            6,
+            2,
+            15,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Jeetmanyu Bawra": {
         "o": 2,
         "r": 24,
         "w": 0,
-        "dots": 5,
-        "ph": null
+        "ph": {
+          "pp": [
+            12,
+            5,
+            24,
+            0
+          ],
+          "mid": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Jay": {
         "o": 2,
         "r": 38,
         "w": 0,
-        "dots": 3,
-        "ph": null
+        "ph": {
+          "pp": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mid": [
+            12,
+            3,
+            38,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Sabar": {
         "o": 0.3,
         "r": 7,
         "w": 0,
-        "dots": 0,
-        "ph": null
+        "ph": {
+          "pp": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mid": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "death": [
+            3,
+            0,
+            7,
+            0
+          ]
+        }
       }
     }
   }
