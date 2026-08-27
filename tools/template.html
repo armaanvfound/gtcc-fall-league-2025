@@ -441,6 +441,8 @@
   .ml-s span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
   .ml-p{font-family:var(--serif);font-size:16px;line-height:1;}
   .ml-p span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:4px;}
+  .ml-na{color:var(--muted);}
+  .ml-note{font-size:11.5px;line-height:1.55;color:var(--muted);margin:0 0 10px;padding:0 2px;}
   .ml-x{font-family:var(--serif);font-size:16px;color:var(--bat);}
   .dottbl,.partbl{width:100%;border-collapse:collapse;}
   .dottbl th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
@@ -1090,14 +1092,22 @@ if (OURS) {
       `<tr class="${isUs ? 'us' : ''}"><td class="ml-t">${isUs ? 'Us' : esc(m.opp)}` +
       `<span>${s.order === 1 ? 'batted first' : 'chased'}</span></td>` +
       `<td class="ml-s">${s.runs}/${s.wkts}<span>${s.overs} ov &middot; ${s.rpo} rpo</span></td>` +
-      PHK.map(p => `<td class="ml-p">${s.phases[p][2]}<span>${s.phases[p][3]}w &middot; ` +
-        `${Math.round(s.phases[p][1] / s.phases[p][0] * 100)}% dot</span></td>`).join('') +
+      // A scorecard-only match has no phase split. Show an em dash rather than
+      // reading through a null, and say why once under the card.
+      PHK.map(p => s.phases
+        ? `<td class="ml-p">${s.phases[p][2]}<span>${s.phases[p][3]}w &middot; ` +
+          `${Math.round(s.phases[p][1] / s.phases[p][0] * 100)}% dot</span></td>`
+        : `<td class="ml-p ml-na">&mdash;</td>`).join('') +
       `<td class="ml-x">${s.extras}</td></tr>`;
     return `<div class="mlog">
       <div class="ml-head"><span class="ml-res ${cls}">${word}</span>
         <b>vs ${esc(m.opp)}</b>
         <span class="ml-meta">${fmtDate(m.date)} 2026 &middot; ${m.quota} overs &middot; ${esc(m.competition)}
-          &middot; NRR ${m.nrr >= 0 ? '+' : ''}${m.nrr.toFixed(2)}</span></div>
+          &middot; NRR ${m.nrr >= 0 ? '+' : ''}${m.nrr.toFixed(2)}</span></div>` +
+      (m.hasPhases === false
+        ? `<p class="ml-note">No ball-by-ball commentary was published for this match, so there is no
+             phase split. The scores, the result and every player's figures are complete.</p>`
+        : '') + `
       <div class="ml-toss">${esc(m.toss)}. ${word === 'Tied' ? 'Scores level' : word + ' by ' + esc(m.margin)}.` +
       (m.quotaNote ? ` <i>${esc(m.quotaNote)}</i>` : '') + `</div>
       <div class="scroll"><table class="mltbl"><thead><tr><th></th><th>Score</th>` +
