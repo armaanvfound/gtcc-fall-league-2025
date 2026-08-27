@@ -127,22 +127,44 @@ def match_rows(matches):
             margin=m["margin"], url=m.get("url"), labels=phase_labels(m),
             us=dict(order=us["order"], runs=us["runs"], wkts=us["wkts"],
                     overs=us["oversText"], balls=us["balls"], rpo=_rate(us["runs"], ourOv),
-                    dots=sum(us["phases"][p][DOTS] for p in PHASES),
-                    dotPct=_pct(sum(us["phases"][p][DOTS] for p in PHASES), us["balls"]),
+                    dots=_dots(us),
+                    dotPct=_pct(_dots(us), us["balls"]) if _dots(us) is not None else None,
                     extras=us["wideRuns"] + us["noBalls"], phases=us["phases"]),
             them=dict(order=them["order"], runs=them["runs"], wkts=them["wkts"],
                       overs=them["oversText"], balls=them["balls"],
                       rpo=_rate(them["runs"], theirOv),
-                      dots=sum(them["phases"][p][DOTS] for p in PHASES),
-                      dotPct=_pct(sum(them["phases"][p][DOTS] for p in PHASES), them["balls"]),
+                      dots=_dots(them),
+                      dotPct=_pct(_dots(them), them["balls"]) if _dots(them) is not None else None,
                       extras=them["wideRuns"] + them["noBalls"], phases=them["phases"]),
             nrr=round(us["runs"] / ourOv - them["runs"] / theirOv, 2),
+            hasPhases=has_phases(m),
         ))
     return rows
 
 
 def _blank():
     return {p: [0, 0, 0, 0] for p in PHASES}
+
+
+def has_phases(m):
+    """Whether CricHeroes published ball-by-ball for this match.
+
+    Some matches are only ever given a scorecard. Every batting and bowling
+    figure is still complete and reconciled - what a scorecard cannot give is
+    WHEN the runs came, so the powerplay/middle/death split is absent. Those
+    matches count everywhere else and are skipped in phase tables, rather than
+    being dropped (which loses a real result) or zero-filled (which would quietly
+    drag every phase average down).
+    """
+    return (m.get("ourInnings", {}).get("phases") is not None
+            and m.get("theirInnings", {}).get("phases") is not None)
+
+
+def _dots(inn):
+    ph = inn.get("phases")
+    if ph:
+        return sum(ph[p][DOTS] for p in PHASES)
+    return None
 
 
 def _add(acc, ph):
@@ -155,8 +177,12 @@ def phase_totals(matches, only15=False):
     """Aggregate phase splits for our batting and our bowling."""
     bat, bowl = _blank(), _blank()
     n = 0
+    skipped = 0
     for m in matches:
         if only15 and int(float(m["quota"])) != 15:
+            continue
+        if not has_phases(m):
+            skipped += 1
             continue
         n += 1
         _add(bat, m["ourInnings"]["phases"])
@@ -172,6 +198,7 @@ def phase_totals(matches, only15=False):
     tw = sum(bowl[p][BALLS] for p in PHASES)
     return dict(
         matches=n,
+        withoutBallByBall=skipped,
         bat=pack(bat), bowl=pack(bowl),
         batOverall=dict(balls=tb, dots=sum(bat[p][DOTS] for p in PHASES),
                         dotPct=_pct(sum(bat[p][DOTS] for p in PHASES), tb)),
@@ -191,7 +218,13 @@ def bowler_table(matches):
             a["overs"] += float(d["o"])
             a["runs"] += d["r"]
             a["wkts"] += d["w"]
-            _add(a["ph"], d["ph"])
+            if d.get("ph"):
+                _add(a["ph"], d["ph"])
+            else:
+                # No split for this spell, but its overs and dots are known and
+                # belong in the career totals - only the phase columns lose it.
+                a["noSplitBalls"] = a.get("noSplitBalls", 0) + int(round(float(d["o"]) * 6))
+                a["noSplitDots"] = a.get("noSplitDots", 0) + (d.get("dots") or 0)
     out = []
     for a in agg.values():
         balls = sum(a["ph"][p][BALLS] for p in PHASES)

@@ -1,0 +1,182 @@
+{
+  "mid": "26829017",
+  "date": "2026-08-26",
+  "opp": "FERAL XI",
+  "venue": "Stone Street Park, Oshawa",
+  "competition": "Friendly",
+  "isLeague": false,
+  "quota": 15,
+  "phaseBounds": [
+    5,
+    10
+  ],
+  "phaseData": false,
+  "phaseDataNote": "CricHeroes did not publish ball-by-ball commentary for this match, only the scorecard. Every batting and bowling figure here is complete and reconciled; the phase split (powerplay/middle/death) is the one thing that cannot be derived from a scorecard, so this match is excluded from phase tables and counted everywhere else.",
+  "toss": "Royal Challenger Blaster won the toss and chose to bat",
+  "result": "lost",
+  "margin": "7 wickets",
+  "url": "https://cricheroes.com/scorecard/26829017/individual/royal-challenger-blaster-vs-feral-xi/scorecard",
+  "ourInnings": {
+    "order": 1,
+    "runs": 110,
+    "wkts": 9,
+    "oversText": "15.0",
+    "balls": 90,
+    "wideRuns": 15,
+    "noBalls": 4,
+    "byeRuns": 0,
+    "phases": null,
+    "batting": [
+      [
+        "Jonty Patel",
+        26,
+        18,
+        0,
+        3,
+        true
+      ],
+      [
+        "Yash Chauhan",
+        6,
+        10,
+        0,
+        0,
+        true
+      ],
+      [
+        "Pankhil Patel",
+        1,
+        2,
+        0,
+        0,
+        true
+      ],
+      [
+        "Armaan Wadhwa",
+        2,
+        4,
+        0,
+        0,
+        true
+      ],
+      [
+        "Mithilesh Patel",
+        3,
+        4,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jay",
+        5,
+        5,
+        0,
+        0,
+        true
+      ],
+      [
+        "Kalpesh Saraiya",
+        11,
+        15,
+        1,
+        0,
+        true
+      ],
+      [
+        "Saurabh Patel",
+        22,
+        20,
+        1,
+        0,
+        false
+      ],
+      [
+        "Jeetmanyu Bawra",
+        5,
+        9,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jemish Virendra Patel",
+        6,
+        2,
+        0,
+        1,
+        true
+      ],
+      [
+        "Jay Vasani",
+        4,
+        5,
+        0,
+        0,
+        false
+      ]
+    ]
+  },
+  "theirInnings": {
+    "order": 2,
+    "runs": 112,
+    "wkts": 3,
+    "oversText": "10.3",
+    "balls": 63,
+    "wideRuns": 17,
+    "noBalls": 2,
+    "byeRuns": 1,
+    "phases": null,
+    "ourBowling": {
+      "Jemish Virendra Patel": {
+        "o": 2,
+        "r": 10,
+        "w": 2,
+        "dots": 9,
+        "ph": null
+      },
+      "Kalpesh Saraiya": {
+        "o": 2,
+        "r": 12,
+        "w": 1,
+        "dots": 6,
+        "ph": null
+      },
+      "Saurabh Patel": {
+        "o": 1,
+        "r": 5,
+        "w": 0,
+        "dots": 4,
+        "ph": null
+      },
+      "Armaan Wadhwa": {
+        "o": 1,
+        "r": 15,
+        "w": 0,
+        "dots": 2,
+        "ph": null
+      },
+      "Jeetmanyu Bawra": {
+        "o": 2,
+        "r": 24,
+        "w": 0,
+        "dots": 5,
+        "ph": null
+      },
+      "Jay": {
+        "o": 2,
+        "r": 38,
+        "w": 0,
+        "dots": 3,
+        "ph": null
+      },
+      "Sabar": {
+        "o": 0.3,
+        "r": 7,
+        "w": 0,
+        "dots": 0,
+        "ph": null
+      }
+    }
+  }
+}

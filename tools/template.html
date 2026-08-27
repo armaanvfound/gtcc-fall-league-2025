@@ -1053,13 +1053,25 @@ if (OURS) {
   const pc = v => v === null || v === undefined ? '&mdash;' : v + '%';
   const sgn = d => (d >= 0 ? '+' : '−') + Math.abs(d);
 
+  // One match has a scorecard but no published commentary, so it has no phase
+  // split. Saying "every match, ball by ball" while a phase table quietly rests
+  // on fewer is the kind of small untruth that makes people distrust the rest.
+  const noBB = (OURS.all && OURS.all.withoutBallByBall) || 0;
   $('ours-lede').innerHTML =
-    `Every match we have played, read ball by ball and reconciled against the scorecard. ` +
+    (noBB
+      ? `Every match we have played, reconciled against the scorecard. `
+      : `Every match we have played, read ball by ball and reconciled against the scorecard. `) +
     `<b>${R.played} matches, all of them friendlies against ${R.oppCount === 1 ? esc(R.opponents[0]) : R.oppCount + ' sides'}</b>, ` +
     `across three different formats. That is enough to say something about our own habits &mdash; who bowls a ` +
     `dot, who wastes a ball, where we leak &mdash; and not nearly enough to say how good we are. ` +
     `Only the ${OURS.fifteenCount === 1 ? 'single' : OURS.fifteenCount} fifteen-over match is set against the ` +
-    `league par; a twelve-over innings has no fifth-over powerplay and an eight-over hit-out has no death.`;
+    `league par; a twelve-over innings has no fifth-over powerplay and an eight-over hit-out has no death.` +
+    (noBB
+      ? ` <b>${noBB} of these ${noBB === 1 ? 'matches has' : 'matches have'} a scorecard but no ball-by-ball
+          commentary</b>, so ${noBB === 1 ? 'it counts' : 'they count'} in the result, the net run rate and every
+          player's career, but ${noBB === 1 ? 'is' : 'are'} left out of the phase tables below &mdash; a scorecard
+          says what happened, not when.`
+      : '');
 
   $('ours-record').innerHTML =
     `<div class="tgrid">` +
@@ -2287,9 +2299,11 @@ $('method').innerHTML =
     `184/6 against Golden City on Sep 28 has no over-by-over data on CricHeroes - so it counts ` +
     `in the results and the win-line bands but sits outside the phase averages.</p>` : '') +
   (OURS ? `<p><b>Our own matches (the <a href="form.html">Our form</a> page).</b> All ${OURS.record.played} matches we have played, read ` +
-    `ball by ball from the CricHeroes commentary and reconciled against the scorecard: runs, wickets, legal ` +
+    `from the CricHeroes scorecard, and where commentary exists, ball by ball: runs, wickets, legal ` +
     `deliveries and every bowler's figures match the published card in all ` +
-    `${OURS.record.played * 2} innings. Wickets are bowler-credited, so a run out sits with the fielding side ` +
+    `${OURS.record.played * 2} innings.${(OURS.all && OURS.all.withoutBallByBall)
+      ? ` ${OURS.all.withoutBallByBall} match has no published commentary, so it carries no phase split and is
+          excluded from the phase averages while counting everywhere else.` : ''} Wickets are bowler-credited, so a run out sits with the fielding side ` +
     `rather than whoever bowled the ball. A dot is a legal delivery off which no runs at all were scored — ` +
     `CricHeroes counts a bye as a dot for the batter, we do not. Only fifteen-over matches are set against ` +
     `the league par, because a twelve-over innings has no fifth-over powerplay and an eight-over ` +

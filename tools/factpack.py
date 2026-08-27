@@ -281,7 +281,13 @@ def build_factpack(payload):
 
         # Read these first - they bound what any answer may claim.
         "caveats": [
-            "Our own record is 3 friendlies against a single opponent (FERAL XI), "
+            "One of our matches (26 Aug 2026) has a scorecard but no ball-by-ball "
+            "commentary. Its result, net run rate and every player's figures are "
+            "complete and count in full; it is the phase split (powerplay/middle/"
+            "death) that does not exist for it, so our phase averages rest on "
+            "fewer matches than our record does. Say so if a phase question leans "
+            "on it.",
+            "Our own record is a handful of friendlies against a single opponent (FERAL XI), "
             "in three different formats. None of it is league cricket. Treat our "
             "numbers as habits, not as proof of how good we are.",
             "The 2025 league numbers are a different, solid basis: 88 matches, all "
