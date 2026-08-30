@@ -45,10 +45,10 @@ PAGES = {
         h1="What to do on the day",
         desc=("Our 2026 fixtures and a match plan for each of them: the toss call, the target, "
               "and the phase-by-phase read on whoever we are playing."),
-        sections=["season", "plan"],
-        js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours", "players"],
-        nav=[("Fixtures", "season"), ("Match plan", "plan")],
+        sections=["season", "schedule", "plan"],
+        js=["01 - our 2026 campaign", "league schedule", "08 - match plan + opponent scouting"],
+        data=["league", "phases", "season", "ours", "players", "schedule"],
+        nav=[("Fixtures", "season"), ("Schedule", "schedule"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
     ),
     "form": dict(

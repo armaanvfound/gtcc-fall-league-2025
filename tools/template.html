@@ -533,6 +533,48 @@
     .dottbl td,.dottbl th{padding-right:8px;}
   }
   /* 2026 fixtures */
+  /* full league schedule */
+  .sch-usdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bat);
+             vertical-align:middle;margin:0 1px;}
+  .sch-ctrls{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;}
+  .sch-ctrls button{font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+    background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2);
+    border-radius:14px;padding:5px 12px;cursor:pointer;}
+  .sch-ctrls button:hover{border-color:var(--bat);color:var(--bat);}
+  .sch-ctrls button.on{background:var(--bat);border-color:var(--bat);color:#fff;}
+  .sch-day{margin:0 0 14px;}
+  .sch-date{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);padding:4px 0 6px;border-bottom:1px solid var(--rule-2);margin-bottom:4px;}
+  .sch-row{display:grid;grid-template-columns:52px 34px 1fr auto;gap:10px;align-items:baseline;
+    padding:6px 4px;font-size:14px;border-bottom:1px solid var(--rule-2);}
+  .sch-row.us{background:var(--surface);border-left:2px solid var(--bat);padding-left:8px;
+    border-radius:2px;}
+  .sch-t{font-family:var(--mono);font-size:12px;color:var(--ink-2);}
+  .sch-g{font-family:var(--mono);font-size:10px;color:var(--muted);}
+  .sch-m em{color:var(--muted);font-style:normal;font-size:12px;padding:0 4px;}
+  .sch-m .sch-us{color:var(--bat);font-weight:600;}
+  .sch-v{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;}
+  .sch-empty{color:var(--muted);font-size:14px;padding:12px 0;}
+  .sch-kot{width:100%;border-collapse:collapse;font-size:14px;}
+  .sch-kot td{padding:7px 6px;border-bottom:1px solid var(--rule-2);vertical-align:baseline;}
+  .sch-kd{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap;width:78px;}
+  .sch-kr{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--bat);width:74px;}
+  .sch-km em{color:var(--muted);font-style:normal;padding:0 4px;}
+  .sch-note{font-size:12px;line-height:1.55;color:var(--muted);margin:10px 0 0;}
+  .sch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .sch-gcol{border:1px solid var(--rule);border-radius:4px;padding:11px 12px;background:var(--paper);}
+  .sch-gcol.ours{border-color:var(--bat);background:var(--surface);}
+  .sch-gcol h5{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink-2);}
+  .sch-gcol.ours h5{color:var(--bat);}
+  .sch-gcol div{font-size:13px;padding:3px 0;color:var(--ink-2);}
+  .sch-gcol .sch-us{color:var(--bat);font-weight:600;}
+  @media (max-width:640px){
+    .sch-grid{grid-template-columns:1fr;}
+    .sch-row{grid-template-columns:46px 30px 1fr;}
+    .sch-v{grid-column:2 / -1;text-align:left;padding-left:0;}
+  }
   .fixt{width:100%;border-collapse:collapse;border:1px solid var(--rule);border-radius:3px;}
   .fixt th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
            color:var(--muted);background:var(--surface-2);padding:9px 12px;white-space:nowrap;}
@@ -659,6 +701,17 @@
   <div id="fixtures"></div>
   <div id="seeding"></div>
   <div id="xp-form"></div>
+</section>
+
+<section id="schedule">
+  <div class="sechead"><div class="n">02</div><h2>The full league schedule</h2></div>
+  <p class="lede" id="sch-lede"></p>
+  <div id="sch-controls"></div>
+  <div id="sch-list"></div>
+  <div class="subh">The knockouts</div>
+  <div id="sch-ko"></div>
+  <div class="subh">The six groups</div>
+  <div id="sch-groups"></div>
 </section>
 
 <section id="ours">
@@ -1046,6 +1099,88 @@ if (SEA) {
     `this competition or anything near its format — five-over and twelve-over cricket, some of it with a ` +
     `tennis ball. Those give a form guide and nothing finer: their phase splits are deliberately absent ` +
     `rather than estimated, because a number that looks precise and means nothing is worse than a blank.</p></div>`;
+}
+
+/* league schedule */
+// The whole 2026 fixture list, read from the official sheet. Our five group
+// games are highlighted and shown first by default, since that is what the team
+// checks most; the group filter opens it up to the rest of the field.
+const SCH = DATA.schedule;
+if (SCH) {
+  const T = SCH.totals;
+  const our = SCH.ourGroup;
+  $('sch-lede').innerHTML =
+    `Every game in the league &mdash; <b>${T.group}</b> group matches and <b>${T.knockout}</b> ` +
+    `knockouts, ${fmtDate(T.first)} to ${fmtDate(T.last)}. Our five are in <b>${esc(our)}</b> and ` +
+    `are marked <span class="sch-usdot"></span>. Use the filter to see any other group.`;
+
+  const groupNames = Object.keys(SCH.groups);
+  // filter state: 'ours' | 'Group N' | 'all'
+  let filter = 'ours';
+
+  const controls = () =>
+    `<div class="sch-ctrls">` +
+    `<button data-f="ours" class="${filter === 'ours' ? 'on' : ''}">Just us</button>` +
+    `<button data-f="${esc(our)}" class="${filter === our ? 'on' : ''}">Our group</button>` +
+    groupNames.filter(g => g !== our).map(g =>
+      `<button data-f="${esc(g)}" class="${filter === g ? 'on' : ''}">${esc(g.replace('Group ', 'G'))}</button>`).join('') +
+    `<button data-f="all" class="${filter === 'all' ? 'on' : ''}">All</button>` +
+    `</div>`;
+
+  const SCH_US = 'Royal Challenger Blaster';
+  const teamCell = (name) =>
+    `<span class="${name === SCH_US ? 'sch-us' : ''}">${esc(name)}</span>`;
+
+  function draw() {
+    const matches = SCH.groupMatches.filter(m =>
+      filter === 'all' ? true :
+      filter === 'ours' ? m.ours :
+      m.group === filter);
+
+    // group by date
+    const byDate = {};
+    matches.forEach(m => { (byDate[m.date] = byDate[m.date] || []).push(m); });
+    const dates = Object.keys(byDate).sort();
+
+    $('sch-list').innerHTML = dates.length
+      ? dates.map(d => {
+          const day = byDate[d][0];
+          return `<div class="sch-day"><div class="sch-date">${esc(day.disp)}</div>` +
+            byDate[d].map(m =>
+              `<div class="sch-row${m.ours ? ' us' : ''}">` +
+              `<span class="sch-t">${esc(m.time)}</span>` +
+              `<span class="sch-g">${esc(m.group.replace('Group ', 'G'))}</span>` +
+              `<span class="sch-m">${teamCell(m.t1)} <em>v</em> ${teamCell(m.t2)}</span>` +
+              `<span class="sch-v">${esc(m.groundShort)}</span></div>`).join('') +
+            `</div>`;
+        }).join('')
+      : `<p class="sch-empty">No matches for that filter.</p>`;
+
+    $('sch-controls').innerHTML = controls();
+    [...document.querySelectorAll('#sch-controls button')].forEach(b =>
+      b.addEventListener('click', () => { filter = b.dataset.f; draw(); }));
+  }
+  draw();
+
+  // knockout bracket
+  $('sch-ko').innerHTML =
+    `<table class="sch-kot"><tbody>` +
+    SCH.knockouts.map(k =>
+      `<tr><td class="sch-kd">${esc(k.disp)}</td><td class="sch-kr">${esc(k.round)}</td>` +
+      `<td class="sch-km">${esc(k.t1)} <em>v</em> ${esc(k.t2)}</td></tr>`).join('') +
+    `</tbody></table>` +
+    `<p class="sch-note">Team names in the bracket are seed placeholders until the groups finish. ` +
+    `The top three of six in every group go through, so all five of our games matter for seeding.</p>`;
+
+  // the six groups
+  $('sch-groups').innerHTML =
+    `<div class="sch-grid">` +
+    groupNames.map(g =>
+      `<div class="sch-gcol${g === our ? ' ours' : ''}"><h5>${esc(g)}${g === our ? ' &middot; us' : ''}</h5>` +
+      SCH.groups[g].map(t =>
+        `<div class="${t === SCH_US ? 'sch-us' : ''}">${esc(t)}</div>`).join('') +
+      `</div>`).join('') +
+    `</div>`;
 }
 
 /* 02 — how we have actually played */

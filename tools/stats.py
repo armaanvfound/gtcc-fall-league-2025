@@ -181,6 +181,11 @@ def build_payload():
         out['ours'] = build_ours()
     except Exception:
         out['ours'] = None
+    try:
+        from schedule import build_schedule
+        out['schedule'] = build_schedule()
+    except Exception:
+        out['schedule'] = None
     # Per-player league data. Optional: the pages fall back to team-level
     # scouting when league-raw/performances.tsv has not been collected yet.
     try:
