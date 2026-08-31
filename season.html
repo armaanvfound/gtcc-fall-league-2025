@@ -934,11 +934,13 @@ if (RES && RES.matches.length) {
     `These matter more every week: they say how this season actually plays, not how last ` +
     `season did` + (g5n ? `, and <b>${g5n}</b> involve${g5n === 1 ? 's' : ''} our own group.` : `. None involve our group yet.`);
 
+  // .tgrid tiles are .k (value) over .t (label) - the same pattern every other
+  // stat row on the site uses.
   $('res-stats').innerHTML =
     `<div class="tgrid">` +
-    `<div class="tcell"><div class="tv">${T.avgFirstInnings}</div><div class="tk">avg first innings<span>across ${T.played} match${T.played === 1 ? '' : 'es'}</span></div></div>` +
-    `<div class="tcell"><div class="tv">${T.batFirstWins}/${T.played}</div><div class="tk">bat-first wins<span>2025 was 59%</span></div></div>` +
-    `<div class="tcell"><div class="tv">${T.lowestFirst}&ndash;${T.highestFirst}</div><div class="tk">first-innings range<span>the 2025 win line was 120</span></div></div>` +
+    `<div><div class="k">${T.avgFirstInnings}</div><div class="t">avg first innings &middot; ${T.played} match${T.played === 1 ? '' : 'es'}</div></div>` +
+    `<div><div class="k">${T.batFirstWins}/${T.played}</div><div class="t">bat-first wins &middot; 2025 was 59%</div></div>` +
+    `<div><div class="k">${T.lowestFirst}&ndash;${T.highestFirst}</div><div class="t">first-innings range &middot; win line 120</div></div>` +
     `</div>`;
 
   $('res-list').innerHTML = RES.matches.slice().reverse().map(r => {
