@@ -45,13 +45,22 @@ PAGES = {
         h1="What to do on the day",
         desc=("Our 2026 fixtures and a match plan for each of them: the toss call, the target, "
               "and the phase-by-phase read on whoever we are playing."),
-        sections=["season", "schedule", "results", "plan"],
-        js=["01 - our 2026 campaign", "league schedule", "2026 results",
-            "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours", "players", "schedule", "results2026"],
-        nav=[("Fixtures", "season"), ("Schedule", "schedule"), ("Results", "results"),
-             ("Match plan", "plan")],
+        sections=["season", "plan"],
+        js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
+        data=["league", "phases", "season", "ours", "players"],
+        nav=[("Fixtures", "season"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
+    ),
+    "season": dict(
+        title="The season",
+        eyebrow="GTCC Fall League 2026 &middot; All six groups",
+        h1="The season as it happens",
+        desc=("The full 2026 schedule - every group, the knockout bracket - and real results "
+              "as each round is played, with our own group highlighted throughout."),
+        sections=["schedule", "results"],
+        js=["league schedule", "2026 results"],
+        data=["schedule", "results2026"],
+        nav=[("Schedule", "schedule"), ("Results", "results")],
     ),
     "form": dict(
         title="Our form",
