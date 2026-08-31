@@ -256,6 +256,32 @@ def _with_rpo(block, overs=5):
     return out
 
 
+def _results_block(res):
+    """The current season's results, compact: one line per match plus totals."""
+    if not res or not res.get("matches"):
+        return None
+    lines = []
+    for r in res["matches"]:
+        f, s2 = r["first"], r["second"]
+        lines.append("%s [%s] %s %d/%d beat %s %d/%d by %s (%s)" % (
+            r.get("date") or "?", r.get("group") or "?",
+            r["winner"], *( (f["runs"], f["wkts"]) if r["winner"] == f["team"] else (s2["runs"], s2["wkts"]) ),
+            (s2["team"] if r["winner"] == f["team"] else f["team"]),
+            *( (s2["runs"], s2["wkts"]) if r["winner"] == f["team"] else (f["runs"], f["wkts"]) ),
+            r.get("margin") or "?", "defended" if r["batFirstWon"] else "chased"))
+    t = res["totals"]
+    return {
+        "whatThisIs": ("Completed 2026 league matches, updated as rounds are played. "
+                       "These are THIS season's real results - prefer them to 2025 "
+                       "inference where they conflict, but always say how few they are."),
+        "played": t["played"],
+        "avgFirstInnings": t["avgFirstInnings"],
+        "batFirstRecord": "%d of %d" % (t["batFirstWins"], t["played"]),
+        "matches": lines,
+        "ourGroupResults": len(res.get("g5") or []),
+    }
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -365,6 +391,10 @@ def build_factpack(payload):
             "squad": squad.get("players"),
             "captain": squad.get("captain"),
         },
+
+        # Real 2026 results, harvested after each round. Better evidence than
+        # any 2025 number once the sample grows - quote the count with the rate.
+        "results2026": _results_block(payload.get("results2026")),
 
         "season2026": {
             "group": sea.get("group"),
