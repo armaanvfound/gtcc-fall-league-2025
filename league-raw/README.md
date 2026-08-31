@@ -94,3 +94,20 @@ scraping more of these leagues will not produce any.
 `collector.js` runs 3 requests at a time with a 300ms gap. That was measured: six
 at once had **a quarter of requests come back 429**, three with a gap had none.
 It is somebody's small company being polite to us.
+
+## 2026 results (`results-2026.tsv`)
+
+The current season's completed matches, full scorecards. This is the file that
+grows all season - re-harvest after each round with `tools/collect2026.js`
+(paste into the console on any cricheroes.com page), then:
+
+```
+cp ~/Downloads/rcb-results-2026.tsv league-raw/results-2026.tsv
+python3 tools/build.py
+git add -A && git commit -m "2026 results" && git push
+```
+
+`tools/results2026.py` turns it into the Results section on the Match plan page
+and the running 2026 numbers (avg first innings, bat-first record, per-team
+form). Group 5 results are highlighted - those are direct scouting on the five
+sides we play.

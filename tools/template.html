@@ -575,6 +575,17 @@
     .sch-row{grid-template-columns:46px 30px 1fr;}
     .sch-v{grid-column:2 / -1;text-align:left;padding-left:0;}
   }
+  /* 2026 results */
+  .res-row{border:1px solid var(--rule);border-radius:4px;padding:10px 13px;margin:0 0 10px;background:var(--paper);}
+  .res-row.us{border-color:var(--bat);background:var(--surface);}
+  .res-head{display:flex;gap:10px;align-items:baseline;font-family:var(--mono);font-size:10.5px;
+    color:var(--muted);letter-spacing:.04em;margin-bottom:5px;}
+  .res-g{color:var(--bat);font-weight:600;}
+  .res-v{margin-left:auto;}
+  .res-line{font-size:14.5px;}
+  .res-line em{color:var(--muted);font-style:normal;font-size:12px;padding:0 5px;}
+  .res-win{display:block;font-size:12.5px;color:var(--ink-2);margin-top:2px;}
+  .res-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:5px;}
   .fixt{width:100%;border-collapse:collapse;border:1px solid var(--rule);border-radius:3px;}
   .fixt th{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
            color:var(--muted);background:var(--surface-2);padding:9px 12px;white-space:nowrap;}
@@ -712,6 +723,13 @@
   <div id="sch-ko"></div>
   <div class="subh">The six groups</div>
   <div id="sch-groups"></div>
+</section>
+
+<section id="results">
+  <div class="sechead"><div class="n">03</div><h2>2026 results, as they come in</h2></div>
+  <p class="lede" id="res-lede"></p>
+  <div id="res-stats"></div>
+  <div id="res-list"></div>
 </section>
 
 <section id="ours">
@@ -1181,6 +1199,43 @@ if (SCH) {
         `<div class="${t === SCH_US ? 'sch-us' : ''}">${esc(t)}</div>`).join('') +
       `</div>`).join('') +
     `</div>`;
+}
+
+/* 2026 results */
+// The season's live intel. Two matches today, ninety by October - the section
+// reads the same at both sizes, and every number says what it rests on.
+const RES = DATA.results2026;
+if (RES && RES.matches.length) {
+  const T = RES.totals;
+  const g5n = RES.g5.length;
+  $('res-lede').innerHTML =
+    `Real 2026 results, updated as rounds are played &mdash; <b>${T.played}</b> so far. ` +
+    `These matter more every week: they say how this season actually plays, not how last ` +
+    `season did` + (g5n ? `, and <b>${g5n}</b> involve${g5n === 1 ? 's' : ''} our own group.` : `. None involve our group yet.`);
+
+  $('res-stats').innerHTML =
+    `<div class="tgrid">` +
+    `<div class="tcell"><div class="tv">${T.avgFirstInnings}</div><div class="tk">avg first innings<span>across ${T.played} match${T.played === 1 ? '' : 'es'}</span></div></div>` +
+    `<div class="tcell"><div class="tv">${T.batFirstWins}/${T.played}</div><div class="tk">bat-first wins<span>2025 was 59%</span></div></div>` +
+    `<div class="tcell"><div class="tv">${T.lowestFirst}&ndash;${T.highestFirst}</div><div class="tk">first-innings range<span>the 2025 win line was 120</span></div></div>` +
+    `</div>`;
+
+  $('res-list').innerHTML = RES.matches.slice().reverse().map(r => {
+    const f = r.first, s2 = r.second;
+    return `<div class="res-row${r.involvesOurGroup ? ' us' : ''}">
+      <div class="res-head">
+        <span class="res-g">${esc((r.group || '').replace('Group ', 'G'))}</span>
+        <span class="res-d">${esc(fmtDate(r.date))}</span>
+        <span class="res-v">${esc((r.ground || '').replace(' - Oshawa',''))}</span>
+      </div>
+      <div class="res-line"><b>${esc(f.team)}</b> ${f.runs}/${f.wkts}
+        <em>v</em> <b>${esc(s2.team)}</b> ${s2.runs}/${s2.wkts}
+        <span class="res-win">${esc(r.winner)} by ${esc(r.margin)}</span></div>
+      <div class="res-note">${r.topBat ? esc(r.topBat.name) + ' ' + r.topBat.runs + ' (' + r.topBat.balls + ')' : ''}${
+        r.topBowl ? ' &middot; ' + esc(r.topBowl.name) + ' ' + r.topBowl.wkts + '-' + r.topBowl.runs : ''}${
+        r.batFirstWon ? ' &middot; defended' : ' &middot; chased'}</div>
+    </div>`;
+  }).join('');
 }
 
 /* 02 — how we have actually played */
