@@ -282,6 +282,18 @@ def _results_block(res):
     }
 
 
+def _phasegap_caveat(ours):
+    """If a match has no phase split yet, say so - our record spans more matches
+    than the phase tables do until its commentary is read."""
+    n = (ours.get("all") or {}).get("withoutBallByBall") or 0
+    if not n:
+        return None
+    return ("%d of our matches lacks ball-by-ball data so far, so it counts in our "
+            "record, net run rate and player careers but is left out of the phase "
+            "splits - our phase tables rest on fewer matches than our record. Say "
+            "so if a phase question leans on it." % n)
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -307,6 +319,7 @@ def build_factpack(payload):
 
         # Read these first - they bound what any answer may claim.
         "caveats": [
+            _phasegap_caveat(ours),
             "Our own record is a handful of friendlies against a single opponent (FERAL XI), "
             "in three different formats. None of it is league cricket. Treat our "
             "numbers as habits, not as proof of how good we are.",
@@ -452,6 +465,7 @@ def build_factpack(payload):
             entry.update(_target_for(t, (ph.get("all") or {}).get("death")))
             pack["opponents2025"][name] = entry
 
+    pack["caveats"] = [c for c in pack["caveats"] if c]
     return pack
 
 

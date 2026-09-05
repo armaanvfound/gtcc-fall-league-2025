@@ -1,0 +1,134 @@
+{
+  "mid": "26972499",
+  "date": "2026-09-05",
+  "opp": "United Punjab",
+  "venue": "Stone Street Park, Oshawa",
+  "competition": "GTCC Fall League 2026",
+  "isLeague": true,
+  "quota": 15,
+  "phaseBounds": [
+    5,
+    10
+  ],
+  "toss": "Royal Challenger Blaster won the toss and chose to field",
+  "result": "won",
+  "margin": "5 wickets",
+  "url": "https://cricheroes.com/scorecard/26972499/gtcc-fall-league-2026/united-punjab-vs-royal-challenger-blaster/scorecard",
+  "ourInnings": {
+    "order": 2,
+    "runs": 85,
+    "wkts": 5,
+    "oversText": "12.1",
+    "balls": 73,
+    "wideRuns": 3,
+    "noBalls": 1,
+    "byeRuns": 1,
+    "phases": null,
+    "batting": [
+      [
+        "Jaykumar Patel",
+        10,
+        8,
+        0,
+        1,
+        true
+      ],
+      [
+        "Jay",
+        24,
+        23,
+        3,
+        0,
+        true
+      ],
+      [
+        "Armaan Wadhwa",
+        7,
+        5,
+        1,
+        0,
+        true
+      ],
+      [
+        "Nikhil Das T",
+        6,
+        10,
+        0,
+        0,
+        true
+      ],
+      [
+        "Patel Happy",
+        1,
+        7,
+        0,
+        0,
+        true
+      ],
+      [
+        "Kalpesh Saraiya",
+        6,
+        10,
+        0,
+        0,
+        false
+      ],
+      [
+        "Yash Chauhan",
+        26,
+        11,
+        1,
+        3,
+        false
+      ]
+    ]
+  },
+  "theirInnings": {
+    "order": 1,
+    "runs": 84,
+    "wkts": 10,
+    "oversText": "13.4",
+    "balls": 82,
+    "wideRuns": 10,
+    "noBalls": 4,
+    "byeRuns": 3,
+    "phases": null,
+    "ourBowling": {
+      "Patel Happy": {
+        "o": 3,
+        "r": 20,
+        "w": 3,
+        "dots": 9,
+        "ph": null
+      },
+      "Jeetmanyu Bawra": {
+        "o": 2.4,
+        "r": 7,
+        "w": 1,
+        "dots": 11,
+        "ph": null
+      },
+      "Jemish Virendra Patel": {
+        "o": 2,
+        "r": 14,
+        "w": 1,
+        "dots": 5,
+        "ph": null
+      },
+      "Kalpesh Saraiya": {
+        "o": 3,
+        "r": 21,
+        "w": 1,
+        "dots": 8,
+        "ph": null
+      },
+      "Armaan Wadhwa": {
+        "o": 3,
+        "r": 19,
+        "w": 3,
+        "dots": 9,
+        "ph": null
+      }
+    }
+  }
+}
