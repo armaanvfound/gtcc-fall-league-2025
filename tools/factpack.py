@@ -350,7 +350,9 @@ def _leaders_block(ld):
         "_legend": {"bat": "[name, team, runs, innings, strikeRate, RCB/G5 flag]",
                     "bowl": "[name, team, wickets, innings, economy, RCB/G5 flag]"},
         "whatThisIs": ("2026 tournament leaderboards across %d completed matches, computed "
-                       "from the same scorecards as the results. Early season: most rest on "
+                       "from the same scorecards as the results. ONLY THE TOP FIVE of each "
+                       "board is here - the season page shows ten, so say 'not in the top "
+                       "five', never 'not on the board'. Early season: most rest on "
                        "one or two innings - always say how many. Rate boards carry a "
                        "minimum sample (%s / %s)." % (ld["matches"],
                        ld["minimums"]["strikeRate"], ld["minimums"]["economy"])),
