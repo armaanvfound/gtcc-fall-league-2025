@@ -120,6 +120,10 @@ def match_rows(matches):
         us, them = m["ourInnings"], m["theirInnings"]
         ourOv = _overs_to_float(us["oversText"])
         theirOv = _overs_to_float(them["oversText"])
+        # NRR uses the all-out rule (full quota for a side bowled out); the run
+        # rates shown per innings stay the actual overs the side faced.
+        ourNrrOv = _nrr_overs(us, m["quota"])
+        theirNrrOv = _nrr_overs(them, m["quota"])
         rows.append(dict(
             mid=m["mid"], date=m["date"], opp=m["opp"], venue=m["venue"],
             competition=m["competition"], isLeague=m["isLeague"], quota=m["quota"],
@@ -136,7 +140,7 @@ def match_rows(matches):
                       dots=_dots(them),
                       dotPct=_pct(_dots(them), them["balls"]) if _dots(them) is not None else None,
                       extras=them["wideRuns"] + them["noBalls"], phases=them["phases"]),
-            nrr=round(us["runs"] / ourOv - them["runs"] / theirOv, 2),
+            nrr=round(us["runs"] / ourNrrOv - them["runs"] / theirNrrOv, 2),
             hasPhases=has_phases(m),
         ))
     return rows
@@ -294,6 +298,22 @@ def batter_table(matches):
     return rows
 
 
+def _nrr_overs(inn, quota):
+    """Overs an innings counts for net run rate.
+
+    The standing rule: a side bowled out is treated as having batted its full
+    quota, however few overs it actually lasted. Miss this and beating a team you
+    skittle cheaply barely moves your NRR - our United Punjab win came out at
+    +0.84 using their actual 13.4 overs, when the real figure (all out, so a full
+    15) is +1.39, the number CricHeroes shows. A side that used all its overs, or
+    was not all out, counts the overs it actually faced.
+    """
+    actual = _overs_to_float(inn["oversText"])
+    if inn.get("wkts", 0) >= 10:          # all out (11-a-side)
+        return max(actual, float(quota))
+    return actual
+
+
 def _tally(matches):
     """Win/loss/net-run-rate over a set of matches."""
     w = sum(1 for m in matches if m["result"] == "won")
@@ -301,10 +321,11 @@ def _tally(matches):
     t = sum(1 for m in matches if m["result"] == "tied")
     rf = ro = ra = oo = 0.0
     for m in matches:
+        q = m["quota"]
         rf += m["ourInnings"]["runs"]
-        ro += _overs_to_float(m["ourInnings"]["oversText"])
+        ro += _nrr_overs(m["ourInnings"], q)
         ra += m["theirInnings"]["runs"]
-        oo += _overs_to_float(m["theirInnings"]["oversText"])
+        oo += _nrr_overs(m["theirInnings"], q)
     return dict(played=len(matches), won=w, lost=l, tied=t,
                 runsFor=int(rf), oversFor=round(ro, 2),
                 runsAgainst=int(ra), oversAgainst=round(oo, 2),
