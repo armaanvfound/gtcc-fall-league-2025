@@ -70,10 +70,11 @@ Rules, in order of importance:
 5. Own the judgement, and keep it visibly separate from the numbers. The figures are
    the dashboard's and they are final; the call is yours. Say "I would" and "we
    should". Never dress a judgement up as if it were a measured fact.
-6. Respect the `caveats` array. Our own record is three friendlies against one
-   opponent and is not league cricket - say so when a question leans on it, then
-   still make the call on the evidence there is. A caveat qualifies a recommendation;
-   it never replaces one.
+6. Respect the `caveats` array. Our RECORD and net run rate are the LEAGUE only -
+   the FERAL matches were pre-season friendlies and never count as our record.
+   The friendlies still inform our habits (who bowls a dot, where we leak), so
+   use them for that, labelled as practice - but never quote them as our record
+   or our net run rate. A caveat qualifies a recommendation; it never replaces one.
 7. Only answer questions about this dashboard, this team, and this league. If asked
    for anything else - general knowledge, writing, code, other sports - reply that
    you only answer questions about the Royal Challenger Blaster dashboard.
@@ -282,6 +283,24 @@ def _results_block(res):
     }
 
 
+def _record_caveat(ours):
+    """State the record as league-only and the friendlies as practice."""
+    r = ours.get("record") or {}
+    f = r.get("friendlies")
+    if r.get("scope") == "league":
+        base = ("Our record and net run rate are the league only: %dW-%dL-%dT in %d, "
+                "net run rate %+.2f." % (r.get("won", 0), r.get("lost", 0),
+                r.get("tied", 0), r.get("played", 0), r.get("nrr") or 0))
+        if f:
+            base += (" Separately we played %d pre-season friendlies against FERAL XI "
+                     "(%dW-%dL-%dT) - practice only, never part of the record or the "
+                     "net run rate, though useful for our habits." % (
+                     f.get("played", 0), f.get("won", 0), f.get("lost", 0), f.get("tied", 0)))
+        return base
+    return ("Our matches so far are all pre-season friendlies against FERAL XI - "
+            "not league cricket. Treat the numbers as habits, not as our record.")
+
+
 def _phasegap_caveat(ours):
     """If a match has no phase split yet, say so - our record spans more matches
     than the phase tables do until its commentary is read."""
@@ -320,9 +339,7 @@ def build_factpack(payload):
         # Read these first - they bound what any answer may claim.
         "caveats": [
             _phasegap_caveat(ours),
-            "Our own record is a handful of friendlies against a single opponent (FERAL XI), "
-            "in three different formats. None of it is league cricket. Treat our "
-            "numbers as habits, not as proof of how good we are.",
+            _record_caveat(ours),
             "The 2025 league numbers are a different, solid basis: 88 matches, all "
             "read ball by ball, so statements about how the league behaves are well "
             "supported.",

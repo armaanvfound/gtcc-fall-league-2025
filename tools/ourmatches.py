@@ -294,7 +294,8 @@ def batter_table(matches):
     return rows
 
 
-def record(matches):
+def _tally(matches):
+    """Win/loss/net-run-rate over a set of matches."""
     w = sum(1 for m in matches if m["result"] == "won")
     l = sum(1 for m in matches if m["result"] == "lost")
     t = sum(1 for m in matches if m["result"] == "tied")
@@ -304,13 +305,36 @@ def record(matches):
         ro += _overs_to_float(m["ourInnings"]["oversText"])
         ra += m["theirInnings"]["runs"]
         oo += _overs_to_float(m["theirInnings"]["oversText"])
-    opps = sorted({m["opp"] for m in matches})
     return dict(played=len(matches), won=w, lost=l, tied=t,
-                opponents=opps, oppCount=len(opps),
-                leagueCount=sum(1 for m in matches if m["isLeague"]),
                 runsFor=int(rf), oversFor=round(ro, 2),
                 runsAgainst=int(ra), oversAgainst=round(oo, 2),
                 nrr=round(rf / ro - ra / oo, 2) if ro and oo else None)
+
+
+def record(matches):
+    """Our record and net run rate - THE LEAGUE ONLY.
+
+    The FERAL matches were pre-season friendlies, not competitive cricket, so
+    they must never sit in the headline record or the net run rate: our first
+    real match was the league opener. Once any league match exists the headline
+    counts league games alone; the friendlies are kept beside it as clearly
+    labelled practice. Before the league starts the headline falls back to all
+    matches so the page is never empty.
+    """
+    league = [m for m in matches if m["isLeague"]]
+    friendly = [m for m in matches if not m["isLeague"]]
+    head = league if league else matches
+    r = _tally(head)
+    r.update(
+        scope="league" if league else "friendlies",
+        opponents=sorted({m["opp"] for m in head}),
+        oppCount=len({m["opp"] for m in head}),
+        leagueCount=len(league),
+        friendlies=(dict(_tally(friendly),
+                         opponents=sorted({m["opp"] for m in friendly}))
+                    if friendly else None),
+    )
+    return r
 
 
 def _overs_str(balls):
