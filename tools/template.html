@@ -595,6 +595,12 @@
   html[data-page="season"] .res-head{font-size:11px;margin-bottom:7px;}
   html[data-page="season"] .res-note{font-size:11.5px;margin-top:7px;}
 
+  /* the opponent's 2026 block on the match plan */
+  .o26 h4 .tag{vertical-align:2px;margin-left:6px;}
+  .o26-r{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);
+         border:1px solid var(--rule);border-radius:3px;padding:2px 7px;margin:4px 6px 0 0;}
+  .o26-r.w{border-color:var(--good);color:var(--good);}
+  .o26-r.l{border-color:var(--rule);color:var(--muted);}
   /* leaderboards */
   .ld-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:0 0 18px;}
   .ld-t{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
@@ -1003,6 +1009,7 @@
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
     <div id="tossbox" hidden></div>
+    <div id="opp26box" hidden></div>
     <div class="seg" id="scenario" role="group" aria-label="Innings scenario">
       <button type="button" data-s="bat" aria-pressed="false">We bat first</button>
       <button type="button" data-s="bowl" aria-pressed="false">We bowl first</button>
@@ -2199,6 +2206,55 @@ if (PH && PH.teams) {
     return { n: base, why: 'par', d: 0 };
   }
 
+  // This season, before last season: the opponent's real 2026 league form and
+  // in-form players, rendered above the 2025 phase plan with both eras named.
+  // 2026 says WHO is scoring and HOW MUCH; the 2025 profile still owns WHEN in
+  // an innings a side scores, because phase splits need ball-by-ball we only
+  // have for our own games.
+  function render2026(){
+    const box = $('opp26box');
+    const O26 = DATA.opponents2026;
+    const t = O26 && O26.teams ? O26.teams[osel.value] : null;
+    if (!t || !t.played) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+
+    const res = t.results.map(r =>
+      `<span class="o26-r ${r.won ? 'w' : 'l'}">${r.won ? 'Beat' : 'Lost to'} ${esc(r.vs)} ` +
+      `${esc(r.us)}${r.battedFirst ? '' : ' chasing'} &middot; ${esc(fmtDate(r.date))}</span>`).join('');
+
+    const bats = t.batters.slice(0, 3).map(b =>
+      `<tr><td class="dm-n">${esc(b.name)}</td><td>${b.runs}</td><td>${b.inns}</td>` +
+      `<td>${b.sr ?? '&mdash;'}</td><td>${b.best}</td><td>${b.fours}/${b.sixes}</td></tr>`).join('');
+    const bowls = t.bowlers.slice(0, 3).map(w =>
+      `<tr><td class="dm-n">${esc(w.name)}</td><td>${w.wkts}</td><td>${w.inns}</td>` +
+      `<td>${w.econ ?? '&mdash;'}</td><td>${w.dotPct ?? '&mdash;'}%</td></tr>`).join('');
+
+    box.innerHTML =
+      `<div class="opp-block o26">
+         <h4>This season <span class="tag ok">2026 league</span></h4>
+         <p class="dm-lede"><b>${t.won} win${t.won === 1 ? '' : 's'} in ${t.played}</b>` +
+      (t.avgBatFirst !== null ? ` &middot; ${t.avgBatFirst} batting first` : '') +
+      (t.avgChase !== null ? ` &middot; ${t.avgChase} chasing` : '') +
+      `. ${res}</p>
+         <div class="dm-tables">
+           <div><h5>Their bats, 2026</h5>
+             <div class="dm-scroll"><table class="dmtbl"><thead><tr>
+               <th>Player</th><th>R<span>runs</span></th><th>I<span>innings</span></th>
+               <th>SR<span>strike rate</span></th><th>HS<span>highest</span></th>
+               <th>4s/6s<span>boundaries</span></th></tr></thead>
+             <tbody>${bats}</tbody></table></div></div>
+           <div><h5>Their bowlers, 2026</h5>
+             <div class="dm-scroll"><table class="dmtbl"><thead><tr>
+               <th>Player</th><th>W<span>wickets</span></th><th>I<span>innings</span></th>
+               <th>Econ<span>per over</span></th><th>Dot%<span>dot balls</span></th></tr></thead>
+             <tbody>${bowls}</tbody></table></div></div>
+         </div>
+         <p class="dm-caveat">Real matches from this league, ${t.played === 1 ? 'but only one so far' : t.played + ' of them'} &mdash;
+           form, not yet a profile. No phase split exists for their games (that needs ball-by-ball we
+           only hold for our own), so <b>when</b> they score still comes from the 2025 profile below.</p>
+       </div>`;
+  }
+
   function renderToss(){
     const box = $('tossbox');
     const oppName = osel.value;
@@ -2433,7 +2489,7 @@ if (PH && PH.teams) {
     const lhb = t.leftHanders;
     box.innerHTML =
       `<div class="opp-block dm">
-         <h4>Their players</h4>
+         <h4>Their players <span class="tag y25">2025 season</span></h4>
          <p class="dm-lede">${top ? `<b>${esc(top.name)}</b> is the bat to plan for &mdash;
             ${top.runs} runs at ${n(top.sr)} from ${top.inns} innings` : ''}${
             topw ? `, and <b>${esc(topw.name)}</b> the bowler, ${topw.wkts} wickets at
@@ -2472,6 +2528,7 @@ if (PH && PH.teams) {
 
   osel.addEventListener('change', () => {
     renderToss();
+    render2026();
     renderPlan();
     renderDanger();
     const t = PH.teams[osel.value];

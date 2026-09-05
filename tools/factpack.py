@@ -364,6 +364,38 @@ def _leaders_block(ld):
     }
 
 
+def _opp26_block(o):
+    """Each team's 2026 league form and in-form players, compact.
+
+    The year split matters to the assistant more than to anyone: 2026 says WHO
+    is scoring and their form; the 2025 profile says WHEN in an innings a side
+    scores. Never blend them into one claim.
+    """
+    if not o or not o.get("teams"):
+        return None
+    out = {
+        "_legend": {"bat": "[name, runs, innings, strikeRate, high]",
+                    "bowl": "[name, wickets, innings, economy, dotPct]"},
+        "whatThisIs": ("Each team's 2026 league record and top players, from the full "
+                       "scorecards of every completed match. No phase splits exist here "
+                       "- phases for 2026 exist only for OUR OWN matches. When asked how "
+                       "a side plays by phase, that is 2025 evidence; say so."),
+        "teams": {},
+    }
+    for name, t in o["teams"].items():
+        out["teams"][name] = {
+            "record": "%dW in %d" % (t["won"], t["played"]),
+            "avgBatFirst": t["avgBatFirst"], "avgChase": t["avgChase"],
+            "results": ["%s %s vs %s (%s)" % ("W" if r["won"] else "L",
+                        r["us"], r["vs"], r["date"]) for r in t["results"]],
+            "bat": [[b["name"], b["runs"], b["inns"], b["sr"], b["best"]]
+                    for b in t["batters"][:3]],
+            "bowl": [[w["name"], w["wkts"], w["inns"], w["econ"], w["dotPct"]]
+                     for w in t["bowlers"][:3]],
+        }
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -480,6 +512,8 @@ def build_factpack(payload):
         "standings2026": _standings_block(payload.get("standings2026")),
 
         "leaders2026": _leaders_block(payload.get("leaders2026")),
+
+        "opponents2026": _opp26_block(payload.get("opponents2026")),
 
         "season2026": {
             "group": sea.get("group"),

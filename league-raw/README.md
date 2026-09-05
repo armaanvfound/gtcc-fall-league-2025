@@ -129,9 +129,18 @@ Saying **"sync"** to Claude runs this whole loop; it is also two manual steps:
 
 Then publish: `git add -A && git commit -m "2026 sync" && git push`.
 
-One file feeds everything: results section, computed points table, standings in
-the fact pack, our record when we are in a match, and the qualification picture.
-That is deliberate - one source, one sync, nothing to disagree.
+One file feeds everything: the results section, the computed points table, the
+leaderboards, each opponent's 2026 block on the match plan, the standings and
+opponent intel in the fact pack, and our record when we are in a match. That is
+deliberate - one source, one sync, nothing to disagree. A team's first league
+game automatically lights up their "This season" block on the match plan on the
+next sync; nothing needs enabling.
+
+Claude's full "sync" routine, in order: harvest via the browser -> sync2026.py
+(validate, install, rebuild) -> if a new RCB match is present, add it to
+our-matches/ with ball-by-ball (needs Chrome foregrounded ~30s) -> commit and
+push -> wait for Pages to deploy -> run tools/eval_assistant.py against the live
+chatbot and report the result. A sync is not done until the eval passes.
 
 If a new RCB match is in the harvest, our-matches/ needs its ball-by-ball too
 (phase splits). That part needs the commentary page rendered - Chrome in the
