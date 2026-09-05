@@ -660,6 +660,23 @@
   .tag.ok{background:var(--good);color:#fff;} .tag.no{background:var(--rule);color:var(--ink-2);}
   .tag.form{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold);}
   .know{display:block;line-height:1.5;}
+  .tag.win{background:var(--good);color:#fff;}
+  .tag.loss{background:var(--bat);color:#fff;}
+  .tag.tie{background:var(--ink-2);color:#fff;}
+  .tag.y25{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--rule);}
+  .kline{display:block;line-height:1.5;margin-top:7px;}
+  .kline:first-child{margin-top:0;}
+  .fx-v .v26{color:var(--ink-2);}
+  .fx-past .fx-d,.fx-past .fx-o,.fx-past .fx-v{opacity:.6;}
+  .era-banner{border:1px solid var(--gold);background:var(--gold-bg);border-radius:5px;
+              padding:12px 16px;margin:2px 0 26px;font-size:13.5px;line-height:1.55;color:var(--ink-2);}
+  .nextup{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;border:1px solid var(--bat);
+          border-radius:5px;background:var(--surface);padding:13px 16px;margin:0 0 16px;}
+  .nextup .nu-l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--bat);font-weight:600;}
+  .nextup b{font-family:var(--serif);font-size:19px;font-weight:400;}
+  .nextup .nu-m{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);}
+  .nextup a{font-family:var(--mono);font-size:11px;margin-left:auto;white-space:nowrap;}
   .seedbox{margin-top:22px;border:1px solid var(--rule);border-left:3px solid var(--chase);
            border-radius:0 3px 3px 0;background:var(--surface);padding:18px 20px;}
   .seedbox h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
@@ -749,7 +766,7 @@
       <a href="index.html" data-pg="index">Match plan</a>
       <a href="season.html" data-pg="season" class="on" aria-current="page">The season</a>
       <a href="form.html" data-pg="form">Our form</a>
-      <a href="league.html" data-pg="league">The league</a>
+      <a href="league.html" data-pg="league">2025 intel</a>
     </div>
   </div>
 </nav>
@@ -789,7 +806,7 @@
   <div id="res-list"></div>
 </section>
 
-<nav class="pagefoot" aria-label="Other pages"><a href="index.html"><span class="pf-l">Match plan</span><span class="pf-h">What to do on the day</span><span class="pf-p">Our 2026 fixtures and a match plan for each of them: the toss call, the target, and the phase-by-phase read on whoever we are playing.</span></a><a href="form.html"><span class="pf-l">Our form</span><span class="pf-h">Our form so far</span><span class="pf-p">Every match Royal Challenger Blaster has played, read ball by ball: phase splits, dot-ball percentages, player careers and what they say we should change.</span></a><a href="league.html"><span class="pf-l">The league</span><span class="pf-h">How this league is actually won</span><span class="pf-p">Phase-by-phase targets, opponent scouting and a ten-point playbook, built from 88 matches and every one of them read ball by ball. The win line is 120.</span></a></nav>
+<nav class="pagefoot" aria-label="Other pages"><a href="index.html"><span class="pf-l">Match plan</span><span class="pf-h">What to do on the day</span><span class="pf-p">Our 2026 fixtures and a match plan for each of them: the toss call, the target, and the phase-by-phase read on whoever we are playing.</span></a><a href="form.html"><span class="pf-l">Our form</span><span class="pf-h">Our form so far</span><span class="pf-p">Every match Royal Challenger Blaster has played, read ball by ball: phase splits, dot-ball percentages, player careers and what they say we should change.</span></a><a href="league.html"><span class="pf-l">2025 intel</span><span class="pf-h">How this league is actually won</span><span class="pf-p">Phase-by-phase targets, opponent scouting and a ten-point playbook, built from 88 matches and every one of them read ball by ball. The win line is 120.</span></a></nav>
 <footer id="foot"></footer>
 </div>
 <div id="tip" style="position:fixed;pointer-events:none;opacity:0;transition:opacity .12s;
@@ -1043,7 +1060,7 @@ if (PAGE === 'form') {
   $('prov').innerHTML =
     `Group 5 \u00b7 5 matches \u00b7 30 Aug \u2013 27 Sep 2026<br>` +
     `Plans below are built from ${L.matches} league matches of 2025 evidence` +
-    (OURS ? ` and our own ${OURS.record.played} matches` : '') + `.`;
+    (OURS ? ` and our own ${OURS.record.played} league ${OURS.record.played === 1 ? 'match' : 'matches'}` : '') + `.`;
 } else {
   $('standfirst').textContent =
     `What every ball bowled across ${L.matches} matches last season says about how this competition ` +

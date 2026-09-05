@@ -47,7 +47,7 @@ PAGES = {
               "and the phase-by-phase read on whoever we are playing."),
         sections=["season", "plan"],
         js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours", "players"],
+        data=["league", "phases", "season", "ours", "players", "results2026"],
         nav=[("Fixtures", "season"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
     ),
@@ -74,8 +74,11 @@ PAGES = {
         nav=[("Match log", "ours"), ("Squad", "squad")],
     ),
     "league": dict(
-        title="The league",
+        title="2025 intel",
         eyebrow="GTCC Fall League &middot; 2025 season, read in full",
+        banner=("Everything on this page is <b>last season</b> &mdash; the 2025 league read ball by "
+                "ball. It is the evidence base for planning, not the live season: this year's table, "
+                "results and schedule are on <a href='season.html'>The season</a>."),
         h1="How this league is actually won",
         desc=("Phase-by-phase targets, opponent scouting and a ten-point playbook, built from 88 "
               "matches and every one of them read ball by ball. The win line is 120."),
@@ -214,7 +217,8 @@ def main():
         # which supplies the max-width column, the horizontal padding and the
         # centring — without it every page renders edge to edge.
         numbered = [renumber(sections[s], i) for i, s in enumerate(cfg["sections"], 1)]
-        inner = head + "\n\n" + "\n\n".join(numbered) + "\n\n" + foot + "\n" + footer
+        banner = ('<div class="era-banner">%s</div>' % cfg["banner"]) if cfg.get("banner") else ""
+        inner = head + banner + "\n\n" + "\n\n".join(numbered) + "\n\n" + foot + "\n" + footer
         body = nav + '\n<div class="wrap">\n' + inner + "\n</div>\n" + tip
         js = jshead + "\n" + "\n".join(
             blocks[b] for b in cfg["js"] + [j for j in ALWAYS_JS if j not in cfg["js"]])

@@ -644,6 +644,23 @@
   .tag.ok{background:var(--good);color:#fff;} .tag.no{background:var(--rule);color:var(--ink-2);}
   .tag.form{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold);}
   .know{display:block;line-height:1.5;}
+  .tag.win{background:var(--good);color:#fff;}
+  .tag.loss{background:var(--bat);color:#fff;}
+  .tag.tie{background:var(--ink-2);color:#fff;}
+  .tag.y25{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--rule);}
+  .kline{display:block;line-height:1.5;margin-top:7px;}
+  .kline:first-child{margin-top:0;}
+  .fx-v .v26{color:var(--ink-2);}
+  .fx-past .fx-d,.fx-past .fx-o,.fx-past .fx-v{opacity:.6;}
+  .era-banner{border:1px solid var(--gold);background:var(--gold-bg);border-radius:5px;
+              padding:12px 16px;margin:2px 0 26px;font-size:13.5px;line-height:1.55;color:var(--ink-2);}
+  .nextup{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;border:1px solid var(--bat);
+          border-radius:5px;background:var(--surface);padding:13px 16px;margin:0 0 16px;}
+  .nextup .nu-l{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+                color:var(--bat);font-weight:600;}
+  .nextup b{font-family:var(--serif);font-size:19px;font-weight:400;}
+  .nextup .nu-m{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);}
+  .nextup a{font-family:var(--mono);font-size:11px;margin-left:auto;white-space:nowrap;}
   .seedbox{margin-top:22px;border:1px solid var(--rule);border-left:3px solid var(--chase);
            border-radius:0 3px 3px 0;background:var(--surface);padding:18px 20px;}
   .seedbox h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
@@ -735,7 +752,7 @@
       <a href="index.html" data-pg="index">Match plan</a>
       <a href="season.html" data-pg="season">The season</a>
       <a href="form.html" data-pg="form">Our form</a>
-      <a href="league.html" data-pg="league">The league</a>
+      <a href="league.html" data-pg="league">2025 intel</a>
     </div>
   </div>
 </nav>
@@ -1107,29 +1124,81 @@ if (SEA) {
     `season. That makes every 2025 number below directly usable: the group is the same size, the round ` +
     `robin the same length, and the bubble breaks the same way.`;
 
-  $('fixtures').innerHTML =
+  // Evidence for each fixture, newest first: what happened in THIS league beats
+  // everything - our own head-to-head above all - then this season in other
+  // formats, then the 2025 profile, each line wearing its year so the eras never
+  // blur. "No data" is reserved for teams with genuinely nothing anywhere.
+  const R26 = DATA.results2026;
+  const gKey = g => String(g || '').toLowerCase().replace(/cricket|ground|park|-|,|oshawa|ajax(?= )/g, '').replace(/[^a-z]/g, '');
+  const todayIso = new Date().toISOString().slice(0, 10);
+
+  // "next" means not yet played: a same-day fixture whose result is already on
+  // file is done, not upcoming
+  const playedKey = new Set((OURS ? OURS.matches : [])
+    .filter(m => m.isLeague).map(m => m.date + '|' + m.opp));
+  const nx = SEA.fixtures.find(f => f.date >= todayIso && !playedKey.has(f.date + '|' + f.opp));
+  $('fixtures').innerHTML = (nx
+    ? `<div class="nextup"><span class="nu-l">Next match</span><b>${esc(nx.opp)}</b>` +
+      `<span class="nu-m">${esc(nx.disp)} ${esc(nx.time)} &middot; ${esc(nx.ground)}</span>` +
+      `<a href="#plan">open the match plan &darr;</a></div>`
+    : ``) +
     `<table class="fixt"><thead><tr><th>Date</th><th>Opponent</th><th>Ground</th>` +
     `<th>What we know</th></tr></thead><tbody>` +
     SEA.fixtures.map(f => {
-      const v = f.venue
-        ? `${esc(f.ground)}<span>bat first won ${f.venue.batFirstPct}% here in 2025 · par ${f.venue.avg1}</span>`
-        : esc(f.ground);
-      let know;
-      if (f.tier === 'scouted') {
-        know = `<span class="tag ok">Scouted</span><span class="know">2025 phase profile available — ` +
-               `pick them in the match plan below.</span>`;
-      } else if (f.tier === 'form') {
-        const fm = f.form;
-        know = `<span class="tag form">Form only</span><span class="know">` +
-               `<b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played} matches, but all of it ${esc(fm.comps)} — ` +
-               `never this league or this format. ${esc(fm.read)} <b>${esc(fm.edge)}</b></span>`;
-      } else {
-        know = `<span class="tag no">No data</span><span class="know">Did not play this league in 2025 under ` +
-               `this name. Treat the first sighting as reconnaissance.</span>`;
+      // ground line: this season's numbers first once the ground has any, last
+      // season's below it, each labelled
+      const g26 = R26 ? R26.matches.filter(m => gKey(m.ground) === gKey(f.ground)) : [];
+      let v = esc(f.ground);
+      if (g26.length >= 2) {
+        const avg1 = Math.round(g26.reduce((s2, m) => s2 + m.first.runs, 0) / g26.length);
+        const bfw = g26.filter(m => m.batFirstWon).length;
+        v += `<span class="v26">2026: par ${avg1} &middot; bat-first won ${bfw}/${g26.length}</span>`;
       }
-      return `<tr><td class="fx-d">${esc(f.disp)}<span>${esc(f.time)}</span></td>` +
+      if (f.venue) v += `<span>2025: bat-first won ${f.venue.batFirstPct}% &middot; par ${f.venue.avg1}</span>`;
+
+      const lines = [];
+      // 1. our own league meeting - the strongest evidence there is
+      const h2h = (OURS ? OURS.matches : []).find(m => m.isLeague && m.opp === f.opp && m.date <= todayIso);
+      if (h2h) {
+        const w = h2h.result === 'won' ? 'win' : (h2h.result === 'lost' ? 'loss' : 'tie');
+        const word = h2h.result === 'won' ? 'Beat them' : (h2h.result === 'lost' ? 'Lost to them' : 'Tied with them');
+        const them = `${h2h.them.runs}${h2h.them.wkts >= 10 ? ' all out' : '/' + h2h.them.wkts}`;
+        lines.push(`<span class="kline"><span class="tag ${w}">${h2h.result}</span> ` +
+          `${word} by ${esc(h2h.margin)}, ${esc(fmtDate(h2h.date))} — they made ${them}, ` +
+          `us ${h2h.us.runs}/${h2h.us.wkts}. Ball-by-ball on <a href="form.html">Our form</a>.</span>`);
+      }
+      // 2. their other 2026 league results
+      const others = R26 ? R26.matches.filter(m =>
+        (m.first.team === f.opp || m.second.team === f.opp) &&
+        m.first.team !== 'Royal Challenger Blaster' && m.second.team !== 'Royal Challenger Blaster') : [];
+      others.slice(-2).forEach(m => {
+        const won = m.winner === f.opp;
+        const opp2 = m.first.team === f.opp ? m.second.team : m.first.team;
+        lines.push(`<span class="kline"><span class="tag ${won ? 'ok' : 'no'}">2026 league</span> ` +
+          `${won ? 'Beat' : 'Lost to'} ${esc(opp2)} by ${esc(m.margin)}, ${esc(fmtDate(m.date))} — ` +
+          `see <a href="season.html#results">results</a>.</span>`);
+      });
+      // 3. last season's profile
+      if (f.tier === 'scouted') {
+        lines.push(`<span class="kline"><span class="tag y25">2025 profile</span> ` +
+          `Full phase profile from last season — pick them in the match plan below.</span>`);
+      }
+      // 4. this season, other formats
+      if (f.form) {
+        const fm = f.form;
+        lines.push(`<span class="kline"><span class="tag form">2026, other formats</span> ` +
+          `<b>${fm.won}&ndash;${fm.lost}</b> in ${fm.played} matches of ${esc(fm.comps)} — not this ` +
+          `format, so read habits only. ${esc(fm.read)} <b>${esc(fm.edge)}</b></span>`);
+      }
+      if (!lines.length) {
+        lines.push(`<span class="kline"><span class="tag no">No record</span> Nothing in this league, ` +
+          `last season, or any competition we track. The first six overs are the scouting.</span>`);
+      }
+
+      const past = f.date < todayIso || h2h;
+      return `<tr${past ? ' class="fx-past"' : ''}><td class="fx-d">${esc(f.disp)}<span>${esc(f.time)}</span></td>` +
              `<td class="fx-o">${esc(f.opp)}</td><td class="fx-v">${v}</td>` +
-             `<td class="fx-k">${know}</td></tr>`;
+             `<td class="fx-k">${lines.join('')}</td></tr>`;
     }).join('') + `</tbody></table>`;
 
   // Prominent hand-off to the form page, carrying the headline numbers so the
@@ -1667,7 +1736,7 @@ if (PAGE === 'form') {
   $('prov').innerHTML =
     `Group 5 · 5 matches · 30 Aug – 27 Sep 2026<br>` +
     `Plans below are built from ${L.matches} league matches of 2025 evidence` +
-    (OURS ? ` and our own ${OURS.record.played} matches` : '') + `.`;
+    (OURS ? ` and our own ${OURS.record.played} league ${OURS.record.played === 1 ? 'match' : 'matches'}` : '') + `.`;
 } else {
   $('standfirst').textContent =
     `What every ball bowled across ${L.matches} matches last season says about how this competition ` +
