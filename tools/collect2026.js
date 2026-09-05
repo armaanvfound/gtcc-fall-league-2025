@@ -80,8 +80,10 @@
       const bat = nm[String(inn.team_id)] || ('team' + inn.team_id);
       const other = sc[(ix + 1) % sc.length];
       const bowl = other ? (nm[String(other.team_id)] || ('team' + other.team_id)) : '?';
+      // is_allout is CricHeroes' own flag and the only reliable one: a
+      // 10-a-side team is all out at 9 down, and NRR hangs on knowing it.
       L.push(['I', id, ix + 1, clean(bat), I.total_run, I.total_wicket,
-              I.overs_played, I.total_extra].join('\t'));
+              I.overs_played, I.total_extra, I.is_allout ? 1 : 0].join('\t'));
       for (const b of (inn.batting || []))
         L.push(['B', id, ix + 1, clean(bat), clean(b.name), b.runs, b.balls, b['4s'],
                 b['6s'], b.SR, clean(b.batting_hand), clean(b.how_to_out), b.player_id].join('\t'));

@@ -313,6 +313,28 @@ def _phasegap_caveat(ours):
             "so if a phase question leans on it." % n)
 
 
+def _standings_block(st):
+    """Group 5 in full, other groups as one-line summaries - the chatbot's view
+    of the points table. Same computed source as the season page."""
+    if not st:
+        return None
+    def row(r):
+        return [r["team"], r["played"], r["won"], r["lost"], r["tied"], r["points"],
+                r["nrr"]]
+    out = {
+        "_legend": "[team, played, won, lost, tied, points, NRR]",
+        "rules": ("2 points a win, 1 a tie. Top two per group advance plus the two "
+                  "best third-placed sides; NRR is the tiebreak and uses the "
+                  "all-out rule. Official table: " + st["source"]["url"]),
+        "group5": [row(r) for r in st["groups"]["Group 5"]],
+        "otherGroupLeaders": {
+            g: [row(r) for r in rows[:2] if r["played"]]
+            for g, rows in st["groups"].items() if g != "Group 5"
+        },
+    }
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -425,6 +447,8 @@ def build_factpack(payload):
         # Real 2026 results, harvested after each round. Better evidence than
         # any 2025 number once the sample grows - quote the count with the rate.
         "results2026": _results_block(payload.get("results2026")),
+
+        "standings2026": _standings_block(payload.get("standings2026")),
 
         "season2026": {
             "group": sea.get("group"),

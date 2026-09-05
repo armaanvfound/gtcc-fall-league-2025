@@ -28,7 +28,7 @@ US = "Royal Challenger Blaster"
 # Group composition, from the official schedule (tools/schedule.py reads the
 # same sheet). Used to tag every result with the group it belongs to.
 GROUPS = {
-    "Group 1": ["Desi Cric Champs", "Feral", "Durham Spartans Cricket Club",
+    "Group 1": ["Desi Cric Champs", "FERAL XI", "Durham Spartans Cricket Club",
                 "Maple Eagles", "Scarborough Strikers", "Sunrisers Harmony"],
     "Group 2": ["ThunderStrikers", "Toronto Sharks", "DesiBoyz CC",
                 "Super Challengers", "YRICA team", "Downtown Hunterz"],
@@ -43,10 +43,18 @@ GROUPS = {
 }
 
 # CricHeroes team names -> schedule names, where they differ.
+# CricHeroes spellings -> the one name the dashboard uses everywhere. Every
+# missed alias silently forks a team in the standings: the match books under a
+# phantom name while the real roster row stays at played-0 - "PunjabXI" lost a
+# game that "Panjab XI" never saw. Check the standings for played-0 teams whose
+# group has results after every sync; that is the tell.
 ALIASES = {
     "Durham Strikers - T15": "Durham Strikers",
     "YRICA": "YRICA team",
     "Royal challengers blaster": US,
+    "PunjabXI": "Panjab XI",
+    "North Stars": "NorthStars",
+    "Feral": "FERAL XI",
 }
 
 
@@ -76,9 +84,15 @@ def build_results2026():
                 m.update(date=r[2], ground=r[3], toss=r[4],
                          winner=_canon(r[5]), margin=r[6])
             elif r[0] == "I":
+                # Column 9 is CricHeroes' own all-out flag. Wickets cannot tell
+                # you this: a 10-a-side team is all out at 9 down, and treating
+                # its innings as incomplete hands the NRR sign to the wrong team
+                # (Panjab XI, bowled out for 65 in 11.1, briefly "outscored" the
+                # side that chased them down).
                 m["innings"].append(dict(
                     order=int(r[2]), team=_canon(r[3]), runs=int(r[4]),
-                    wkts=int(r[5]), overs=r[6], extras=int(r[7])))
+                    wkts=int(r[5]), overs=r[6], extras=int(r[7]),
+                    allOut=bool(int(r[8])) if len(r) > 8 else int(r[5]) >= 10))
             elif r[0] == "B":
                 m["bat"].append(dict(team=_canon(r[3]), name=r[4], runs=int(r[5]),
                                      balls=int(r[6]), hand=r[10], howOut=r[11]))
@@ -103,10 +117,10 @@ def build_results2026():
             mid=m["mid"], date=m.get("date"), ground=m.get("ground"),
             group=grp, toss=m.get("toss"), winner=m.get("winner"),
             margin=m.get("margin"), batFirstWon=batFirstWon,
-            first=dict(team=first["team"], runs=first["runs"],
-                       wkts=first["wkts"], overs=first["overs"]),
-            second=dict(team=second["team"], runs=second["runs"],
-                        wkts=second["wkts"], overs=second["overs"]),
+            first=dict(team=first["team"], runs=first["runs"], wkts=first["wkts"],
+                       overs=first["overs"], allOut=first["allOut"]),
+            second=dict(team=second["team"], runs=second["runs"], wkts=second["wkts"],
+                        overs=second["overs"], allOut=second["allOut"]),
             topBat=(dict(name=top_bat["name"], team=top_bat["team"],
                          runs=top_bat["runs"], balls=top_bat["balls"])
                     if top_bat else None),

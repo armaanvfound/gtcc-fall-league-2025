@@ -1,42 +1,171 @@
-M	26904884	2026-08-30	Stone Street Park	Toss: Durham Strikers - T15 opt to field	Mavericks	51 runs	Limited Overs
-I	26904884	1	Mavericks	115	7	15.0	10
-B	26904884	1	Mavericks	SIDHARTH	25	21	2	0	119.05	RHB	c Manikandan Surasangu b Santhosh Rajan	9386087
-B	26904884	1	Mavericks	Sreejith KK	38	27	0	5	140.74	RHB	c Manikandan Surasangu b Santhosh Rajan	22481369
-B	26904884	1	Mavericks	Anandhu R  (wk)	4	4	0	0	100.00	RHB	c †Arunkumar b Venkatesh Agneeswaran	21088770
-B	26904884	1	Mavericks	Allen Saju	25	21	0	2	119.05	RHB	not out	19803529
-B	26904884	1	Mavericks	Daries Antony	1	3	0	0	33.33	RHB	c Arunkumar b Gopal Kanniappan	21106964
-B	26904884	1	Mavericks	Indrajith Das	1	2	0	0	50.00	RHB	c Sathish Rajan b Venkatesh Agneeswaran	24120932
-B	26904884	1	Mavericks	Sanjay Charuvil	10	9	0	1	111.11	RHB	c Santosh Natarajan b Sathish Rajan	20873340
-B	26904884	1	Mavericks	Ebin Thankachan	0	1	0	0	0.00	RHB	c †Arunkumar b Magulan Duraipandian	21088814
-B	26904884	1	Mavericks	Dean das	1	4	0	0	25.00	RHB	not out	20873489
-W	26904884	1	Durham Strikers - T15	Magulan Duraipandian	3	0	15	1	11	0	1	1	0	5.00	32794123
-W	26904884	1	Durham Strikers - T15	Sathish Rajan	3	0	24	1	7	1	1	1	1	8.00	41670672
-W	26904884	1	Durham Strikers - T15	Santhosh Rajan	3	0	27	2	7	0	2	2	0	9.00	23717445
-W	26904884	1	Durham Strikers - T15	Arun Inpamozhi  (c)	2	0	24	0	6	0	3	3	0	12.00	16113070
-W	26904884	1	Durham Strikers - T15	Gopal Kanniappan	2	0	9	1	6	1	0	0	0	4.50	27728606
-W	26904884	1	Durham Strikers - T15	Venkatesh Agneeswaran	2	0	15	2	6	0	1	0	1	7.50	23105461
-I	26904884	2	Durham Strikers - T15	64	8	15.0	9
-B	26904884	2	Durham Strikers - T15	Gopal Kanniappan	5	10	0	0	50.00	RHB	c Sanjay Charuvil b Ebin Thankachan	27728606
-B	26904884	2	Durham Strikers - T15	Venkatesh Agneeswaran	2	6	0	0	33.33	RHB	c †Anandhu R b Ebin Thankachan	23105461
-B	26904884	2	Durham Strikers - T15	Santosh Natarajan	5	5	1	0	100.00	RHB	c Daries Antony b Sreejith KK	23117493
-B	26904884	2	Durham Strikers - T15	Sarathy	3	8	0	0	37.50	RHB	c †Anandhu R b Bala Santhosam	23102239
-B	26904884	2	Durham Strikers - T15	Sarath Chandra Reddy	0	3	0	0	0.00	RHB	c Dean das b Daries Antony	52310591
-B	26904884	2	Durham Strikers - T15	Shankar Gopal	8	18	0	0	44.44	RHB	c Vinoth kumar b Sanjay Charuvil	52815211
-B	26904884	2	Durham Strikers - T15	Arunkumar  (wk)	12	13	0	0	92.31	RHB	b Dean das	16168974
-B	26904884	2	Durham Strikers - T15	Manikandan Surasangu	0	4	0	0	0.00	RHB	c †Anandhu R b Dean das	42018740
-B	26904884	2	Durham Strikers - T15	Arun Inpamozhi  (c)	12	14	0	0	85.71	RHB	not out	16113070
-B	26904884	2	Durham Strikers - T15	Santhosh Rajan	8	9	0	0	88.89	RHB	not out	23717445
-W	26904884	2	Mavericks	Ebin Thankachan	2	0	8	2	7	0	0	1	0	4.00	21088814
-W	26904884	2	Mavericks	Sreejith KK	2	0	5	1	10	1	0	0	0	2.50	22481369
-W	26904884	2	Mavericks	Daries Antony	2	0	9	1	7	0	0	2	0	4.50	21106964
-W	26904884	2	Mavericks	Bala Santhosam	2	0	3	1	10	0	0	1	0	1.50	28305774
-W	26904884	2	Mavericks	Dean das	2	0	8	2	8	0	0	0	0	4.00	20873489
-W	26904884	2	Mavericks	Sanjay Charuvil	2	0	12	1	3	0	0	0	0	6.00	20873340
-W	26904884	2	Mavericks	SIDHARTH	1	0	6	0	1	0	0	0	0	6.00	9386087
-W	26904884	2	Mavericks	Indrajith Das	1	0	4	0	3	0	0	1	0	4.00	24120932
-W	26904884	2	Mavericks	Anandhu R	1	0	7	0	2	0	0	1	0	7.00	21088770
+M	26972492	2026-09-05	GTCC Ajax Cricket Ground	Toss: Deccan Avengers opt to field	Deccan Avengers	1 wicket	Limited Overs
+I	26972492	1	PunjabXI	65	9	11.1	7	1
+B	26972492	1	PunjabXI	Henil Patel  (c)	10	7	2	0	142.86	RHB	c Aravind Reddy b Abhi b	20983966
+B	26972492	1	PunjabXI	Thakur	0	3	0	0	0.00	RHB	c †Manoj Gayam b Abhi b	40807678
+B	26972492	1	PunjabXI	Ali Hakimi  (wk)	4	13	0	0	30.77	RHB	c Abhi b b Ganesh	31612548
+B	26972492	1	PunjabXI	Sanjiv sharma	0	1	0	0	0.00	RHB	c Avinash b Manu Chowdary	39683013
+B	26972492	1	PunjabXI	Shivam Jadeja	14	14	3	0	100.00	RHB	c †Manoj Gayam b Aravind Reddy	30131782
+B	26972492	1	PunjabXI	Jagveer singh	24	14	4	0	171.43	RHB	not out	32886299
+B	26972492	1	PunjabXI	Navjot Bachhal	2	5	0	0	40.00	RHB	st †Manoj Gayam b Aravind Reddy	51906760
+B	26972492	1	PunjabXI	Navneet Sharma	2	3	0	0	66.67	RHB	c †Manoj Gayam b Anudeep Baganarapu	53262677
+B	26972492	1	PunjabXI	Gurpinder Gurpinder	0	1	0	0	0.00	RHB	b Anudeep Baganarapu	40949975
+B	26972492	1	PunjabXI	Harman	2	6	0	0	33.33	RHB	c †Manoj Gayam b Anudeep Baganarapu	40782357
+W	26972492	1	Deccan Avengers	Manu Chowdary  (c)	3	0	26	1	10	5	0	2	0	8.67	31933873
+W	26972492	1	Deccan Avengers	Abhi b	3	0	9	2	11	0	0	2	0	3.00	22916114
+W	26972492	1	Deccan Avengers	Aravind Reddy	2	0	13	2	6	2	0	1	0	6.50	22879367
+W	26972492	1	Deccan Avengers	Ganesh	2	0	15	1	6	2	0	2	0	7.50	23100592
+W	26972492	1	Deccan Avengers	Anudeep Baganarapu	1.1	0	2	3	5	0	0	0	0	1.71	39217407
+I	26972492	2	Deccan Avengers	66	9	14.3	18	0
+B	26972492	2	Deccan Avengers	Anudeep Baganarapu	5	11	0	0	45.45	RHB	c †Ali Hakimi b Thakur	39217407
+B	26972492	2	Deccan Avengers	Sai charan	14	19	2	0	73.68	RHB	c Shivam Jadeja b Thakur	31253860
+B	26972492	2	Deccan Avengers	Ganesh	4	9	0	0	44.44	RHB	c †Ali Hakimi b Henil Patel	23100592
+B	26972492	2	Deccan Avengers	Manu Chowdary  (c)	0	1	0	0	0.00	RHB	run out † Ali Hakimi / Sanjiv sharma	31933873
+B	26972492	2	Deccan Avengers	Aravind Reddy	2	6	0	0	33.33	RHB	hit wkt b Jagveer singh	22879367
+B	26972492	2	Deccan Avengers	Vishnu Reddy	2	7	0	0	28.57	RHB	c Sanjiv sharma b Shivam Jadeja	50373676
+B	26972492	2	Deccan Avengers	Abhi b	4	8	0	0	50.00	RHB	b Henil Patel	22916114
+B	26972492	2	Deccan Avengers	Charan Bingi	6	10	0	0	60.00	RHB	b Sanjiv sharma	22879061
+B	26972492	2	Deccan Avengers	Avinash	3	4	0	0	75.00	RHB	c Harman b Henil Patel	30683148
+B	26972492	2	Deccan Avengers	Manoj Gayam  (wk)	6	10	0	0	60.00	RHB	not out	39879802
+B	26972492	2	Deccan Avengers	Manoj Kumar Gunda	2	5	0	0	40.00	RHB	not out	22916115
+W	26972492	2	PunjabXI	Shivam Jadeja	3	0	13	1	10	0	0	0	3	4.33	30131782
+W	26972492	2	PunjabXI	Sanjiv sharma	3	0	13	1	12	2	0	0	0	4.33	39683013
+W	26972492	2	PunjabXI	Thakur	3	0	15	2	10	0	0	5	0	5.00	40807678
+W	26972492	2	PunjabXI	Jagveer singh	3	0	9	1	11	0	0	2	0	3.00	32886299
+W	26972492	2	PunjabXI	Henil Patel  (c)	2.3	0	13	3	8	0	0	5	0	5.20	20983966
+M	26972497	2026-09-05	Stone Street Park	Toss: Royals opt to field	North Stars	47 runs	Limited Overs
+I	26972497	1	North Stars	81	8	15.0	11	0
+B	26972497	1	North Stars	Jaideep (JD)  (wk)	11	14	1	0	78.57	RHB	c Deep Patel b Dishant Patel	9081230
+B	26972497	1	North Stars	Karmjit singh	13	14	1	0	92.86	RHB	c †Ruchit Patel b Dishant Patel	52755789
+B	26972497	1	North Stars	Ashish Khattar	11	15	0	0	73.33	RHB	c Rajkumar Patel b Deep Patel	16183456
+B	26972497	1	North Stars	Devesh Cricket	20	25	0	1	80.00	RHB	c MEETKUMAR PATHAK b Dishant Patel	40652754
+B	26972497	1	North Stars	Sameer Bhardwaj	7	8	0	0	87.50	RHB	c Ruchit Patel b MEETKUMAR PATHAK	52755959
+B	26972497	1	North Stars	Bhuvan Anand  (c)	0	1	0	0	0.00	RHB	c †Ruchit Patel b Dishant Patel	16145433
+B	26972497	1	North Stars	Praveen	6	10	0	0	60.00	RHB	c MEETKUMAR PATHAK b Deep Patel	21660645
+B	26972497	1	North Stars	Kapil Dhawan (KD)	0	3	0	0	0.00	RHB	run out Rajkumar Patel / Deep Patel	42383742
+B	26972497	1	North Stars	Gurpinder jassar	2	1	0	0	200.00	RHB	not out	52789447
+W	26972497	1	Royals	Deep Patel	3	0	14	1	9	0	0	3	0	4.67	27666738
+W	26972497	1	Royals	MEETKUMAR PATHAK	3	0	20	1	7	2	0	1	0	6.67	52755822
+W	26972497	1	Royals	Dishant Patel  (c)	3	0	14	4	9	0	0	1	0	4.67	39618059
+W	26972497	1	Royals	Deep Patel	3	0	12	1	9	0	0	1	1	4.00	53396043
+W	26972497	1	Royals	HEMIL PATEL	3	0	17	0	8	0	1	0	0	5.67	12803113
+I	26972497	2	Royals	34	9	11.0	6	1
+B	26972497	2	Royals	Ruchit Patel	0	3	0	0	0.00	RHB	b Devesh Cricket	24809
+B	26972497	2	Royals	Yash Patel	3	5	0	0	60.00	RHB	run out Devesh Cricket	53453892
+B	26972497	2	Royals	Rajkumar Patel	4	9	0	0	44.44	RHB	c Praveen b Devesh Cricket	53399203
+B	26972497	2	Royals	MEETKUMAR PATHAK	0	3	0	0	0.00	LHB	b Bhuvan Anand	52755822
+B	26972497	2	Royals	Deep Patel	5	10	0	0	50.00	RHB	c †Jaideep (JD) b Sameer Bhardwaj	27666738
+B	26972497	2	Royals	HEMIL PATEL	1	5	0	0	20.00	RHB	c Karmjit singh b Keerrthi Canada	12803113
+B	26972497	2	Royals	Dishant Patel  (c)	13	17	0	0	76.47	LHB	not out	39618059
+B	26972497	2	Royals	Deep Patel	1	9	0	0	11.11	RHB	c&b Gurpinder jassar	53396043
+B	26972497	2	Royals	Kunj Patel	0	1	0	0	0.00	RHB	c Keerrthi Canada b Gurpinder jassar	53496989
+B	26972497	2	Royals	Jimmy Patel	1	6	0	0	16.67	RHB	c †Jaideep (JD) b Keerrthi Canada	52931584
+W	26972497	2	North Stars	Devesh Cricket	3	0	7	2	13	0	0	0	0	2.33	40652754
+W	26972497	2	North Stars	Bhuvan Anand  (c)	2	0	4	1	8	0	0	0	0	2.00	16145433
+W	26972497	2	North Stars	Sameer Bhardwaj	2	0	5	1	9	0	0	1	0	2.50	52755959
+W	26972497	2	North Stars	Keerrthi Canada	3	0	17	2	8	0	0	3	2	5.67	40652757
+W	26972497	2	North Stars	Gurpinder jassar	1	0	1	2	5	0	0	0	0	1.00	52789447
+M	26972498	2026-09-05	Stone Street Park	Toss: FERAL XI opt to field	Sunrisers Harmony	10 runs	Limited Overs
+I	26972498	1	Sunrisers Harmony	118	8	15.0	11	0
+B	26972498	1	Sunrisers Harmony	Ishaan Raghav	9	10	0	1	90.00	RHB	c Yash Vandra b Yash Abhishek Cricket	32430873
+B	26972498	1	Sunrisers Harmony	Viquar Ahmed	31	28	1	2	110.71	RHB	c Yash Vandra b Syed mustafa Maududi	23842323
+B	26972498	1	Sunrisers Harmony	Madhu Adapa  (c & wk)	16	19	1	0	84.21	RHB	c Adnan khan  b Yash Abhishek Cricket	31266333
+B	26972498	1	Sunrisers Harmony	Dhruvin Patel	13	6	0	2	216.67	RHB	b Adnan khan 	15140688
+B	26972498	1	Sunrisers Harmony	Prem	4	8	0	0	50.00	LHB	c Yash Abhishek Cricket b Yash Vandra	16792486
+B	26972498	1	Sunrisers Harmony	Akshay ramjee	5	5	0	0	100.00	RHB	run out Yash Vandra / Kushal Reddy	32084538
+B	26972498	1	Sunrisers Harmony	Manoj Kumar Medarametla	11	8	0	1	137.50	RHB	st †Raja Sekhar Reddy Gantla b Yash Vandra	39063308
+B	26972498	1	Sunrisers Harmony	Rohan patel	15	5	0	2	300.00	RHB	not out	32014450
+B	26972498	1	Sunrisers Harmony	Fareed Javid Cricket	0	1	0	0	0.00	RHB	c †Raja Sekhar Reddy Gantla b Yash Vandra	52788919
+B	26972498	1	Sunrisers Harmony	Mahesh	3	3	0	0	100.00	RHB	not out	9167416
+W	26972498	1	FERAL XI	Syed mustafa Maududi	3	0	17	1	9	2	0	1	0	5.67	51530424
+W	26972498	1	FERAL XI	Mani Asron	3	0	29	0	7	0	3	0	1	9.67	7371163
+W	26972498	1	FERAL XI	Yash Abhishek Cricket	3	0	18	2	8	0	1	1	0	6.00	52570795
+W	26972498	1	FERAL XI	Yash Vandra	3	0	17	3	12	0	1	4	0	5.67	50353197
+W	26972498	1	FERAL XI	Ayaan Shaikh	1	0	11	0	1	0	0	2	2	11.00	42302314
+W	26972498	1	FERAL XI	Adnan khan 	1	0	14	1	3	0	2	0	0	14.00	42302317
+W	26972498	1	FERAL XI	Kushal Reddy  (c)	1	0	12	0	0	0	1	0	0	12.00	15283637
+I	26972498	2	FERAL XI	108	7	15.0	12	0
+B	26972498	2	FERAL XI	Tazeemahamed Shaikh	15	12	0	2	125.00	RHB	run out Fareed Javid Cricket / Madhu Adapa	49882750
+B	26972498	2	FERAL XI	Raja Sekhar Reddy Gantla  (wk)	9	17	0	0	52.94	RHB	retired out	15282981
+B	26972498	2	FERAL XI	Fardeen Khan	17	20	2	0	85.00	RHB	c †Madhu Adapa b Mahesh	27729185
+B	26972498	2	FERAL XI	Sohel Vahora	1	2	0	0	50.00	RHB	c Varun S V b Fareed Javid Cricket	51571197
+B	26972498	2	FERAL XI	Kushal Reddy  (c)	17	11	2	0	154.55	RHB	c Prem b Madhu Adapa	15283637
+B	26972498	2	FERAL XI	Yash Vandra	23	18	0	2	127.78	LHB	c Akshay ramjee b Madhu Adapa	50353197
+B	26972498	2	FERAL XI	Mani Asron	13	11	1	0	118.18	RHB	not out	7371163
+B	26972498	2	FERAL XI	Yash Abhishek Cricket	1	1	0	0	100.00	RHB	run out Dhruvin Patel / † Madhu Adapa	52570795
+B	26972498	2	FERAL XI	Vigneshwar Reddy	0	1	0	0	0.00	RHB	not out	50218445
+W	26972498	2	Sunrisers Harmony	Varun S V	3	0	12	0	12	0	1	1	0	4.00	39123596
+W	26972498	2	Sunrisers Harmony	Bharat Vamsi Palem	3	0	23	0	8	2	1	0	0	7.67	31288989
+W	26972498	2	Sunrisers Harmony	Mahesh	3	0	17	1	7	1	0	2	0	5.67	9167416
+W	26972498	2	Sunrisers Harmony	Fareed Javid Cricket	3	0	25	1	8	0	1	4	1	8.33	52788919
+W	26972498	2	Sunrisers Harmony	Madhu Adapa  (c)	2	0	15	2	4	1	0	0	1	7.50	31266333
+W	26972498	2	Sunrisers Harmony	Ishaan Raghav	1	0	15	0	3	1	1	1	1	15.00	32430873
+M	26972499	2026-09-05	Stone Street Park	Toss: Royal Challenger Blaster opt to field	Royal Challenger Blaster	5 wickets	Limited Overs
+I	26972499	1	United Punjab	84	10	13.4	18	1
+B	26972499	1	United Punjab	Gurman Singh	8	11	0	0	72.73	LHB	c Jay Vasani b Armaan Wadhwa	50071259
+B	26972499	1	United Punjab	Sukhmander Brar	0	2	0	0	0.00	RHB	c †Rudresh Bhanushali b Patel Happy	48826962
+B	26972499	1	United Punjab	Gurveer Sandhu  (wk)	1	5	0	0	20.00	RHB	b Jeetmanyu Bawra	23409092
+B	26972499	1	United Punjab	Harmanpreet Singh	5	10	0	0	50.00	RHB	c Yash Chauhan b Kalpesh Saraiya	50070754
+B	26972499	1	United Punjab	Avneet dhami	0	3	0	0	0.00	RHB	c Jemish Virendra Patel b Armaan Wadhwa	30373086
+B	26972499	1	United Punjab	Harjeet Maan  (c)	3	9	0	0	33.33	LHB	c Mithilesh Patel b Jemish Virendra Patel	39512592
+B	26972499	1	United Punjab	Jashandeep singh	12	10	1	1	120.00	RHB	b Patel Happy	53248955
+B	26972499	1	United Punjab	Repu Singh	12	11	0	1	109.09	RHB	c Kalpesh Saraiya b Armaan Wadhwa	42275195
+B	26972499	1	United Punjab	Harmanveer singh Sidhu	14	14	1	0	100.00	RHB	b Patel Happy	42329863
+B	26972499	1	United Punjab	Ammy 	8	8	0	0	100.00	RHB	run out Jay / Jeetmanyu Bawra	23409110
+B	26972499	1	United Punjab	Sukhpreet Singh	3	3	0	0	100.00	RHB	not out	50096375
+W	26972499	1	Royal Challenger Blaster	Patel Happy	3	0	20	3	9	1	1	1	0	6.67	2652392
+W	26972499	1	Royal Challenger Blaster	Jeetmanyu Bawra	2.4	0	7	1	11	0	0	0	1	2.62	52952451
+W	26972499	1	Royal Challenger Blaster	Jemish Virendra Patel  (c)	2	0	14	1	5	0	0	5	1	7.00	9229046
+W	26972499	1	Royal Challenger Blaster	Kalpesh Saraiya	3	0	21	1	8	1	0	3	1	7.00	49039226
+W	26972499	1	Royal Challenger Blaster	Armaan Wadhwa	3	0	19	3	9	0	1	1	1	6.33	29248905
+I	26972499	2	Royal Challenger Blaster	85	5	12.1	5	0
+B	26972499	2	Royal Challenger Blaster	Jaykumar Patel	10	8	0	1	125.00	RHB	c †Gurveer Sandhu b Jashandeep singh	52952786
+B	26972499	2	Royal Challenger Blaster	Jay	24	23	3	0	104.35	LHB	c Avneet dhami b Harmanveer singh Sidhu	3744782
+B	26972499	2	Royal Challenger Blaster	Armaan Wadhwa	7	5	1	0	140.00	RHB	c Harmanpreet Singh b Sukhmander Brar	29248905
+B	26972499	2	Royal Challenger Blaster	Nikhil Das T	6	10	0	0	60.00	RHB	c Harjeet Maan b Harmanveer singh Sidhu	5091808
+B	26972499	2	Royal Challenger Blaster	Patel Happy	1	7	0	0	14.29	LHB	b Harmanveer singh Sidhu	2652392
+B	26972499	2	Royal Challenger Blaster	Kalpesh Saraiya	6	10	0	0	60.00	RHB	not out	49039226
+B	26972499	2	Royal Challenger Blaster	Yash Chauhan	26	11	1	3	236.36	RHB	not out	41295331
+W	26972499	2	United Punjab	Avneet dhami	2	0	16	0	5	0	1	1	0	8.00	30373086
+W	26972499	2	United Punjab	Jashandeep singh	1	0	5	1	3	0	0	0	1	5.00	53248955
+W	26972499	2	United Punjab	Sukhmander Brar	3	0	26	1	8	2	2	0	0	8.67	48826962
+W	26972499	2	United Punjab	Akshdeep.cricket	1	0	16	0	1	3	0	0	0	16.00	51966195
+W	26972499	2	United Punjab	Sukhpreet Singh	2	0	7	0	6	0	0	1	0	3.50	50096375
+W	26972499	2	United Punjab	Harmanveer singh Sidhu	3	0	14	3	10	0	1	1	0	4.67	42329863
+W	26972499	2	United Punjab	Harjeet Maan  (c)	0.1	0	1	0	1	0	0	1	0	6.00	39512592
+M	26972500	2026-09-05	Stone Street Park	Toss: Super Challengers opt to field	Super Challengers	5 wickets	Limited Overs
+I	26972500	1	YRICA	75	9	15.0	10	0
+B	26972500	1	YRICA	Ajit Shinde	1	2	0	0	50.00	RHB	c Anup john b Ginil Joseph	53387786
+B	26972500	1	YRICA	Rohit Chauhan	2	4	0	0	50.00	RHB	c Roshen daniel b Julious M	53524612
+B	26972500	1	YRICA	Rishikesh Kulkarni	11	15	0	0	73.33	RHB	run out Vivin Lukose / Anup john	53387895
+B	26972500	1	YRICA	Hemant Loya	22	25	1	0	88.00	RHB	c †Anup john b Anto John	50556100
+B	26972500	1	YRICA	Sudhakar Sah  (wk)	10	15	0	0	66.67	RHB	run out † Anup john / † Anup john	53388262
+B	26972500	1	YRICA	Bhavesh Patel	0	0	0	0	0.00	RHB	run out Laju Joseph / † Anup john	53395059
+B	26972500	1	YRICA	Suraj Gupta  (c)	7	9	1	0	77.78	RHB	c Roshen daniel b Ginil Joseph	53524412
+B	26972500	1	YRICA	Ravi Donthamsetty	11	15	1	0	73.33	RHB	st †Anup john b Vivin Lukose	53393787
+B	26972500	1	YRICA	Niraj Harsora	1	3	0	0	33.33	RHB	not out	53571172
+B	26972500	1	YRICA	Lakshmanan Gopalakrishnan	0	2	0	0	0.00	RHB	st †Anup john b Vivin Lukose	53492191
+W	26972500	1	Super Challengers	Ginil Joseph	3	0	10	2	10	0	0	0	0	3.33	27672341
+W	26972500	1	Super Challengers	Julious M  (c)	3	0	15	1	9	1	0	2	0	5.00	39411092
+W	26972500	1	Super Challengers	JINESH JOY	3	0	15	0	6	0	0	2	0	5.00	52881425
+W	26972500	1	Super Challengers	Anup john	1	0	10	0	2	1	0	2	0	10.00	39643754
+W	26972500	1	Super Challengers	Anto John	2	0	11	1	4	0	0	0	0	5.50	51600931
+W	26972500	1	Super Challengers	Vivin Lukose	3	0	13	2	13	1	0	3	0	4.33	39645250
+I	26972500	2	Super Challengers	77	5	11.2	3	0
+B	26972500	2	Super Challengers	Vivin Lukose	2	2	0	0	100.00	RHB	b Suraj Gupta	39645250
+B	26972500	2	Super Challengers	Anup john	18	15	2	0	120.00	RHB	c †Sudhakar Sah b Ravi Donthamsetty	39643754
+B	26972500	2	Super Challengers	Anto John	22	25	0	2	88.00	RHB	st †Sudhakar Sah b Hemant Loya	51600931
+B	26972500	2	Super Challengers	Julious M  (c)	13	15	0	1	86.67	RHB	run out Lakshmanan Gopalakrishnan / Hemant Loya	39411092
+B	26972500	2	Super Challengers	Laju Joseph	18	8	0	2	225.00	RHB	not out	39644279
+B	26972500	2	Super Challengers	JINESH JOY	0	1	0	0	0.00	RHB	c Niraj Harsora b Ajit Shinde	52881425
+B	26972500	2	Super Challengers	Tijo Zacharia	1	2	0	0	50.00	RHB	not out	39644323
+W	26972500	2	YRICA	Suraj Gupta  (c)	3	0	13	1	9	1	0	0	0	4.33	53524412
+W	26972500	2	YRICA	Bhavesh Patel	2	0	13	0	4	1	0	1	0	6.50	53395059
+W	26972500	2	YRICA	Lakshmanan Gopalakrishnan	3	0	22	0	11	0	3	0	0	7.33	53492191
+W	26972500	2	YRICA	Ravi Donthamsetty	1	0	6	1	3	0	0	0	0	6.00	53393787
+W	26972500	2	YRICA	Hemant Loya	1.2	0	11	1	4	0	1	1	0	8.25	50556100
+W	26972500	2	YRICA	Ajit Shinde	1	0	11	1	2	0	1	0	0	11.00	53387786
 M	26904903	2026-08-30	Stone Street Park	Toss: YRICA opt to bat	YRICA	47 runs	Limited Overs
-I	26904903	1	YRICA	130	6	15.0	24
+I	26904903	1	YRICA	130	6	15.0	24	0
 B	26904903	1	YRICA	Ajit Shinde	4	9	0	0	44.44	RHB	c †Abbas Mirza b Amir Walajahi	53387786
 B	26904903	1	YRICA	Rohit Chauhan	0	1	0	0	0.00	RHB	c Meesam Mirza b Amir Walajahi	53524612
 B	26904903	1	YRICA	Rishikesh Kulkarni	24	29	1	0	82.76	RHB	b Irfan Mirza	53387895
@@ -51,7 +180,7 @@ W	26904903	1	DesiBoyz CC	Syed Raza Razvi	3	0	25	0	4	0	0	3	2	8.33	41068451
 W	26904903	1	DesiBoyz CC	Mandeep Sharma 	3	0	14	1	9	1	0	0	0	4.67	53575527
 W	26904903	1	DesiBoyz CC	Syyid Muhammed Ali Zainulabideen	3	0	23	0	6	0	0	2	2	7.67	3186741
 W	26904903	1	DesiBoyz CC	Irfan Mirza	3	0	33	2	7	5	1	0	0	11.00	49943491
-I	26904903	2	DesiBoyz CC	83	10	13.4	24
+I	26904903	2	DesiBoyz CC	83	10	13.4	24	1
 B	26904903	2	DesiBoyz CC	Qayam Mir	0	3	0	0	0.00	RHB	c Suraj Gupta b Manish K Mawatwal	39709744
 B	26904903	2	DesiBoyz CC	Moe Ali  (c)	6	7	1	0	85.71	RHB	c Bhavesh Patel b Manish K Mawatwal	49885150
 B	26904903	2	DesiBoyz CC	Salman Mirza	18	21	1	0	85.71	RHB	c Abhijit Kulkarni b Suraj Gupta	49940992
@@ -71,68 +200,40 @@ W	26904903	2	YRICA	Suraj Gupta  (c)	2	0	12	2	6	1	0	3	0	6.00	53524412
 W	26904903	2	YRICA	Ajit Shinde	1	0	6	1	2	0	0	1	0	6.00	53387786
 W	26904903	2	YRICA	Aniruddha Kelkar	1	0	8	1	3	0	1	0	0	8.00	53387771
 W	26904903	2	YRICA	Abhijit Kulkarni	1	0	8	0	4	0	0	5	0	8.00	53387766
-M	26972499	2026-09-05	Stone Street Park	Toss: Royal Challenger Blaster opt to field	Royal Challenger Blaster	5 wickets	Limited Overs
-I	26972499	1	United Punjab	84	10	13.4	18
-B	26972499	1	United Punjab	Gurman Singh	8	11	0	0	72.73	LHB	c Jay Vasani b Armaan Wadhwa	50071259
-B	26972499	1	United Punjab	Sukhmander Brar	0	2	0	0	0.00	RHB	c †Rudresh Bhanushali b Patel Happy	48826962
-B	26972499	1	United Punjab	Gurveer Sandhu  (wk)	1	5	0	0	20.00	RHB	b Jeetmanyu Bawra	23409092
-B	26972499	1	United Punjab	Harmanpreet Singh	5	10	0	0	50.00	RHB	c Yash Chauhan b Kalpesh Saraiya	50070754
-B	26972499	1	United Punjab	Avneet dhami	0	3	0	0	0.00	RHB	c Jemish Virendra Patel b Armaan Wadhwa	30373086
-B	26972499	1	United Punjab	Harjeet Maan  (c)	3	9	0	0	33.33	LHB	c Mithilesh Patel b Jemish Virendra Patel	39512592
-B	26972499	1	United Punjab	Jashandeep singh	12	10	1	1	120.00	RHB	b Patel Happy	53248955
-B	26972499	1	United Punjab	Repu Singh	12	11	0	1	109.09	RHB	c Kalpesh Saraiya b Armaan Wadhwa	42275195
-B	26972499	1	United Punjab	Harmanveer singh Sidhu	14	14	1	0	100.00	RHB	b Patel Happy	42329863
-B	26972499	1	United Punjab	Ammy 	8	8	0	0	100.00	RHB	run out Jay / Jeetmanyu Bawra	23409110
-B	26972499	1	United Punjab	Sukhpreet Singh	3	3	0	0	100.00	RHB	not out	50096375
-W	26972499	1	Royal Challenger Blaster	Patel Happy	3	0	20	3	9	1	1	1	0	6.67	2652392
-W	26972499	1	Royal Challenger Blaster	Jeetmanyu Bawra	2.4	0	7	1	11	0	0	0	1	2.62	52952451
-W	26972499	1	Royal Challenger Blaster	Jemish Virendra Patel  (c)	2	0	14	1	5	0	0	5	1	7.00	9229046
-W	26972499	1	Royal Challenger Blaster	Kalpesh Saraiya	3	0	21	1	8	1	0	3	1	7.00	49039226
-W	26972499	1	Royal Challenger Blaster	Armaan Wadhwa	3	0	19	3	9	0	1	1	1	6.33	29248905
-I	26972499	2	Royal Challenger Blaster	85	5	12.1	5
-B	26972499	2	Royal Challenger Blaster	Jaykumar Patel	10	8	0	1	125.00	RHB	c †Gurveer Sandhu b Jashandeep singh	52952786
-B	26972499	2	Royal Challenger Blaster	Jay	24	23	3	0	104.35	LHB	c Avneet dhami b Harmanveer singh Sidhu	3744782
-B	26972499	2	Royal Challenger Blaster	Armaan Wadhwa	7	5	1	0	140.00	RHB	c Harmanpreet Singh b Sukhmander Brar	29248905
-B	26972499	2	Royal Challenger Blaster	Nikhil Das T	6	10	0	0	60.00	RHB	c Harjeet Maan b Harmanveer singh Sidhu	5091808
-B	26972499	2	Royal Challenger Blaster	Patel Happy	1	7	0	0	14.29	LHB	b Harmanveer singh Sidhu	2652392
-B	26972499	2	Royal Challenger Blaster	Kalpesh Saraiya	6	10	0	0	60.00	RHB	not out	49039226
-B	26972499	2	Royal Challenger Blaster	Yash Chauhan	26	11	1	3	236.36	RHB	not out	41295331
-W	26972499	2	United Punjab	Avneet dhami	2	0	16	0	5	0	1	1	0	8.00	30373086
-W	26972499	2	United Punjab	Jashandeep singh	1	0	5	1	3	0	0	0	1	5.00	53248955
-W	26972499	2	United Punjab	Sukhmander Brar	3	0	26	1	8	2	2	0	0	8.67	48826962
-W	26972499	2	United Punjab	Akshdeep.cricket	1	0	16	0	1	3	0	0	0	16.00	51966195
-W	26972499	2	United Punjab	Sukhpreet Singh	2	0	7	0	6	0	0	1	0	3.50	50096375
-W	26972499	2	United Punjab	Harmanveer singh Sidhu	3	0	14	3	10	0	1	1	0	4.67	42329863
-W	26972499	2	United Punjab	Harjeet Maan  (c)	0.1	0	1	0	1	0	0	1	0	6.00	39512592
-M	26972500	2026-09-05	Stone Street Park	Toss: Super Challengers opt to field	Super Challengers	5 wickets	Limited Overs
-I	26972500	1	YRICA	75	9	15.0	10
-B	26972500	1	YRICA	Ajit Shinde	1	2	0	0	50.00	RHB	c Anup john b Ginil Joseph	53387786
-B	26972500	1	YRICA	Rohit Chauhan	2	4	0	0	50.00	RHB	c Roshen daniel b Julious M	53524612
-B	26972500	1	YRICA	Rishikesh Kulkarni	11	15	0	0	73.33	RHB	run out Vivin Lukose / Anup john	53387895
-B	26972500	1	YRICA	Hemant Loya	22	25	1	0	88.00	RHB	c †Anup john b Anto John	50556100
-B	26972500	1	YRICA	Sudhakar Sah  (wk)	10	15	0	0	66.67	RHB	run out † Anup john / † Anup john	53388262
-B	26972500	1	YRICA	Bhavesh Patel	0	0	0	0	0.00	RHB	run out Laju Joseph / † Anup john	53395059
-B	26972500	1	YRICA	Suraj Gupta  (c)	7	9	1	0	77.78	RHB	c Roshen daniel b Ginil Joseph	53524412
-B	26972500	1	YRICA	Ravi Donthamsetty	11	15	1	0	73.33	RHB	st †Anup john b Vivin Lukose	53393787
-B	26972500	1	YRICA	Niraj Harsora	1	3	0	0	33.33	RHB	not out	53571172
-B	26972500	1	YRICA	Lakshmanan Gopalakrishnan	0	2	0	0	0.00	RHB	st †Anup john b Vivin Lukose	53492191
-W	26972500	1	Super Challengers	Ginil Joseph	3	0	10	2	10	0	0	0	0	3.33	27672341
-W	26972500	1	Super Challengers	Julious M  (c)	3	0	15	1	9	1	0	2	0	5.00	39411092
-W	26972500	1	Super Challengers	JINESH JOY	3	0	15	0	6	0	0	2	0	5.00	52881425
-W	26972500	1	Super Challengers	Anup john	1	0	10	0	2	1	0	2	0	10.00	39643754
-W	26972500	1	Super Challengers	Anto John	2	0	11	1	4	0	0	0	0	5.50	51600931
-W	26972500	1	Super Challengers	Vivin Lukose	3	0	13	2	13	1	0	3	0	4.33	39645250
-I	26972500	2	Super Challengers	77	5	11.2	3
-B	26972500	2	Super Challengers	Vivin Lukose	2	2	0	0	100.00	RHB	b Suraj Gupta	39645250
-B	26972500	2	Super Challengers	Anup john	18	15	2	0	120.00	RHB	c †Sudhakar Sah b Ravi Donthamsetty	39643754
-B	26972500	2	Super Challengers	Anto John	22	25	0	2	88.00	RHB	st †Sudhakar Sah b Hemant Loya	51600931
-B	26972500	2	Super Challengers	Julious M  (c)	13	15	0	1	86.67	RHB	run out Lakshmanan Gopalakrishnan / Hemant Loya	39411092
-B	26972500	2	Super Challengers	Laju Joseph	18	8	0	2	225.00	RHB	not out	39644279
-B	26972500	2	Super Challengers	JINESH JOY	0	1	0	0	0.00	RHB	c Niraj Harsora b Ajit Shinde	52881425
-B	26972500	2	Super Challengers	Tijo Zacharia	1	2	0	0	50.00	RHB	not out	39644323
-W	26972500	2	YRICA	Suraj Gupta  (c)	3	0	13	1	9	1	0	0	0	4.33	53524412
-W	26972500	2	YRICA	Bhavesh Patel	2	0	13	0	4	1	0	1	0	6.50	53395059
-W	26972500	2	YRICA	Lakshmanan Gopalakrishnan	3	0	22	0	11	0	3	0	0	7.33	53492191
-W	26972500	2	YRICA	Ravi Donthamsetty	1	0	6	1	3	0	0	0	0	6.00	53393787
-W	26972500	2	YRICA	Hemant Loya	1.2	0	11	1	4	0	1	1	0	8.25	50556100
-W	26972500	2	YRICA	Ajit Shinde	1	0	11	1	2	0	1	0	0	11.00	53387786
+M	26904884	2026-08-30	Stone Street Park	Toss: Durham Strikers - T15 opt to field	Mavericks	51 runs	Limited Overs
+I	26904884	1	Mavericks	115	7	15.0	10	0
+B	26904884	1	Mavericks	SIDHARTH	25	21	2	0	119.05	RHB	c Manikandan Surasangu b Santhosh Rajan	9386087
+B	26904884	1	Mavericks	Sreejith KK	38	27	0	5	140.74	RHB	c Manikandan Surasangu b Santhosh Rajan	22481369
+B	26904884	1	Mavericks	Anandhu R  (wk)	4	4	0	0	100.00	RHB	c †Arunkumar b Venkatesh Agneeswaran	21088770
+B	26904884	1	Mavericks	Allen Saju	25	21	0	2	119.05	RHB	not out	19803529
+B	26904884	1	Mavericks	Daries Antony	1	3	0	0	33.33	RHB	c Arunkumar b Gopal Kanniappan	21106964
+B	26904884	1	Mavericks	Indrajith Das	1	2	0	0	50.00	RHB	c Sathish Rajan b Venkatesh Agneeswaran	24120932
+B	26904884	1	Mavericks	Sanjay Charuvil	10	9	0	1	111.11	RHB	c Santosh Natarajan b Sathish Rajan	20873340
+B	26904884	1	Mavericks	Ebin Thankachan	0	1	0	0	0.00	RHB	c †Arunkumar b Magulan Duraipandian	21088814
+B	26904884	1	Mavericks	Dean das	1	4	0	0	25.00	RHB	not out	20873489
+W	26904884	1	Durham Strikers - T15	Magulan Duraipandian	3	0	15	1	11	0	1	1	0	5.00	32794123
+W	26904884	1	Durham Strikers - T15	Sathish Rajan	3	0	24	1	7	1	1	1	1	8.00	41670672
+W	26904884	1	Durham Strikers - T15	Santhosh Rajan	3	0	27	2	7	0	2	2	0	9.00	23717445
+W	26904884	1	Durham Strikers - T15	Arun Inpamozhi  (c)	2	0	24	0	6	0	3	3	0	12.00	16113070
+W	26904884	1	Durham Strikers - T15	Gopal Kanniappan	2	0	9	1	6	1	0	0	0	4.50	27728606
+W	26904884	1	Durham Strikers - T15	Venkatesh Agneeswaran	2	0	15	2	6	0	1	0	1	7.50	23105461
+I	26904884	2	Durham Strikers - T15	64	8	15.0	9	0
+B	26904884	2	Durham Strikers - T15	Gopal Kanniappan	5	10	0	0	50.00	RHB	c Sanjay Charuvil b Ebin Thankachan	27728606
+B	26904884	2	Durham Strikers - T15	Venkatesh Agneeswaran	2	6	0	0	33.33	RHB	c †Anandhu R b Ebin Thankachan	23105461
+B	26904884	2	Durham Strikers - T15	Santosh Natarajan	5	5	1	0	100.00	RHB	c Daries Antony b Sreejith KK	23117493
+B	26904884	2	Durham Strikers - T15	Sarathy	3	8	0	0	37.50	RHB	c †Anandhu R b Bala Santhosam	23102239
+B	26904884	2	Durham Strikers - T15	Sarath Chandra Reddy	0	3	0	0	0.00	RHB	c Dean das b Daries Antony	52310591
+B	26904884	2	Durham Strikers - T15	Shankar Gopal	8	18	0	0	44.44	RHB	c Vinoth kumar b Sanjay Charuvil	52815211
+B	26904884	2	Durham Strikers - T15	Arunkumar  (wk)	12	13	0	0	92.31	RHB	b Dean das	16168974
+B	26904884	2	Durham Strikers - T15	Manikandan Surasangu	0	4	0	0	0.00	RHB	c †Anandhu R b Dean das	42018740
+B	26904884	2	Durham Strikers - T15	Arun Inpamozhi  (c)	12	14	0	0	85.71	RHB	not out	16113070
+B	26904884	2	Durham Strikers - T15	Santhosh Rajan	8	9	0	0	88.89	RHB	not out	23717445
+W	26904884	2	Mavericks	Ebin Thankachan	2	0	8	2	7	0	0	1	0	4.00	21088814
+W	26904884	2	Mavericks	Sreejith KK	2	0	5	1	10	1	0	0	0	2.50	22481369
+W	26904884	2	Mavericks	Daries Antony	2	0	9	1	7	0	0	2	0	4.50	21106964
+W	26904884	2	Mavericks	Bala Santhosam	2	0	3	1	10	0	0	1	0	1.50	28305774
+W	26904884	2	Mavericks	Dean das	2	0	8	2	8	0	0	0	0	4.00	20873489
+W	26904884	2	Mavericks	Sanjay Charuvil	2	0	12	1	3	0	0	0	0	6.00	20873340
+W	26904884	2	Mavericks	SIDHARTH	1	0	6	0	1	0	0	0	0	6.00	9386087
+W	26904884	2	Mavericks	Indrajith Das	1	0	4	0	3	0	0	1	0	4.00	24120932
+W	26904884	2	Mavericks	Anandhu R	1	0	7	0	2	0	0	1	0	7.00	21088770

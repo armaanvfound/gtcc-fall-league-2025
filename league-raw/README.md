@@ -111,3 +111,28 @@ git add -A && git commit -m "2026 results" && git push
 and the running 2026 numbers (avg first innings, bat-first record, per-team
 form). Group 5 results are highlighted - those are direct scouting on the five
 sides we play.
+
+## The one-word sync
+
+Saying **"sync"** to Claude runs this whole loop; it is also two manual steps:
+
+1. **Harvest** - paste `tools/collect2026.js` into the console on any
+   cricheroes.com page. It lists every completed match of GTCC Fall League 2026
+   (tournament 2167460, share link https://chshare.link/tournament/54auYA),
+   fetches each full scorecard, and downloads `rcb-results-2026.tsv`.
+2. **Install + rebuild + check** - `python3 tools/sync2026.py`. It takes the
+   newest download BY MODIFIED TIME (browsers rename repeats to "... (1).tsv" -
+   picking by name once installed a stale file), validates every row shape
+   (including the I-row all-out flag NRR depends on), refuses a harvest with
+   fewer matches than installed, rebuilds every page and the fact pack, and
+   prints the Group 5 table as a sanity check.
+
+Then publish: `git add -A && git commit -m "2026 sync" && git push`.
+
+One file feeds everything: results section, computed points table, standings in
+the fact pack, our record when we are in a match, and the qualification picture.
+That is deliberate - one source, one sync, nothing to disagree.
+
+If a new RCB match is in the harvest, our-matches/ needs its ball-by-ball too
+(phase splits). That part needs the commentary page rendered - Chrome in the
+foreground for ~30 seconds - which Claude will ask for when it applies.

@@ -57,10 +57,10 @@ PAGES = {
         h1="The season as it happens",
         desc=("The full 2026 schedule - every group, the knockout bracket - and real results "
               "as each round is played, with our own group highlighted throughout."),
-        sections=["schedule", "results"],
-        js=["league schedule", "2026 results"],
-        data=["schedule", "results2026"],
-        nav=[("Schedule", "schedule"), ("Results", "results")],
+        sections=["schedule", "standings", "results"],
+        js=["league schedule", "standings", "2026 results"],
+        data=["schedule", "results2026", "standings2026"],
+        nav=[("Schedule", "schedule"), ("Points table", "standings"), ("Results", "results")],
     ),
     "form": dict(
         title="Our form",

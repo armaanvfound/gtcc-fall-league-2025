@@ -309,7 +309,10 @@ def _nrr_overs(inn, quota):
     was not all out, counts the overs it actually faced.
     """
     actual = _overs_to_float(inn["oversText"])
-    if inn.get("wkts", 0) >= 10:          # all out (11-a-side)
+    # An explicit allOut wins; wkts >= 10 is the fallback for older files. The
+    # flag matters because a short side is all out at 9 down.
+    all_out = inn.get("allOut") if inn.get("allOut") is not None else inn.get("wkts", 0) >= 10
+    if all_out:
         return max(actual, float(quota))
     return actual
 

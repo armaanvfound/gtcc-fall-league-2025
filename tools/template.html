@@ -595,6 +595,27 @@
   html[data-page="season"] .res-head{font-size:11px;margin-bottom:7px;}
   html[data-page="season"] .res-note{font-size:11.5px;margin-top:7px;}
 
+  /* standings */
+  .st-h{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--ink-2);margin:0 0 8px;}
+  .st-idle{color:var(--muted);text-transform:none;letter-spacing:0;}
+  .sttbl{width:100%;border-collapse:collapse;border:1px solid var(--rule);background:var(--paper);}
+  .sttbl th{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+            color:var(--muted);text-align:right;padding:7px 8px;border-bottom:1px solid var(--rule);}
+  .sttbl th span{display:block;font-size:8px;letter-spacing:.02em;text-transform:none;opacity:.8;}
+  .sttbl th:first-child{text-align:left;padding-left:12px;}
+  .sttbl td{padding:7px 8px;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;
+            border-bottom:1px solid var(--rule-2);white-space:nowrap;}
+  .sttbl td.st-n{text-align:left;padding-left:12px;font-size:13.5px;white-space:normal;}
+  .sttbl td.st-p{font-weight:600;}
+  .sttbl tr.us td{background:var(--surface);border-left:0;}
+  .sttbl tr.us td.st-n{font-weight:600;box-shadow:inset 3px 0 0 var(--bat);}
+  /* the qualification line: top two go through */
+  .sttbl tr.qline td{border-bottom:2px solid var(--ink-2);}
+  .sttbl.big td{padding:10px 10px;font-size:14px;}
+  .sttbl.big td.st-n{font-size:15px;}
+  .st-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:6px;}
+  #st-g5{margin-bottom:26px;}
   /* 2026 results */
   .res-row{border:1px solid var(--rule);border-radius:4px;padding:10px 13px;margin:0 0 10px;background:var(--paper);}
   .res-row.us{border-color:var(--bat);background:var(--surface);}
@@ -744,6 +765,14 @@
   <div id="sch-ko"></div>
   <div class="subh">The six groups</div>
   <div id="sch-groups"></div>
+</section>
+
+<section id="standings">
+  <div class="sechead"><div class="n">02</div><h2>The points table</h2></div>
+  <p class="lede" id="st-lede"></p>
+  <div id="st-g5"></div>
+  <div class="subh">The other groups</div>
+  <div id="st-rest"></div>
 </section>
 
 <section id="results">
@@ -1203,11 +1232,11 @@ if (SCH) {
 
   // knockout bracket
   $('sch-ko').innerHTML =
-    `<table class="sch-kot"><tbody>` +
+    `<div class="scroll"><table class="sch-kot"><tbody>` +
     SCH.knockouts.map(k =>
       `<tr><td class="sch-kd">${esc(k.disp)}</td><td class="sch-kr">${esc(k.round)}</td>` +
       `<td class="sch-km">${esc(k.t1)} <em>v</em> ${esc(k.t2)}</td></tr>`).join('') +
-    `</tbody></table>` +
+    `</tbody></table></div>` +
     `<p class="sch-note">Team names in the bracket are seed placeholders until the groups finish. ` +
     `The top three of six in every group go through, so all five of our games matter for seeding.</p>`;
 
@@ -1219,6 +1248,40 @@ if (SCH) {
       SCH.groups[g].map(t =>
         `<div class="${t === SCH_US ? 'sch-us' : ''}">${esc(t)}</div>`).join('') +
       `</div>`).join('') +
+    `</div>`;
+}
+
+/* standings */
+// The points table, computed from the same harvested scorecards as the results
+// beside it, so the two can never disagree. Group 5 gets the full table; the
+// other groups a compact strip. NRR carries the all-out rule throughout.
+const ST = DATA.standings2026;
+if (ST && $('st-lede')) {
+  const played = g => g.some(r => r.played > 0);
+  $('st-lede').innerHTML =
+    `Two points a win, one a tie. <b>Top two of each group advance, plus the two best ` +
+    `third-placed sides</b> &mdash; and net run rate is the tiebreak, which is why every scorecard ` +
+    `here applies the all-out rule (a side bowled out counts as its full 15 overs). Computed from ` +
+    `our own harvested scorecards; the official table lives on ` +
+    `<a href="${ST.source.url}" target="_blank" rel="noopener">CricHeroes</a>.`;
+
+  const table = (rows, big) =>
+    `<div class="scroll"><table class="sttbl${big ? ' big' : ''}"><thead><tr>` +
+    `<th></th><th>P<span>played</span></th><th>W<span>won</span></th><th>L<span>lost</span></th>` +
+    `<th>T<span>tied</span></th><th>Pts<span>points</span></th><th>NRR<span>net run rate</span></th>` +
+    `</tr></thead><tbody>` +
+    rows.map((r, i) => `<tr class="${r.team === 'Royal Challenger Blaster' ? 'us' : ''}${i === 1 ? ' qline' : ''}">` +
+      `<td class="st-n">${esc(r.team)}</td><td>${r.played}</td><td>${r.won}</td><td>${r.lost}</td>` +
+      `<td>${r.tied}</td><td class="st-p">${r.points}</td>` +
+      `<td>${r.nrr === null ? '&mdash;' : (r.nrr >= 0 ? '+' : '') + r.nrr.toFixed(2)}</td></tr>`).join('') +
+    `</tbody></table></div>`;
+
+  $('st-g5').innerHTML = `<h5 class="st-h">Group 5 &mdash; our group</h5>` + table(ST.groups['Group 5'], true);
+
+  $('st-rest').innerHTML = `<div class="st-grid">` +
+    Object.entries(ST.groups).filter(([g]) => g !== 'Group 5')
+      .map(([g, rows]) => `<div><h5 class="st-h">${esc(g)}${played(rows) ? '' :
+        ' <span class="st-idle">not started</span>'}</h5>` + table(rows, false) + `</div>`).join('') +
     `</div>`;
 }
 
