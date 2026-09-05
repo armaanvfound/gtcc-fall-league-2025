@@ -196,6 +196,11 @@ def build_payload():
         out['standings2026'] = build_standings2026()
     except Exception:
         out['standings2026'] = None
+    try:
+        from leaders2026 import build_leaders2026
+        out['leaders2026'] = build_leaders2026()
+    except Exception:
+        out['leaders2026'] = None
     # Per-player league data. Optional: the pages fall back to team-level
     # scouting when league-raw/performances.tsv has not been collected yet.
     try:

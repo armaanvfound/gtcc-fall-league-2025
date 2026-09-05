@@ -335,6 +335,33 @@ def _standings_block(st):
     return out
 
 
+def _leaders_block(ld):
+    """Top five of each 2026 board, compact tuples, our players marked."""
+    if not ld:
+        return None
+    def bat(r):
+        return [r["name"], r["team"], r["runs"], r["inns"], r["sr"],
+                "RCB" if r["ours"] else ("G5" if r["g5"] else "")]
+    def bowl(r):
+        return [r["name"], r["team"], r["wkts"], r["inns"], r["econ"],
+                "RCB" if r["ours"] else ("G5" if r["g5"] else "")]
+    b = ld["boards"]
+    return {
+        "_legend": {"bat": "[name, team, runs, innings, strikeRate, RCB/G5 flag]",
+                    "bowl": "[name, team, wickets, innings, economy, RCB/G5 flag]"},
+        "whatThisIs": ("2026 tournament leaderboards across %d completed matches, computed "
+                       "from the same scorecards as the results. Early season: most rest on "
+                       "one or two innings - always say how many. Rate boards carry a "
+                       "minimum sample (%s / %s)." % (ld["matches"],
+                       ld["minimums"]["strikeRate"], ld["minimums"]["economy"])),
+        "mostRuns": [bat(r) for r in b["runs"][:5]],
+        "mostWickets": [bowl(r) for r in b["wickets"][:5]],
+        "bestStrikeRate": [bat(r) for r in b["strikeRate"][:5]],
+        "bestEconomy": [bowl(r) for r in b["economy"][:5]],
+        "mostSixes": [[r["name"], r["team"], r["sixes"]] for r in b["sixes"][:3]],
+    }
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -449,6 +476,8 @@ def build_factpack(payload):
         "results2026": _results_block(payload.get("results2026")),
 
         "standings2026": _standings_block(payload.get("standings2026")),
+
+        "leaders2026": _leaders_block(payload.get("leaders2026")),
 
         "season2026": {
             "group": sea.get("group"),

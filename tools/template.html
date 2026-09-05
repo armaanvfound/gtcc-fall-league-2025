@@ -595,6 +595,14 @@
   html[data-page="season"] .res-head{font-size:11px;margin-bottom:7px;}
   html[data-page="season"] .res-note{font-size:11.5px;margin-top:7px;}
 
+  /* leaderboards */
+  .ld-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:0 0 18px;}
+  .ld-t{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
+  .ld-us{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;
+         background:var(--bat);color:#fff;border-radius:2px;padding:1px 4px;vertical-align:2px;}
+  .ld-g5{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;
+         border:1px solid var(--bat);color:var(--bat);border-radius:2px;padding:0 4px;vertical-align:2px;}
+  .ld-min{font-size:9px;color:var(--muted);text-transform:none;letter-spacing:0;}
   /* standings */
   .st-h{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
         color:var(--ink-2);margin:0 0 8px;}
@@ -797,6 +805,13 @@
   <p class="lede" id="res-lede"></p>
   <div id="res-stats"></div>
   <div id="res-list"></div>
+</section>
+
+<section id="leaders">
+  <div class="sechead"><div class="n">04</div><h2>The leaderboards</h2></div>
+  <p class="lede" id="ld-lede"></p>
+  <div class="ld-grid" id="ld-main"></div>
+  <div class="ld-grid" id="ld-rates"></div>
 </section>
 
 <section id="ours">
@@ -1318,6 +1333,43 @@ if (SCH) {
         `<div class="${t === SCH_US ? 'sch-us' : ''}">${esc(t)}</div>`).join('') +
       `</div>`).join('') +
     `</div>`;
+}
+
+/* leaderboards */
+// Tournament leaderboards, computed from the same harvest as the results and
+// the table. Our own players wear the team mark; Group 5 names are flagged too,
+// because a rival topping a board is scouting, not trivia.
+const LD = DATA.leaders2026;
+if (LD && $('ld-lede')) {
+  $('ld-lede').innerHTML =
+    `Who is actually doing it this season, across all <b>${LD.matches}</b> completed ` +
+    `matches. Computed from the same scorecards as the results and the points table, so the three ` +
+    `always agree. Volume boards have no minimum; the rate boards need ${esc(LD.minimums.strikeRate)} ` +
+    `or ${esc(LD.minimums.economy)}, and early numbers rest on a game or two &mdash; the innings ` +
+    `column says exactly how many.`;
+
+  const mark = r => r.ours ? ` <span class="ld-us">RCB</span>` : (r.g5 ? ` <span class="ld-g5">G5</span>` : ``);
+  const board = (title, rows, cols, cells) =>
+    `<div><h5 class="st-h">${title}</h5><div class="scroll"><table class="sttbl"><thead><tr>` +
+    `<th></th>` + cols.map(c => `<th>${c}</th>`).join('') + `</tr></thead><tbody>` +
+    rows.map(r => `<tr${r.ours ? ' class="us"' : ''}><td class="st-n">${esc(r.name)}${mark(r)}` +
+      `<span class="ld-t">${esc(r.team)}</span></td>` +
+      cells(r).map(c => `<td>${c}</td>`).join('') + `</tr>`).join('') +
+    `</tbody></table></div></div>`;
+
+  $('ld-main').innerHTML =
+    board('Most runs', LD.boards.runs, ['R', 'I', 'SR', 'HS'],
+      r => [`<b>${r.runs}</b>`, r.inns, r.sr ?? '&mdash;', r.best]) +
+    board('Most wickets', LD.boards.wickets, ['W', 'I', 'Econ', 'Best'],
+      r => [`<b>${r.wkts}</b>`, r.inns, r.econ ?? '&mdash;', r.best]);
+
+  $('ld-rates').innerHTML =
+    board(`Strike rate <span class="ld-min">(min ${esc(LD.minimums.strikeRate)})</span>`,
+      LD.boards.strikeRate, ['SR', 'R', 'I'], r => [`<b>${r.sr}</b>`, r.runs, r.inns]) +
+    board(`Economy <span class="ld-min">(min ${esc(LD.minimums.economy)})</span>`,
+      LD.boards.economy, ['Econ', 'W', 'Dot%'], r => [`<b>${r.econ}</b>`, r.wkts, (r.dotPct ?? '&mdash;') + '%']) +
+    board('Most sixes', LD.boards.sixes, ['6s', 'R', 'SR'],
+      r => [`<b>${r.sixes}</b>`, r.runs, r.sr ?? '&mdash;']);
 }
 
 /* standings */
