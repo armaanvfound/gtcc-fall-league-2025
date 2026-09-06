@@ -609,6 +609,11 @@
          border:1px solid var(--rule);border-radius:3px;padding:2px 7px;margin:4px 6px 0 0;}
   .o26-r.w{border-color:var(--good);color:var(--good);}
   .o26-r.l{border-color:var(--rule);color:var(--muted);}
+  /* dossier header strip */
+  .oph{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;border-left:3px solid var(--bat);
+       background:var(--surface);padding:10px 14px;border-radius:0 4px 4px 0;margin:0 0 12px;}
+  .oph-n{font-family:var(--serif);font-size:20px;}
+  .oph-m{font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.03em;}
   /* what we need */
   .need{border:1px solid var(--bat);border-radius:5px;background:var(--surface);padding:14px 16px;margin:14px 0 6px;}
   .need-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bat);font-weight:600;}
@@ -1037,6 +1042,7 @@
   <div class="picker">
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
+    <div id="oppheader" hidden></div>
     <div id="tossbox" hidden></div>
     <div id="groundbox" hidden></div>
     <div id="opp26box" hidden></div>
@@ -2365,6 +2371,27 @@ if (PH && PH.teams) {
        </div>`;
   }
 
+  // The dossier header: who, when and where we play them - or a plain line
+  // saying there is no fixture, so a scouting-only team never looks broken.
+  function renderOppHeader(){
+    const box = $('oppheader');
+    if (!osel.value) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    const fx = SEA.fixtures.find(f => f.opp === osel.value);
+    const played = (OURS ? OURS.matches : []).find(m => m.isLeague && m.opp === osel.value);
+    if (fx) {
+      box.innerHTML = `<div class="oph">
+        <span class="oph-n">${esc(osel.value)}</span>
+        <span class="oph-m">${played
+          ? `played ${esc(fx.disp)} &middot; ${esc(fx.ground)} &middot; we ${played.result === 'won' ? 'won' : played.result} by ${esc(played.margin)}`
+          : `${esc(fx.disp)} ${esc(fx.time)} &middot; ${esc(fx.ground)}`}</span></div>`;
+    } else {
+      box.innerHTML = `<div class="oph">
+        <span class="oph-n">${esc(osel.value)}</span>
+        <span class="oph-m">no fixture against us &mdash; 2025 scouting view (a possible knockout opponent)</span></div>`;
+    }
+  }
+
   // The ground for this fixture, both seasons - the dossier answers "how does
   // this place play" without a trip to the season page.
   function renderGround(){
@@ -2380,7 +2407,7 @@ if (PH && PH.teams) {
     const d1 = p ? g.avg1 - p.avg1 : null;
     box.innerHTML =
       `<div class="opp-block">
-        <h4>The ground: ${esc(fx26.ground)} <span class="tag no">where we play them</span></h4>
+        <h4>The ground: ${esc(fx26.ground)} <span class="tag no">where we play them &middot; ${esc(fx26.disp)}</span></h4>
         <div class="grc-row"><span class="tag ok">2026</span>
           <b>${g.avg1}</b> 1st inns &middot; <b>${g.avg2}</b> 2nd &middot; bat-first won ${g.batFirstWins}/${g.n}
           <em>${g.n} match${g.n === 1 ? '' : 'es'}</em></div>` +
@@ -2710,6 +2737,7 @@ if (PH && PH.teams) {
   }
 
   osel.addEventListener('change', () => {
+    renderOppHeader();
     renderToss();
     renderGround();
     render2026();
