@@ -47,7 +47,7 @@ PAGES = {
               "and the phase-by-phase read on whoever we are playing."),
         sections=["season", "plan"],
         js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours", "players", "results2026", "opponents2026"],
+        data=["league", "phases", "season", "ours", "players", "results2026", "opponents2026", "teams"],
         nav=[("Fixtures", "season"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
     ),

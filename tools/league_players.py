@@ -259,8 +259,8 @@ def build_players():
         tw.sort(key=lambda x: (-x["wkts"], x["econ"] if x["econ"] is not None else 99))
         lhb = sum(1 for b in tb if b["hand"] == "LHB")
         teams[t] = {
-            "batters": tb[:6],
-            "bowlers": tw[:6],
+            "batters": tb[:8],
+            "bowlers": tw[:8],
             "squadSeen": len(tb),
             "leftHanders": lhb,
             "rightHanders": sum(1 for b in tb if b["hand"] == "RHB"),
