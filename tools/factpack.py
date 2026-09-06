@@ -433,6 +433,24 @@ def _grounds_block(gr):
     return out
 
 
+def _qualify_block(q):
+    """Group 5 qualification arithmetic: points, games left, ceilings, what
+    guarantees top two. Recomputed every sync; quote the strict reading."""
+    if not q:
+        return None
+    return {
+        "rules": q["rules"],
+        "read": q["read"].replace("<b>", "").replace("</b>", ""),
+        "winsToGuaranteeTopTwo": q["needWins"],
+        "topTwoGuaranteed": q["guaranteed"],
+        "group5": [[t["team"], t["points"], t["left"], t["maxPoints"], t["nrr"]] for t in q["table"]],
+        "_legend": "[team, points, gamesLeft, maxPossiblePoints, NRR]",
+        "ourRemaining": [(x["disp"] + " v " + (x["t2"] if x["t1"] == "Royal Challenger Blaster" else x["t1"]))
+                         for x in q["remaining"]
+                         if "Royal Challenger Blaster" in (x["t1"], x["t2"])],
+    }
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -556,6 +574,8 @@ def build_factpack(payload):
         "opponents2026": _opp26_block(payload.get("opponents2026")),
 
         "grounds2026": _grounds_block(payload.get("grounds2026")),
+
+        "qualification2026": _qualify_block(payload.get("qualify2026")),
 
         "season2026": {
             "group": sea.get("group"),

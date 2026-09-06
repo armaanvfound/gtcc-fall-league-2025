@@ -609,6 +609,13 @@
          border:1px solid var(--rule);border-radius:3px;padding:2px 7px;margin:4px 6px 0 0;}
   .o26-r.w{border-color:var(--good);color:var(--good);}
   .o26-r.l{border-color:var(--rule);color:var(--muted);}
+  /* what we need */
+  .need{border:1px solid var(--bat);border-radius:5px;background:var(--surface);padding:14px 16px;margin:14px 0 6px;}
+  .need-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bat);font-weight:600;}
+  .need-read{font-size:15px;line-height:1.55;margin:8px 0 12px;}
+  .need-fx{font-size:13px;color:var(--ink-2);margin:10px 0 0;}
+  .need-fx span{display:inline-block;font-family:var(--mono);font-size:11px;border:1px solid var(--rule);
+                border-radius:3px;padding:2px 7px;margin:4px 6px 0 0;background:var(--paper);}
   /* ground cards */
   .grc{border:1px solid var(--rule);border-radius:5px;background:var(--paper);padding:13px 16px;}
   .grc-row{font-size:13.5px;color:var(--ink-2);margin-top:7px;line-height:1.6;}
@@ -817,6 +824,7 @@
   <div class="sechead"><div class="n">02</div><h2>The points table</h2></div>
   <p class="lede" id="st-lede"></p>
   <div id="st-g5"></div>
+  <div id="st-need" hidden></div>
   <div class="subh">The other groups</div>
   <div id="st-rest"></div>
 </section>
@@ -1462,6 +1470,27 @@ if (ST && $('st-lede')) {
     `</tbody></table></div>`;
 
   $('st-g5').innerHTML = `<h5 class="st-h">Group 5 &mdash; our group</h5>` + table(ST.groups['Group 5'], true);
+
+  // What we need: the strict arithmetic of qualifying, recomputed every sync.
+  const Q = DATA.qualify2026;
+  if (Q && $('st-need')) {
+    $('st-need').hidden = false;
+    const nxt = Q.remaining.filter(x => x.t1 === 'Royal Challenger Blaster' || x.t2 === 'Royal Challenger Blaster');
+    $('st-need').innerHTML =
+      `<div class="need">
+         <div class="need-h">What we need</div>
+         <p class="need-read">${Q.read}</p>
+         <div class="scroll"><table class="sttbl"><thead><tr><th></th>
+           <th>Pts</th><th>Left<span>games</span></th><th>Max<span>possible</span></th><th>NRR</th></tr></thead><tbody>` +
+         Q.table.map(t => `<tr${t.team === 'Royal Challenger Blaster' ? ' class="us"' : ''}>` +
+           `<td class="st-n">${esc(t.team)}</td><td class="st-p">${t.points}</td><td>${t.left}</td>` +
+           `<td>${t.maxPoints}</td><td>${t.nrr === null ? '&mdash;' : (t.nrr >= 0 ? '+' : '') + t.nrr.toFixed(2)}</td></tr>`).join('') +
+         `</tbody></table></div>
+         <p class="need-fx">Our remaining: ${nxt.map(x => `<span>${esc(x.disp)} v ${esc(x.t1 === 'Royal Challenger Blaster' ? x.t2 : x.t1)}</span>`).join('')}</p>
+         <p class="dm-caveat">${esc(Q.rules)} "Guaranteed" here is the strict reading &mdash; points nobody can overtake &mdash; so it
+           will say more as results come in; short of it, net run rate is the insurance.</p>
+       </div>`;
+  }
 
   $('st-rest').innerHTML = `<div class="st-grid">` +
     Object.entries(ST.groups).filter(([g]) => g !== 'Group 5')

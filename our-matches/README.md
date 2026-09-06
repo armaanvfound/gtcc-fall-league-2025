@@ -6,6 +6,20 @@ played" section and into the form line that section 09's match plan reads.
 
 ## Adding a match
 
+**Preferred: `tools/capture_commentary.js`.** Paste it on the match's Commentary
+tab with Chrome in the FOREGROUND (a background tab never paints the commentary,
+so you read zero balls), run `__rcb.capture()` on each innings - switch with a
+real click on the innings dropdown - then `__rcb.emit(15)`. It prints both
+innings' JSON fragments and a reconciliation table; every line must be OK, and
+every bowler's runs/wickets must equal the Scorecard tab exactly (run outs are
+not credited to bowlers, byes are not charged to them). Then set `allOut` on
+each innings from the scorecard - CricHeroes' own flag; a 10-a-side team is all
+out at 9 down, and net run rate depends on it - and write the file. The
+scorecard half (batting/bowling cards, extras) comes from the season harvest.
+
+The older console snippets below still work but credit run outs to the bowler
+on the ball; prefer the tool.
+
 1. Open the match on CricHeroes and go to the **Commentary** tab.
 2. Run **`__agg`** (below) once per innings for the team-level phase splits and
    the per-bowler figures. Then run **`__bat`** (also below) on *our* batting

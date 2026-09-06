@@ -59,7 +59,7 @@ PAGES = {
               "as each round is played, with our own group highlighted throughout."),
         sections=["schedule", "standings", "results", "grounds", "leaders"],
         js=["league schedule", "standings", "2026 results", "grounds", "leaderboards"],
-        data=["schedule", "results2026", "standings2026", "leaders2026", "grounds2026"],
+        data=["schedule", "results2026", "standings2026", "leaders2026", "grounds2026", "qualify2026"],
         nav=[("Schedule", "schedule"), ("Points table", "standings"), ("Results", "results"),
              ("Grounds", "grounds"), ("Leaderboards", "leaders")],
     ),

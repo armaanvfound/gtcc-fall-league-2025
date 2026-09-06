@@ -114,6 +114,9 @@ sides we play.
 
 ## The one-word sync
 
+The authoritative, agent-facing version of this contract is the repo's
+`AGENTS.md`; keep the two in step.
+
 Saying **"sync"** to Claude runs this whole loop; it is also two manual steps:
 
 1. **Harvest** - paste `tools/collect2026.js` into the console on any
