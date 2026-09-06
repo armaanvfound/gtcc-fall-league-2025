@@ -47,7 +47,7 @@ PAGES = {
               "and the phase-by-phase read on whoever we are playing."),
         sections=["season", "plan"],
         js=["01 - our 2026 campaign", "08 - match plan + opponent scouting"],
-        data=["league", "phases", "season", "ours", "players", "results2026", "opponents2026", "teams"],
+        data=["league", "phases", "season", "ours", "players", "results2026", "opponents2026", "teams", "grounds2026"],
         nav=[("Fixtures", "season"), ("Match plan", "plan")],
         footHide=("form",),   # section 01 already carries a full card for it
     ),
@@ -57,11 +57,11 @@ PAGES = {
         h1="The season as it happens",
         desc=("The full 2026 schedule - every group, the knockout bracket - and real results "
               "as each round is played, with our own group highlighted throughout."),
-        sections=["schedule", "standings", "results", "leaders"],
-        js=["league schedule", "standings", "2026 results", "leaderboards"],
-        data=["schedule", "results2026", "standings2026", "leaders2026"],
+        sections=["schedule", "standings", "results", "grounds", "leaders"],
+        js=["league schedule", "standings", "2026 results", "grounds", "leaderboards"],
+        data=["schedule", "results2026", "standings2026", "leaders2026", "grounds2026"],
         nav=[("Schedule", "schedule"), ("Points table", "standings"), ("Results", "results"),
-             ("Leaderboards", "leaders")],
+             ("Grounds", "grounds"), ("Leaderboards", "leaders")],
     ),
     "form": dict(
         title="Our form",

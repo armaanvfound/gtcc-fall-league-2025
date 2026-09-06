@@ -609,6 +609,13 @@
          border:1px solid var(--rule);border-radius:3px;padding:2px 7px;margin:4px 6px 0 0;}
   .o26-r.w{border-color:var(--good);color:var(--good);}
   .o26-r.l{border-color:var(--rule);color:var(--muted);}
+  /* ground cards */
+  .grc{border:1px solid var(--rule);border-radius:5px;background:var(--paper);padding:13px 16px;}
+  .grc-row{font-size:13.5px;color:var(--ink-2);margin-top:7px;line-height:1.6;}
+  .grc-row .tag{margin-right:6px;}
+  .grc-row em{font-family:var(--mono);font-style:normal;font-size:10px;color:var(--muted);margin-left:6px;}
+  .grc-read{font-size:12.5px;line-height:1.55;color:var(--muted);margin-top:9px;
+            border-top:1px solid var(--rule-2);padding-top:9px;}
   /* leaderboards */
   .ld-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:0 0 18px;}
   .ld-t{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
@@ -821,6 +828,12 @@
   <div id="res-list"></div>
 </section>
 
+<section id="grounds">
+  <div class="sechead"><div class="n">04</div><h2>The grounds</h2></div>
+  <p class="lede" id="gr-lede"></p>
+  <div class="ld-grid" id="gr-cards"></div>
+</section>
+
 <section id="leaders">
   <div class="sechead"><div class="n">04</div><h2>The leaderboards</h2></div>
   <p class="lede" id="ld-lede"></p>
@@ -1017,6 +1030,7 @@
     <label for="oppsel">Select opponent</label>
     <select id="oppsel"><option value="">&mdash; choose &mdash;</option></select>
     <div id="tossbox" hidden></div>
+    <div id="groundbox" hidden></div>
     <div id="opp26box" hidden></div>
     <div class="seg" id="scenario" role="group" aria-label="Innings scenario">
       <button type="button" data-s="bat" aria-pressed="false">We bat first</button>
@@ -1182,8 +1196,9 @@ if (SEA) {
       let v = esc(f.ground);
       if (g26.length >= 2) {
         const avg1 = Math.round(g26.reduce((s2, m) => s2 + m.first.runs, 0) / g26.length);
+        const avg2c = Math.round(g26.reduce((s2, m) => s2 + m.second.runs, 0) / g26.length);
         const bfw = g26.filter(m => m.batFirstWon).length;
-        v += `<span class="v26">2026: par ${avg1} &middot; bat-first won ${bfw}/${g26.length}</span>`;
+        v += `<span class="v26">2026: 1st ${avg1} &middot; 2nd ${avg2c} &middot; bat-first ${bfw}/${g26.length}</span>`;
       }
       if (f.venue) v += `<span>2025: bat-first won ${f.venue.batFirstPct}% &middot; par ${f.venue.avg1}</span>`;
 
@@ -1349,6 +1364,39 @@ if (SCH) {
         `<div class="${t === SCH_US ? 'sch-us' : ''}">${esc(t)}</div>`).join('') +
       `</div>`).join('') +
     `</div>`;
+}
+
+/* grounds */
+// Each ground this season beside last season, so "it is playing lower this
+// year" is a page read, not a memory. Same harvest as everything else.
+const GR = DATA.grounds2026;
+function groundCard(g){
+  const p = g.y2025;
+  const d1 = p ? g.avg1 - p.avg1 : null;
+  return `<div class="grc">
+    <h5 class="st-h">${esc(g.ground)}</h5>
+    <div class="grc-row"><span class="tag ok">2026</span>
+      <b>${g.avg1}</b> 1st inns &middot; <b>${g.avg2}</b> 2nd &middot;
+      bat-first won ${g.batFirstWins}/${g.n} &middot; ${g.allOuts} all-out${g.allOuts === 1 ? '' : 's'}
+      <em>${g.n} match${g.n === 1 ? '' : 'es'}</em></div>
+    ${p ? `<div class="grc-row"><span class="tag y25">2025</span>
+      <b>${p.avg1}</b> 1st inns &middot; <b>${p.avg2}</b> 2nd &middot;
+      bat-first won ${p.batFirstPct}% &middot; ${p.allOuts} all-outs
+      <em>${p.n} matches</em></div>
+    <div class="grc-read">${g.n < 3 ? `<b>${g.n} match${g.n === 1 ? '' : 'es'} is a hint, not a trend:</b> ` : ``}${d1 <= -8
+      ? `playing <b>${-d1} runs lower</b> than last season so far &mdash; ${g.n < 3 ? `watch it, and lean on the 2025 par until more is played.` : `recalibrate targets down; a par-looking total may already be a winning one.`}`
+      : d1 >= 8
+        ? `playing <b>${d1} runs higher</b> than last season so far.`
+        : `playing close to last season's par so far (${d1 >= 0 ? '+' : ''}${d1}).`}
+      A won chase stops at the target, so 2nd-innings averages read low.</div>`
+    : `<div class="grc-read">No 2025 baseline for this ground.</div>`}
+  </div>`;
+}
+if (GR && $('gr-lede')) {
+  $('gr-lede').innerHTML =
+    `Average totals by ground, <b>this season beside last</b> &mdash; batting first and second, the ` +
+    `bat-first record and how often sides are bowled out. Early samples are labelled with their size.`;
+  $('gr-cards').innerHTML = GR.grounds.map(groundCard).join('');
 }
 
 /* leaderboards */
@@ -2288,6 +2336,35 @@ if (PH && PH.teams) {
        </div>`;
   }
 
+  // The ground for this fixture, both seasons - the dossier answers "how does
+  // this place play" without a trip to the season page.
+  function renderGround(){
+    const box = $('groundbox');
+    const GRD = DATA.grounds2026;
+    const fx26 = SEA.fixtures.find(f => f.opp === osel.value);
+    if (!GRD || !fx26) { box.hidden = true; box.innerHTML = ''; return; }
+    const gk = g => String(g||'').toLowerCase().replace(/cricket|ground|park|memorial|-|,|oshawa|whitby/g,'').replace(/[^a-z]/g,'');
+    const g = GRD.grounds.find(x => gk(x.ground) === gk(fx26.ground));
+    if (!g) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    const p = g.y2025;
+    const d1 = p ? g.avg1 - p.avg1 : null;
+    box.innerHTML =
+      `<div class="opp-block">
+        <h4>The ground: ${esc(fx26.ground)} <span class="tag no">where we play them</span></h4>
+        <div class="grc-row"><span class="tag ok">2026</span>
+          <b>${g.avg1}</b> 1st inns &middot; <b>${g.avg2}</b> 2nd &middot; bat-first won ${g.batFirstWins}/${g.n}
+          <em>${g.n} match${g.n === 1 ? '' : 'es'}</em></div>` +
+      (p ? `<div class="grc-row"><span class="tag y25">2025</span>
+          <b>${p.avg1}</b> 1st inns &middot; <b>${p.avg2}</b> 2nd &middot; bat-first won ${p.batFirstPct}%
+          <em>${p.n} matches</em></div>
+        <div class="grc-read">${g.n < 3 ? `<b>${g.n} match${g.n === 1 ? '' : 'es'} is a hint, not a trend:</b> ` : ``}${d1 <= -8
+          ? `playing <b>${-d1} runs lower</b> than last season${g.n < 3 ? ` &mdash; lean on the 2025 numbers until more is played here.` : ` &mdash; a total that looks par may already be winning.`}`
+          : d1 >= 8 ? `playing <b>${d1} runs higher</b> than last season.`
+          : `close to last season's par (${d1 >= 0 ? '+' : ''}${d1}).`}</div>` : ``) +
+      `</div>`;
+  }
+
   function render2026(){
     const box = $('opp26box');
     const O26 = DATA.opponents2026;
@@ -2605,6 +2682,7 @@ if (PH && PH.teams) {
 
   osel.addEventListener('change', () => {
     renderToss();
+    renderGround();
     render2026();
     renderPlan();
     render2025();

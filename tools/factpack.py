@@ -411,6 +411,28 @@ def _season_totals(payload, name):
     return {}
 
 
+def _grounds_block(gr):
+    """Each ground this season beside last: avg totals both innings, bat-first."""
+    if not gr:
+        return None
+    out = {"whatThisIs": ("How each ground plays THIS season vs 2025: average 1st and "
+                          "2nd innings totals, bat-first record, all-outs. Prefer these "
+                          "to 2025 pars when setting targets, quoting the sample size. "
+                          "avg2 reads low by construction (a won chase stops early)."),
+           "grounds": []}
+    for g in gr["grounds"]:
+        row = {"ground": g["ground"], "y2026": {
+            "matches": g["n"], "avg1st": g["avg1"], "avg2nd": g["avg2"],
+            "batFirstWins": "%d of %d" % (g["batFirstWins"], g["n"]),
+            "allOuts": g["allOuts"]}}
+        if g.get("y2025"):
+            p = g["y2025"]
+            row["y2025"] = {"matches": p["n"], "avg1st": p["avg1"], "avg2nd": p["avg2"],
+                            "batFirstWinPct": p["batFirstPct"], "allOuts": p["allOuts"]}
+        out["grounds"].append(row)
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -532,6 +554,8 @@ def build_factpack(payload):
         "leaders2026": _leaders_block(payload.get("leaders2026")),
 
         "opponents2026": _opp26_block(payload.get("opponents2026")),
+
+        "grounds2026": _grounds_block(payload.get("grounds2026")),
 
         "season2026": {
             "group": sea.get("group"),

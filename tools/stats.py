@@ -105,7 +105,9 @@ def build_payload():
         if len(sub) < 5: continue
         w = sum(1 for m in sub if m['winner'] == m['bat1'])
         venues.append(dict(venue=v, n=len(sub), pct=round(w/len(sub)*100),
-                           avg1=round(statistics.mean([m['s1'] for m in sub]))))
+                           avg1=round(statistics.mean([m['s1'] for m in sub])),
+                           avg2=round(statistics.mean([m['s2'] for m in sub])),
+                           allout=sum(1 for m in sub if m['w1'] == 10 or m['w2'] == 10)))
 
     bf = sum(1 for m in P if m['winner'] == m['bat1'])
     hi = [m for m in P15 if m['s1'] >= 120]; lo = [m for m in P15 if m['s1'] < 120]
@@ -211,6 +213,11 @@ def build_payload():
         out['opponents2026'] = build_opponents2026()
     except Exception:
         out['opponents2026'] = None
+    try:
+        from grounds2026 import build_grounds2026
+        out['grounds2026'] = build_grounds2026(out.get('league'))
+    except Exception:
+        out['grounds2026'] = None
     # Per-player league data. Optional: the pages fall back to team-level
     # scouting when league-raw/performances.tsv has not been collected yet.
     try:
