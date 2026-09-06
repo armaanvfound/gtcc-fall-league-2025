@@ -126,9 +126,14 @@ def main():
         #    say so. This catches a stale refusal as well as a wrong number.
         if kind in ("playeravg", "playerdet"):
             low = plain.lower()
-            if re.search(r"do(es)? not (hold|have)|not in the (data|dashboard)|cannot", low):
+            # An answer may honestly caveat (player records are cross-competition,
+            # not per-season) - that is correct, not a refusal. Fail only when it
+            # withholds the figures themselves.
+            has_figures = bool(re.search(r"\d+\.?\d*", plain))
+            refuses = re.search(r"do(es)? not (hold|have)|not in the (data|dashboard)|cannot", low)
+            if refuses and not has_figures:
                 problems.append("refused a figure the pack now holds")
-            elif not re.search(r"\d", plain):
+            elif not has_figures:
                 problems.append("gave no figures at all")
 
         # 5. LBW does not exist in this competition - claiming it would be invented
