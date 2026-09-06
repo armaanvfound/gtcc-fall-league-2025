@@ -55,6 +55,9 @@ ALIASES = {
     "PunjabXI": "Panjab XI",
     "North Stars": "NorthStars",
     "Feral": "FERAL XI",
+    "Fighters X1 - T15": "Fighters",
+    "Trailblazers Cricket Club": "Trailblazers",
+    "Durham Spartans": "Durham Spartans Cricket Club",
 }
 
 
