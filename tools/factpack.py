@@ -621,13 +621,17 @@ def build_factpack(payload):
 
     for name, t in (ph.get("teams") or {}).items():
         entry = {}
+        # Ship the per-over rate beside every phase total. Without it the model
+        # derived one on its own when a question invited a rate comparison -
+        # and got 27.6/15 = 1.85, dividing a five-over phase by fifteen. A
+        # number it can retrieve is a number it cannot miscalculate.
         if t.get("bat"):
             b = t["bat"]
-            entry["batting"] = dict(_phase_block(b), total=_r(b.get("total"), 1),
+            entry["batting"] = dict(_with_rpo(_phase_block(b)), total=_r(b.get("total"), 1),
                                     innings=b.get("n"))
         if t.get("bowl"):
             w = t["bowl"]
-            entry["bowlingConceded"] = dict(_phase_block(w), total=_r(w.get("total"), 1),
+            entry["bowlingConceded"] = dict(_with_rpo(_phase_block(w)), total=_r(w.get("total"), 1),
                                             innings=w.get("n"))
         if entry:
             entry.update(_target_for(t, (ph.get("all") or {}).get("death")))
