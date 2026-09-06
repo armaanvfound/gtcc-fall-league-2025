@@ -396,6 +396,21 @@ def _opp26_block(o):
     return out
 
 
+def _season_totals(payload, name):
+    """A team's 2025 totals split by innings role, from the season table.
+
+    avgChasing carries its own caveat because it is structurally understated:
+    a successful chase stops at the target. State it whenever quoting."""
+    for t in payload.get("teams") or []:
+        if t["team"] == name:
+            return {"seasonTotals2025": {
+                "avgBatFirst": t.get("avg1"), "avgChasing": t.get("avg2"),
+                "batFirstRecord": "%d of %d" % (t.get("bat1W", 0), t.get("bat1", 0)),
+                "chaseRecord": "%d of %d" % (t.get("bat2W", 0), t.get("bat2", 0)),
+            }}
+    return {}
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -423,6 +438,9 @@ def build_factpack(payload):
         "caveats": [
             _phasegap_caveat(ours),
             _record_caveat(ours),
+            "Every seasonTotals2025.avgChasing (and any chasing average) reads "
+            "low by construction: a successful chase stops at the target. Say so "
+            "whenever quoting one.",
             "The 2025 league numbers are a different, solid basis: 88 matches, all "
             "read ball by ball, so statements about how the league behaves are well "
             "supported.",
@@ -569,6 +587,7 @@ def build_factpack(payload):
                                             innings=w.get("n"))
         if entry:
             entry.update(_target_for(t, (ph.get("all") or {}).get("death")))
+            entry.update(_season_totals(payload, name))
             pack["opponents2025"][name] = entry
 
     pack["caveats"] = [c for c in pack["caveats"] if c]

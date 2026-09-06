@@ -1930,6 +1930,7 @@ sel.addEventListener('change', () => {
     [t.rf.toFixed(2), 'runs / over for'],
     [t.ra.toFixed(2), 'runs / over against'],
     [t.avg1 == null ? '—' : t.avg1, 'avg batting first'],
+    [t.avg2 == null ? '—' : t.avg2, 'avg chasing'],
     [`${t.allout}/${t.inns}`, 'innings all out'],
     [t.finish, 'finished'],
   ];
@@ -2234,6 +2235,7 @@ if (PH && PH.teams) {
       [`${t.lgW}&ndash;${t.lgL}`, 'group record 2025'],
       [(t.nrr >= 0 ? '+' : '') + t.nrr.toFixed(2), 'net run rate'],
       [t.avg1 == null ? '&mdash;' : t.avg1, 'avg batting first'],
+      [t.avg2 == null ? '&mdash;' : t.avg2, 'avg chasing'],
       [t.ra.toFixed(2), 'conceded per over'],
       [`${t.allout}/${t.inns}`, 'innings all out'],
       [esc(t.finish), 'finished'],
@@ -2257,7 +2259,9 @@ if (PH && PH.teams) {
     if (t.bat1 >= 2 && t.bat2 >= 2) {
       const b1 = Math.round(t.bat1W / t.bat1 * 100), b2 = Math.round(t.bat2W / t.bat2 * 100);
       reads.push(`Batting first they won <b>${b1}%</b>; chasing, <b>${b2}%</b>` +
-        (b1 >= b2 ? ` &mdash; like most sides here, worse when hunting a target.` : ` &mdash; unusually, a chasing side.`));
+        (b1 >= b2 ? ` &mdash; like most sides here, worse when hunting a target.` : ` &mdash; unusually, a chasing side.`) +
+        (t.avg2 != null ? ` Chasing they averaged <b>${t.avg2}</b> across ${t.bat2} &mdash; and a won chase stops ` +
+          `at the target, so that number reads low when they win.` : ``));
     }
     reads.push(t.ra <= 6.6
       ? `They conceded <b>${t.ra.toFixed(2)}</b> an over &mdash; genuinely tight; boundaries have to be earned.`

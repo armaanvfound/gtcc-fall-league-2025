@@ -75,6 +75,10 @@ def build_payload():
     for i, t in enumerate(rank, 1):
         s = S[t]
         scores1 = [m['s1'] for m in P15 if m['bat1'] == t]
+        # Chasing totals are truncated by success - a won chase stops at the
+        # target - so avg2 understates a good chasing side. Shown with that
+        # caveat, never as a mirror of avg1.
+        scores2 = [m['s2'] for m in P15 if m['bat2'] == t]
         conc = [(m['s2'] if m['bat1'] == t else m['s1']) for m in P15 if t in (m['bat1'], m['bat2'])]
         TEAMS.append(dict(
             rank=i, team=t, lgW=s['lgW'], lgL=s['lgL'], W=s['W'], L=s['L'],
@@ -83,6 +87,7 @@ def build_payload():
             finish=finish(t), ko=(t in ko), allout=s['allout'], inns=s['bat1'] + s['bat2'],
             bat1=s['bat1'], bat1W=s['bat1W'], bat2=s['bat2'], bat2W=s['bat2W'],
             avg1=round(statistics.mean(scores1)) if scores1 else None,
+            avg2=round(statistics.mean(scores2)) if scores2 else None,
             avgConc=round(statistics.mean(conc)) if conc else None,
             log=sorted(log[t], key=lambda x: x['date'])))
 
