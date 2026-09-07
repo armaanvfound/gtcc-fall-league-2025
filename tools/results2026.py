@@ -58,6 +58,15 @@ ALIASES = {
     "Fighters X1 - T15": "Fighters",
     "Trailblazers Cricket Club": "Trailblazers",
     "Durham Spartans": "Durham Spartans Cricket Club",
+    "South Warriors Fall26": "South Warriors",
+    "Downtown hunters": "Downtown Hunterz",
+    "Toronto Sharks T15": "Toronto Sharks",
+    "Thunder Strikers": "ThunderStrikers",
+    "REDWINGS": "Red wings",
+    # a team whose name never appears in a match it played resolves to
+    # "team<id>"; these two were read off their team-profile pages
+    "team14433921": "YRICA team",
+    "team14492292": "Fighters",
 }
 
 
