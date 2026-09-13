@@ -63,6 +63,7 @@ ALIASES = {
     "Toronto Sharks T15": "Toronto Sharks",
     "Thunder Strikers": "ThunderStrikers",
     "REDWINGS": "Red wings",
+    "Whitby thunderbolts t15 tennis": "Whitby Thunderbolts",
     # a team whose name never appears in a match it played resolves to
     # "team<id>"; these two were read off their team-profile pages
     "team14433921": "YRICA team",
@@ -104,7 +105,10 @@ def build_results2026():
                 m["innings"].append(dict(
                     order=int(r[2]), team=_canon(r[3]), runs=int(r[4]),
                     wkts=int(r[5]), overs=r[6], extras=int(r[7]),
-                    allOut=bool(int(r[8])) if len(r) > 8 else int(r[5]) >= 10))
+                    # is_allout OR ten down: CricHeroes left the flag unset on
+                    # an innings that was plainly bowled out (86/10 in 14.4),
+                    # and NRR must count that as the full quota.
+                    allOut=(bool(int(r[8])) if len(r) > 8 else False) or int(r[5]) >= 10))
             elif r[0] == "B":
                 m["bat"].append(dict(team=_canon(r[3]), name=r[4], runs=int(r[5]),
                                      balls=int(r[6]), hand=r[10], howOut=r[11]))
