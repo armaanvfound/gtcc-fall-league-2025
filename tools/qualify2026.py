@@ -1,7 +1,9 @@
 """What we need: the Group 5 qualification picture, computed each sync.
 
-Top two of each group advance, plus the two best third-placed sides; NRR is
-the tiebreak. From about round three the question every teammate asks is
+The top three of each group reach the knockouts. First, second and the two best
+third-placed sides by NRR go straight into the pre-quarters; the other four
+third-placed sides must win an Eliminator on 3 Oct first. From about round three
+the question every teammate asks is
 "what do we need on Saturday?" - so this answers it from the standings and the
 remaining fixtures, conservatively:
 
@@ -83,18 +85,24 @@ def build_qualify2026():
                 "can still reach." % us["points"])
     elif need is not None:
         read = ("Win <b>%d of our remaining %d</b> and top two is guaranteed whatever anyone else "
-                "does. Fewer than that and it comes down to other results and net run rate - "
-                "the two best third-placed sides also go through, so a strong NRR is the "
-                "insurance." % (need, us["left"]))
+                "does. Fewer than that and it comes down to other results and net run rate. "
+                "Third place still reaches the knockouts, but only the two best third-placed "
+                "sides by NRR go straight into the pre-quarters - the other four must win an "
+                "Eliminator on 3 Oct first - so a strong NRR is the insurance." % (need, us["left"]))
     else:
         read = ("Top two cannot be guaranteed by our own results alone - it depends on others' "
-                "results and net run rate. The two best third-placed sides also advance.")
+                "results and net run rate. Third place still reaches the knockouts: the two "
+                "best third-placed sides by NRR go straight into the pre-quarters, the other "
+                "four must win an Eliminator on 3 Oct first. Fourth place is out.")
 
     return dict(
         table=table, remaining=remaining, us=us,
         needWins=need, guaranteed=guaranteed, secondCeiling=second_ceiling,
         read=read,
-        rules="Top two per group advance, plus the two best third-placed sides; NRR is the tiebreak.",
+        rules=("The top three in each group reach the knockouts. First and second go straight "
+               "into the pre-quarter-finals, and so do the two best third-placed sides by NRR; "
+               "the other four third-placed sides play an Eliminator on 3 Oct to get there. "
+               "Fourth and below are out. NRR is the tiebreak."),
     )
 
 

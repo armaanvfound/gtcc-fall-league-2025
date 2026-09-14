@@ -328,9 +328,12 @@ def _standings_block(st):
                 r["nrr"]]
     out = {
         "_legend": "[team, played, won, lost, tied, points, NRR]",
-        "rules": ("2 points a win, 1 a tie. Top two per group advance plus the two "
-                  "best third-placed sides; NRR is the tiebreak and uses the "
-                  "all-out rule. Official table: " + st["source"]["url"]),
+        "rules": ("2 points a win, 1 a tie. The top three in each group reach the "
+                  "knockouts: first, second and the two best third-placed sides by NRR "
+                  "go straight into the pre-quarter-finals, the other four third-placed "
+                  "sides play an Eliminator on 3 Oct first, and fourth and below are out. "
+                  "NRR is the tiebreak and uses the all-out rule. Official table: "
+                  + st["source"]["url"]),
         "group5": [row(r) for r in st["groups"]["Group 5"]],
         "otherGroupLeaders": {
             g: [row(r) for r in rows[:2] if r["played"]]

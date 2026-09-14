@@ -1458,8 +1458,9 @@ const ST = DATA.standings2026;
 if (ST && $('st-lede')) {
   const played = g => g.some(r => r.played > 0);
   $('st-lede').innerHTML =
-    `Two points a win, one a tie. <b>Top two of each group advance, plus the two best ` +
-    `third-placed sides</b> &mdash; and net run rate is the tiebreak, which is why every scorecard ` +
+    `Two points a win, one a tie. <b>The top three of each group reach the knockouts</b>: first, ` +
+    `second and the two best third-placed sides go straight into the pre-quarters, the other four ` +
+    `thirds play an eliminator on 3 October first &mdash; and net run rate is the tiebreak, which is why every scorecard ` +
     `here applies the all-out rule (a side bowled out counts as its full 15 overs). Computed from ` +
     `our own harvested scorecards; the official table lives on ` +
     `<a href="${ST.source.url}" target="_blank" rel="noopener">CricHeroes</a>.`;

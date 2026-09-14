@@ -93,6 +93,11 @@ page is pure ASCII, self-contained, no fetch at read time.
   too: it once told the captain we had lost two league matches fielding first
   (it was one) by counting `us.matches`, which includes the friendlies - so
   toss history is `us.tossRecord`, and the eval checks any toss count against it.
+- **The knockout bracket has one source**: `FORMAT` in `tools/season.py`. Top
+  three per group reach the knockouts; first, second and the two best thirds by
+  NRR go straight into the pre-quarters, the other four thirds play a 3 Oct
+  Eliminator, fourth is out. Five other places once said only "top two plus
+  the two best thirds", which reads as thirds three to six going home.
 - **Fact pack depth**: it holds top-5 per leaderboard and top-4 players per
   team; it must say so ("not in the top five", never "not on the board").
 
@@ -103,7 +108,7 @@ page is pure ASCII, self-contained, no fetch at read time.
 `leaders2026.py`, `opponents2026.py`, `grounds2026.py`, `qualify2026.py` (all
 derive from the one TSV) · `ourmatches.py` (our record, phases, careers) ·
 `league_players.py` (2025 player stats from `league-raw/scorecards.tsv`) ·
-`factpack.py` (chatbot facts) · `eval_assistant.py` (23-question grounding
+`factpack.py` (chatbot facts) · `eval_assistant.py` (24-question grounding
 check against the live chatbot; `--selftest` runs its two text rules offline:
 bowling first is flagged only when framed as advice, so an honest account of
 our field-first toss against Durham passes, and any toss count must equal

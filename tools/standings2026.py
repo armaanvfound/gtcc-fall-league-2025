@@ -7,8 +7,10 @@ arithmetic over results. Computing it ourselves means the standings update on
 the same sync as everything else and can never disagree with the results shown
 beside them.
 
-Rules, from the official format (2 points a win, 1 a tie/no-result; the top two
-of each group plus the two best third-placed sides advance, tiebreak NRR):
+Rules, from the official format (2 points a win, 1 a tie/no-result; the top three
+of each group reach the knockouts - first, second and the two best thirds by NRR
+straight into the pre-quarters, the other four thirds via a 3 Oct Eliminator;
+tiebreak NRR):
 
 Net run rate uses the all-out rule - a side bowled out counts as having batted
 its full quota of overs. That is the rule that moved our own NRR from a wrong
@@ -94,8 +96,9 @@ def build_standings2026():
         ),
         note=("Computed from the harvested scorecards - 2 points a win, 1 a tie; "
               "NRR applies the all-out rule (a side bowled out counts as its full "
-              "%d overs). Top two per group advance plus the two best third-placed "
-              "sides, so NRR is the tiebreak that decides seasons." % QUOTA),
+              "%d overs). The top three per group reach the knockouts, but only the two "
+              "best third-placed sides by NRR skip the 3 Oct Eliminator, so NRR is the "
+              "tiebreak that decides seasons." % QUOTA),
     )
 
 
