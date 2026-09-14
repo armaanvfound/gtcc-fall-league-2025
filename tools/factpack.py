@@ -488,6 +488,22 @@ def _toss_record(matches):
     return rec
 
 
+def _ground_phase_block(gp):
+    """Bowler x ground x phase, two scopes, compact: {scope: {bowler: {ground: {phase: [balls, runs, econ, dot%, wktsBowler]}}}}."""
+    if not gp:
+        return None
+    out = {"_legend": "[balls, runs, econ, dotPct, wktsBowler]; bowler-credited; 'all' includes the FERAL friendlies, 'league' is league matches only; Ajax = both Ajax grounds",
+           "_grounds": {g["key"]: g["label"] for g in gp["grounds"]}}
+    for sc in gp["scopes"]:
+        out[sc["key"]] = {"matches": sc["matches"], "matchesByGround": sc["grounds"]}
+        for r in sc["rows"]:
+            out[sc["key"]][r["name"]] = {
+                g: {p: ([c["balls"], c["runs"], c["econ"], c["dotPct"], c["wkts"]] if c else None)
+                    for p, c in cells.items()}
+                for g, cells in r["cells"].items()}
+    return out
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -604,6 +620,7 @@ def build_factpack(payload):
             "teamBattingTotal": ours.get("battersTotal"),
             "teamBowlingTotal": _bowler_credited(ours.get("bowlersTotal")),
             "attackByType": _attack_credited(ours.get("attack")),
+            "bowlingByGroundAndPhase": _ground_phase_block(ours.get("groundPhase")),
             "battingByHand": ours.get("handSplit"),
             "squad": squad.get("players"),
             "captain": squad.get("captain"),

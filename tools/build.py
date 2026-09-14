@@ -69,10 +69,10 @@ PAGES = {
         h1="Our form so far",
         desc=("Every match Royal Challenger Blaster has played, read ball by ball: phase splits, "
               "dot-ball percentages, player careers and what they say we should change."),
-        sections=["ours", "squad"],
-        js=["02 - how we have actually played", "11 - squad"],
+        sections=["ours", "ground-phase", "squad"],
+        js=["02 - how we have actually played", "03 - bowling by ground and phase", "11 - squad"],
         data=["ours", "phases", "squad", "league"],
-        nav=[("Match log", "ours"), ("Squad", "squad")],
+        nav=[("Match log", "ours"), ("By ground", "ground-phase"), ("Squad", "squad")],
     ),
     "league": dict(
         title="2025 intel",

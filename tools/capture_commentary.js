@@ -49,21 +49,29 @@
     return o <= a ? 'pp' : (o <= b ? 'mid' : 'death'); }
 
   function ball(ev) {
-    const wide = /\bwide\b/i.test(ev), no = /\(no ball\)/i.test(ev);
-    const bye = /leg bye|,\s*bye\b/i.test(ev);
+    // The event text starts with the extra. A bare word match read "Caught at
+    // Wide long-on" as a wide and moved a run and a ball out of an innings.
+    const wide = /^wide\b/i.test(ev), no = /\(no ball\)/i.test(ev);
+    // A bye is written "bye, 1 run" at the START of the event, so the comma
+    // form alone missed every plain bye and charged it to the bowler.
+    const bye = /^(\(no ball\)\s*)?(leg )?bye\b|leg bye|,\s*bye\b/i.test(ev);
     let r = 0;
     if (/\bSIX\b/.test(ev)) r = 6; else if (/\bFOUR\b/.test(ev)) r = 4;
     else { const m = ev.match(/(\d+)\s*runs?\b/); if (m) r = +m[1]; }
     const runout = /run out/i.test(ev), out = /\bOUT\b/.test(ev);
     let total, offBat, charged;
-    if (wide)      { total = 1 + r; offBat = 0; charged = 1 + r; }
-    else if (no)   { total = 1 + r; offBat = r; charged = 1 + r; }
-    else if (bye)  { total = r;     offBat = 0; charged = 0; }
-    else           { total = r;     offBat = r; charged = r; }
+    // "wide, 1 run": CricHeroes books the wide as one wide and the run as a
+    // bye (the 13 Sep card's 16 wides / 4 byes only add up that way), so the
+    // extras split follows the card and the bowler is charged the wide alone.
+    if (wide)          { total = 1 + r; offBat = 0; charged = 1; }
+    else if (no && bye){ total = 1 + r; offBat = 0; charged = 1; }   // "(no ball) bye, 1 run": the run is a bye
+    else if (no)       { total = 1 + r; offBat = r; charged = 1 + r; }
+    else if (bye)      { total = r;     offBat = 0; charged = 0; }
+    else               { total = r;     offBat = r; charged = r; }
     return { legal: !wide && !no, total, offBat, charged, out,
              bowlerWkt: out && !runout, dot: !wide && !no && total === 0,
              four: /\bFOUR\b/.test(ev) && !wide, six: /\bSIX\b/.test(ev) && !wide,
-             wideRuns: wide ? 1 + r : 0, noBall: no ? 1 : 0, byeRuns: bye ? r : 0 };
+             wideRuns: wide ? 1 : 0, noBall: no ? 1 : 0, byeRuns: (bye || wide) ? r : 0 };
   }
 
   function tally(L, q) {

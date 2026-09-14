@@ -479,6 +479,60 @@ def hand_split(batters):
     return out
 
 
+# The captain's own grid: each front-line bowler by ground and by phase, once
+# for every match and once for the league alone. Bowler-credited like the
+# career table. "Ajax" folds the friendlies' "Ajax Cricket Club Ground" and the
+# league's "GTCC Ajax Cricket Ground" together - same town, same short name on
+# the captain's sheet - and the key text says so.
+GP_BOWLERS = ["Jeetmanyu Bawra", "Patel Happy", "Jemish Virendra Patel",
+              "Armaan Wadhwa", "Kalpesh Saraiya"]
+GP_GROUNDS = [("stone", "Stone Street", "stone"), ("ajax", "Ajax", "ajax")]
+
+
+def _gp_ground(venue):
+    v = (venue or "").lower()
+    for key, _, needle in GP_GROUNDS:
+        if needle in v:
+            return key
+    return "other"
+
+
+def ground_phase(matches):
+    def blank():
+        return {g: {p: [0, 0, 0, 0] for p in PHASES} for g, _, _ in GP_GROUNDS}
+    def cell(v):
+        balls, dots, runs, wkts = v
+        return dict(balls=balls, dots=dots, runs=runs, wkts=wkts,
+                    econ=round(runs / (balls / 6), 2) if balls else None,
+                    dotPct=_pct(dots, balls) if balls else None) if balls else None
+    scopes = []
+    for key, label, ms in (("all", "All %d games", matches),
+                           ("league", "League", [m for m in matches if m["isLeague"]])):
+        agg = {n: blank() for n in GP_BOWLERS + ["Others"]}
+        counts = {g: 0 for g, _, _ in GP_GROUNDS}
+        for m in ms:
+            g = _gp_ground(m["venue"])
+            if g not in counts:
+                continue
+            counts[g] += 1
+            for name, d in m["theirInnings"]["ourBowling"].items():
+                if not d.get("ph"):
+                    continue
+                row = agg[name if name in agg else "Others"][g]
+                for p in PHASES:
+                    for i in range(4):
+                        row[p][i] += d["ph"][p][i]
+        scopes.append(dict(
+            key=key, label=label % len(ms) if "%d" in label else label, matches=len(ms),
+            grounds={g: counts[g] for g in counts},
+            rows=[dict(name=n, cells={g: {p: cell(agg[n][g][p]) for p in PHASES}
+                                      for g, _, _ in GP_GROUNDS})
+                  for n in GP_BOWLERS + ["Others"]],
+        ))
+    return dict(scopes=scopes, grounds=[dict(key=g, label=l) for g, l, _ in GP_GROUNDS],
+                phases=list(PHASES))
+
+
 def build_ours():
     matches = load()
     if not matches:
@@ -513,6 +567,7 @@ def build_ours():
         battersTotal=batters_total(batters, len(matches)),
         attack=attack_types(bowlers),
         handSplit=hand_split(batters),
+        groundPhase=ground_phase(matches),
     )
 
 

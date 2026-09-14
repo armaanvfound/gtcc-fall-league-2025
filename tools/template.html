@@ -522,6 +522,11 @@
   .pl-ph b{font-family:var(--serif);font-size:15px;font-weight:400;}
   .pl-ph span{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
   .pltbl th.pl-lg,.pltbl td.pl-lg{border-left:2px solid var(--rule-2);border-right:2px solid var(--rule-2);}
+  .gp-title{font-family:var(--serif);font-size:19px;margin:22px 0 8px;}
+  .gp-title span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em;margin-top:3px;}
+  .gptbl th.gp-g{text-align:center;font-family:var(--serif);font-size:14px;letter-spacing:0;text-transform:none;border-left:2px solid var(--rule-2);}
+  .gptbl td:nth-child(5),.gptbl th:nth-child(5):not(.gp-g){border-left:2px solid var(--rule-2);}
+  .gptbl th[rowspan]{vertical-align:bottom;}
   .pl-none{color:var(--rule);}
   .pltbl .good{color:var(--good);} .pltbl .bad{color:var(--bad);}
   .recs{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);
@@ -1078,6 +1083,12 @@
   <div id="phaseplay"></div>
   <h3 class="subh">Match-level calls</h3>
   <div class="play" id="play"></div>
+</section>
+
+<section id="ground-phase">
+  <div class="sechead"><div class="n">12</div><h2>Bowling by ground and phase</h2></div>
+  <p class="lede" id="gp-lede"></p>
+  <div id="gp-tables"></div>
 </section>
 
 <section id="squad">
@@ -2973,6 +2984,37 @@ if (PH && PH.bowlTypes && PH.bowlTypes.spin) {
 }
 $('play').innerHTML = PLAY.map(([h, p, ev]) =>
   `<article><h3>${h}</h3><p>${p}</p><span class="ev">${ev}</span></article>`).join('');
+
+/* 03 — bowling by ground and phase */
+// The captain's grid: bowler x ground x phase, once for every game and once
+// for the league only. Economy in the cell, dot% and balls beneath, so a
+// thin cell (one over) reads as thin rather than as a verdict.
+(function(){
+  const GP = OURS && OURS.groundPhase;
+  if (!GP || !$('gp-tables')) return;
+  const LBL = {pp:'Powerplay', mid:'Middle', death:'End'};
+  const cls = e => e == null ? '' : (e <= 7 ? 'good' : (e >= 10 ? 'bad' : ''));
+  const cell = c => c
+    ? `<td class="pl-ph"><b class="${cls(c.econ)}">${c.econ}</b><span>${c.dotPct}% &middot; ${c.balls}b${c.wkts ? ' &middot; ' + c.wkts + 'w' : ''}</span></td>`
+    : `<td class="pl-ph pl-none">&mdash;</td>`;
+  const table = sc =>
+    `<div class="gp-title">${esc(sc.label)}<span>${sc.matches} match${sc.matches === 1 ? '' : 'es'}: ` +
+    GP.grounds.map(g => `${sc.grounds[g.key]} at ${esc(g.label)}`).join(', ') + `</span></div>` +
+    `<div class="scroll"><table class="pltbl gptbl"><thead>` +
+    `<tr><th rowspan="2">Bowler</th>` + GP.grounds.map(g => `<th colspan="3" class="gp-g">${esc(g.label)}</th>`).join('') + `</tr>` +
+    `<tr>` + GP.grounds.map(() => GP.phases.map(p => `<th>${LBL[p]}<span>econ / dot%</span></th>`).join('')).join('') + `</tr>` +
+    `</thead><tbody>` +
+    sc.rows.map(r => `<tr><td class="pl-n">${esc(r.name)}</td>` +
+      GP.grounds.map(g => GP.phases.map(p => cell(r.cells[g.key][p])).join('')).join('') + `</tr>`).join('') +
+    `</tbody></table></div>`;
+  $('gp-lede').innerHTML = `Every front-line bowler by <b>ground</b> and by <b>phase</b>: economy first, ` +
+    `dot-ball percentage and balls bowled underneath. Once for everything we have played, once for the league alone.`;
+  $('gp-tables').innerHTML = GP.scopes.map(table).join('') +
+    `<div class="pl-key">Bowler-credited, as on the career table: wides and no-balls count against the bowler, ` +
+    `byes and run outs do not. <b>Ajax</b> is the friendlies' "Ajax Cricket Club Ground" and the league's ` +
+    `"GTCC Ajax Cricket Ground" together. Powerplay = overs 1-5, Middle = 6-10, End = 11-15. A cell with ` +
+    `6 or 12 balls under it is one or two overs - a look, not a verdict.</div>`;
+})();
 
 /* 11 — squad */
 const SQ = DATA.squad;

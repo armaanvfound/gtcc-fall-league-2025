@@ -14,7 +14,7 @@
   "result": "lost",
   "margin": "5 wickets",
   "url": "https://cricheroes.com/scorecard/26972449/gtcc-fall-league-2026/royal-challenger-blaster-vs-south-warriors-fall26/scorecard",
-  "phaseSource": "scorecard only - phases fill in when tools/capture_commentary.js reads the ball-by-ball",
+  "phaseSource": "ball-by-ball from the CricHeroes commentary, reconciled to the scorecard on 2026-09-14",
   "ourInnings": {
     "order": 1,
     "runs": 86,
@@ -25,7 +25,26 @@
     "noBalls": 2,
     "byeRuns": 4,
     "allOut": true,
-    "phases": null,
+    "phases": {
+      "pp": [
+        30,
+        19,
+        21,
+        2
+      ],
+      "mid": [
+        30,
+        13,
+        38,
+        4
+      ],
+      "death": [
+        28,
+        14,
+        27,
+        4
+      ]
+    },
     "batting": [
       [
         "Jaykumar Patel",
@@ -116,7 +135,261 @@
         false
       ]
     ],
-    "battingPhases": {}
+    "battingPhases": {
+      "Saurabh Patel": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          8,
+          4,
+          6,
+          0,
+          0
+        ]
+      },
+      "Rudresh Bhanushali": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          5,
+          3,
+          2,
+          0,
+          0
+        ]
+      },
+      "Pankhil Patel": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          7,
+          4,
+          4,
+          0,
+          0
+        ],
+        "death": [
+          5,
+          0,
+          5,
+          0,
+          0
+        ]
+      },
+      "Jay Vasani": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          4,
+          3,
+          1,
+          0,
+          0
+        ]
+      },
+      "Jeetmanyu Bawra": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          5,
+          2,
+          5,
+          1,
+          0
+        ],
+        "death": [
+          6,
+          4,
+          3,
+          0,
+          0
+        ]
+      },
+      "Kalpesh Saraiya": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Yash Chauhan": {
+        "pp": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Armaan Wadhwa": {
+        "pp": [
+          17,
+          9,
+          11,
+          0,
+          0
+        ],
+        "mid": [
+          8,
+          2,
+          12,
+          0,
+          1
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Patel Happy": {
+        "pp": [
+          5,
+          4,
+          1,
+          0,
+          0
+        ],
+        "mid": [
+          6,
+          1,
+          9,
+          1,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Nikhil Das T": {
+        "pp": [
+          5,
+          5,
+          0,
+          0,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Jaykumar Patel": {
+        "pp": [
+          3,
+          1,
+          5,
+          1,
+          0
+        ],
+        "mid": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "death": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
   },
   "theirInnings": {
     "order": 2,
@@ -128,7 +401,26 @@
     "noBalls": 1,
     "byeRuns": 0,
     "allOut": false,
-    "phases": null,
+    "phases": {
+      "pp": [
+        30,
+        13,
+        44,
+        1
+      ],
+      "mid": [
+        30,
+        15,
+        37,
+        3
+      ],
+      "death": [
+        5,
+        3,
+        6,
+        1
+      ]
+    },
     "ourBowling": {
       "Jeetmanyu Bawra": {
         "o": 3.0,
@@ -136,7 +428,26 @@
         "r": 25,
         "w": 2,
         "dots": 8,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            3,
+            8,
+            0
+          ],
+          "mid": [
+            12,
+            5,
+            17,
+            2
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Patel Happy": {
         "o": 3.0,
@@ -144,7 +455,26 @@
         "r": 21,
         "w": 1,
         "dots": 10,
-        "ph": null
+        "ph": {
+          "pp": [
+            12,
+            7,
+            13,
+            1
+          ],
+          "mid": [
+            6,
+            3,
+            8,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Kalpesh Saraiya": {
         "o": 2.0,
@@ -152,7 +482,26 @@
         "r": 19,
         "w": 1,
         "dots": 5,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            2,
+            15,
+            0
+          ],
+          "mid": [
+            6,
+            3,
+            4,
+            1
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Armaan Wadhwa": {
         "o": 2.0,
@@ -160,7 +509,26 @@
         "r": 16,
         "w": 0,
         "dots": 5,
-        "ph": null
+        "ph": {
+          "pp": [
+            6,
+            1,
+            8,
+            0
+          ],
+          "mid": [
+            6,
+            4,
+            8,
+            0
+          ],
+          "death": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
       },
       "Yash Chauhan": {
         "o": 0.5,
@@ -168,7 +536,26 @@
         "r": 6,
         "w": 1,
         "dots": 3,
-        "ph": null
+        "ph": {
+          "pp": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mid": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "death": [
+            5,
+            3,
+            6,
+            1
+          ]
+        }
       }
     }
   }

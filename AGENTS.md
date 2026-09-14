@@ -52,7 +52,9 @@ when we play, and the chatbot's fact pack. Nothing needs enabling per team.
 - `season.html` **The season** — schedule, computed points table, results,
   grounds (2026 beside 2025), leaderboards.
 - `form.html` **Our form** — league record (friendlies excluded), every match
-  ball by ball, phase habits, player careers.
+  ball by ball, phase habits, player careers (all games beside league-only),
+  and the captain's grid: each front-line bowler by ground and by phase, for
+  all games and for the league alone.
 - `league.html` **2025 intel** — last season read in full; opens with a banner
   saying it is the evidence base, not the live season.
 
@@ -86,6 +88,13 @@ page is pure ASCII, self-contained, no fetch at read time.
 - **Bowler phase accounting** is bowler-credited: no run-out wickets, no
   bye/leg-bye runs; wides and no-balls are charged. Team phases count all.
 - **CricHeroes over numbering**: ball N.0 is the LAST ball of over N.
+- **Commentary parsing follows the card, not cricket's rulebook.** Each of
+  these cost a reconciliation on 14 Sep 2026: the extra is the START of the
+  event text ("Caught at Wide long-on" is not a wide; "bye, 1 run" is a
+  bye); "(no ball) bye, 1 run" is a no-ball whose run is a bye, not off the
+  bat; and "wide, 1 run" is booked as ONE wide plus a bye (the 13 Sep card's
+  16 wides / 4 byes only add up that way). A bowler's card dots include byes;
+  ours do not, so the check allows exactly that gap.
 - **The chatbot never calculates.** `tools/factpack.py` precomputes everything;
   `_prompt` in facts.json holds the rules. Standing toss call is BAT (from
   `tossPolicy`); the assistant quotes decisions the pack has made rather than
