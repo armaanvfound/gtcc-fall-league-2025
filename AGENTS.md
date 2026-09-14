@@ -89,7 +89,10 @@ page is pure ASCII, self-contained, no fetch at read time.
 - **The chatbot never calculates.** `tools/factpack.py` precomputes everything;
   `_prompt` in facts.json holds the rules. Standing toss call is BAT (from
   `tossPolicy`); the assistant quotes decisions the pack has made rather than
-  re-deriving them. Markdown is stripped client-side.
+  re-deriving them. Markdown is stripped client-side. Counting is calculating
+  too: it once told the captain we had lost two league matches fielding first
+  (it was one) by counting `us.matches`, which includes the friendlies - so
+  toss history is `us.tossRecord`, and the eval checks any toss count against it.
 - **Fact pack depth**: it holds top-5 per leaderboard and top-4 players per
   team; it must say so ("not in the top five", never "not on the board").
 
@@ -100,8 +103,11 @@ page is pure ASCII, self-contained, no fetch at read time.
 `leaders2026.py`, `opponents2026.py`, `grounds2026.py`, `qualify2026.py` (all
 derive from the one TSV) · `ourmatches.py` (our record, phases, careers) ·
 `league_players.py` (2025 player stats from `league-raw/scorecards.tsv`) ·
-`factpack.py` (chatbot facts) · `eval_assistant.py` (22-question grounding
-check) · `collector.js` / `sync.py` (the 2025 archive harvest, rarely needed).
+`factpack.py` (chatbot facts) · `eval_assistant.py` (23-question grounding
+check against the live chatbot; `--selftest` checks its bowl-first rule
+offline. That rule judges the words beside the phrase, so an honest account
+of our field-first toss against Durham is not flagged as advice, and a
+failure quotes the sentence that tripped it) · `collector.js` / `sync.py` (the 2025 archive harvest, rarely needed).
 
 The chatbot proxy is a Cloudflare Worker in `worker/` (DeepSeek, reasoning
 off — measured; key is a Worker secret, never in the repo).

@@ -47,7 +47,10 @@ Rules, in order of importance:
 2. Never calculate a figure. Every number you need is already in the JSON; quote it
    as it stands. Averaging, adding or blending two pack numbers IS calculating -
    "about 121" from a 116 and a 127 is an invented figure. When a question tempts
-   a blend, quote both numbers side by side instead. If a question needs a number that is not there, say plainly that
+   a blend, quote both numbers side by side instead. Counting is calculating too:
+   how often we batted or fielded first, and how those matches went, is
+   `us.tossRecord` - never a tally of `us.matches`, which mixes in friendlies.
+   If a question needs a number that is not there, say plainly that
    the dashboard does not hold it - and then answer anyway from what it does hold.
    A missing number is never a reason to withhold a view.
 3. ALWAYS GIVE THE RECOMMENDATION. This team is deciding something before a toss,
@@ -453,6 +456,33 @@ def _qualify_block(q):
     }
 
 
+def _toss_record(matches):
+    """Our league toss history, counted here so the assistant never counts it.
+    It did once, off us.matches (which mixes in the friendlies), and told the
+    captain we had lost two league matches fielding first. It was one."""
+    league = [m for m in (matches or []) if m.get("isLeague")]
+    if not league:
+        return None
+    won_toss = sum(1 for m in league
+                   if (m.get("toss") or "").startswith("Royal Challenger Blaster won"))
+    verb = {"won": "beat", "lost": "lost to", "tied": "tied with"}
+    rec = {"scope": "league", "matches": len(league),
+           "tossesWon": won_toss, "tossesLost": len(league) - won_toss}
+    for key, order in (("battingFirst", 1), ("fieldingFirst", 2)):
+        side = [m for m in league if (m.get("us") or {}).get("order") == order]
+        rec[key] = {
+            "played": len(side),
+            "won": sum(1 for m in side if m.get("result") == "won"),
+            "lost": sum(1 for m in side if m.get("result") == "lost"),
+            "tied": sum(1 for m in side if m.get("result") == "tied"),
+            "matches": ["%s %s, %s" % (verb.get(m.get("result"), m.get("result")), m.get("opp"), m.get("date"))
+                        for m in side],
+        }
+    rec["note"] = ("League matches only, from the scorecards. Quote these counts; never "
+                   "count us.matches yourself - it includes the FERAL friendlies.")
+    return rec
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -552,6 +582,7 @@ def build_factpack(payload):
 
         "us": {
             "record": ours.get("record"),
+            "tossRecord": _toss_record(ours.get("matches")),
             "matches": ours.get("matches"),
             "phaseSplits": _phases_all(ours.get("all")),
             "fifteenOverVsPar": _phases_all(ours.get("fifteen")),
