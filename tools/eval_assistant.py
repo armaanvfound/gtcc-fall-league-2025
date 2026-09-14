@@ -211,7 +211,9 @@ def main():
         return 1 if wrong else 0
 
     nums = fact_numbers()
-    toss_record = (json.load(open(ROOT / "facts.json")).get("us") or {}).get("tossRecord")
+    _us = json.load(open(ROOT / "facts.json")).get("us") or {}
+    toss_record = _us.get("tossRecord")
+    unavailable = list((_us.get("unavailable") or {}).keys())
     failures, slow = [], []
 
     for kind, q in CASES:
@@ -308,6 +310,15 @@ def main():
                 problems.append("did not mention the Eliminator for third-placed sides")
             if re.match(r"\W*yes\b", low):
                 problems.append("said a third-placed finish puts us out")
+
+        # 10. an unavailable player is never selected. "Jay" is out injured and
+        #     "Jay Vasani" is a different, available player, so the name must
+        #     stand alone (not be the first word of a longer name).
+        if kind in ("planning", "decision", "synthesis"):
+            for name in unavailable:
+                if re.search(r"\b%s\b(?!\s+[A-Z])" % re.escape(name), plain) and \
+                   not re.search(r"\b%s\b(?!\s+[A-Z])[^.]{0,60}\b(out|injur|unavailable)" % re.escape(name), plain):
+                    problems.append("selected %s, who is unavailable" % name)
 
         # 9. a player's rate must name its scope. The page shows 7.73 (all games)
         #    and 5.8 (league only) for the same bowler; an answer giving one

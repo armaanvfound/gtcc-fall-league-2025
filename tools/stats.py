@@ -19,6 +19,9 @@ SQUAD = dict(
              'Jeetmanyu Bawra', 'Jonty Patel', 'Kalpesh Saraiya', 'Nikhil Das T',
              'Pankhil Patel', 'Patel Happy', 'Rudresh Bhanushali', 'Sabar',
              'Saurabh Patel', 'Yash Chauhan'],
+    # Players who cannot be picked. The pages label them and the chatbot is
+    # told never to select them; careers and past matches are untouched.
+    unavailable={'Jay': 'injured - out for the rest of the 2026 tournament (from 14 Sep 2026)'},
 )
 
 

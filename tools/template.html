@@ -1836,9 +1836,10 @@ if (OURS) {
     // boundary swings an economy by four, and the bowler who happened to bowl a
     // quiet over tops the table on nothing.
     const MIN = 12, THIN = 6;
-    const rank = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN)
+    const OUT = (DATA.squad && DATA.squad.unavailable) || {};
+    const rank = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN && !OUT[b.name])
       .sort((x, y) => best ? x.ph[p].econ - y.ph[p].econ : y.ph[p].econ - x.ph[p].econ)[0];
-    const thinPick = p => OURS.bowlers
+    const thinPick = p => OURS.bowlers.filter(b => !OUT[b.name])
       .filter(b => b.ph[p].balls >= THIN && b.ph[p].balls < MIN)
       .sort((x, y) => x.ph[p].econ - y.ph[p].econ)[0];
     const ppBest = rank('pp', true), ppWorst = rank('pp', false);
@@ -2575,7 +2576,8 @@ if (PH && PH.teams) {
   function ourFormBlock(){
     if (!OURS || !OURS.bowlers.length) return '';
     const MIN = 12;                      // two overs, same bar as section 02
-    const pick = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN)
+    const OUT2 = (DATA.squad && DATA.squad.unavailable) || {};
+    const pick = (p, best) => OURS.bowlers.filter(b => b.ph[p].balls >= MIN && !OUT2[b.name])
       .sort((x, y) => best ? x.ph[p].econ - y.ph[p].econ : y.ph[p].econ - x.ph[p].econ)[0];
     const ppW = pick('pp', false), deB = pick('death', true);
     const extras = OURS.matches.reduce((a, m) => a + m.them.extras, 0);
@@ -3026,6 +3028,7 @@ if (SQ) {
   $('squadgrid').innerHTML = SQ.players.map(p =>
     `<div style="padding:12px 14px"><div class="k" style="font-size:15.5px;font-family:var(--sans);line-height:1.35">${esc(p)}</div>` +
     (p === SQ.captain ? `<div class="t" style="margin-top:4px;color:var(--bat)">captain</div>` : '') +
+    (SQ.unavailable && SQ.unavailable[p] ? `<div class="t" style="margin-top:4px;color:var(--bowl)">out &middot; ${esc(SQ.unavailable[p])}</div>` : '') +
     `</div>`).join('');
 }
 

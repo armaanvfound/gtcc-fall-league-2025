@@ -107,6 +107,11 @@ page is pure ASCII, self-contained, no fetch at read time.
   NRR go straight into the pre-quarters, the other four thirds play a 3 Oct
   Eliminator, fourth is out. Five other places once said only "top two plus
   the two best thirds", which reads as thirds three to six going home.
+- **Unavailable players** live in `SQUAD.unavailable` in `tools/stats.py`
+  (name -> reason). The squad grid labels them, the form page's pickers skip
+  them, the chatbot is told never to select them, and the eval fails a
+  lineup that names one. Careers and past matches are untouched. Remove the
+  entry when the player is back.
 - **Fact pack depth**: it holds top-5 per leaderboard and top-4 players per
   team; it must say so ("not in the top five", never "not on the board").
 

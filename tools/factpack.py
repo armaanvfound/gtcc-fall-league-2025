@@ -567,6 +567,10 @@ def build_factpack(payload):
             "answer said 5.8 - both were right, one was league-only). The phase "
             "splits (pp/mid/death) come only from matches read ball by ball, so "
             "say how many matches they rest on.",
+            "`us.unavailable` lists players who cannot be picked and why. Never "
+            "name one in a lineup, a bowling plan or any selection call - say they "
+            "are out if asked. Their past figures stay in the careers and are fine "
+            "to quote as history. (\"Jay\" and \"Jay Vasani\" are different people.)",
             "Recommendations are wanted, including on selection and on who bowls "
             "when. Make the call from these numbers and say how strongly the data "
             "supports it. The captain decides in the end, but never withhold a view "
@@ -624,6 +628,7 @@ def build_factpack(payload):
             "battingByHand": ours.get("handSplit"),
             "squad": squad.get("players"),
             "captain": squad.get("captain"),
+            "unavailable": squad.get("unavailable") or {},
         },
 
         # Real 2026 results, harvested after each round. Better evidence than
