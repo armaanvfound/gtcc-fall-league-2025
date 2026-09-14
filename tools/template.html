@@ -1744,11 +1744,18 @@ if (OURS) {
       head += `The quick men do the damage: <b>${fast.econ}</b> an over and ` +
         `<b>${fast.wkts} of our ${totW}</b> wickets, against <b>${med.econ}</b> for the medium-pacers. `;
     }
-    if (spin.bowlers && lg && lg.spin && lg.pace) {
-      head += `And we have something this league barely sees: <b>${spin.names.map(esc).join(', ')}</b> ` +
-        `bowl${spin.bowlers > 1 ? '' : 's'} spin, where 2025 was almost entirely pace &mdash; only ` +
+    // a spinner who is out injured is not an option, whatever the table says
+    const OUTA = (DATA.squad && DATA.squad.unavailable) || {};
+    const spinIn = spin.bowlers ? spin.names.filter(n => !OUTA[n]) : [];
+    const spinOut = spin.bowlers ? spin.names.filter(n => OUTA[n]) : [];
+    if (spinIn.length && lg && lg.spin && lg.pace) {
+      head += `And we have something this league barely sees: <b>${spinIn.map(esc).join(', ')}</b> ` +
+        `bowl${spinIn.length > 1 ? '' : 's'} spin, where 2025 was almost entirely pace &mdash; only ` +
         `<b>${lg.spin.n} of ${lg.spin.n + lg.pace.n}</b> sampled overs were spin. Few sides here have ` +
         `practised against it, and the middle overs are where it would bite.`;
+    } else if (spinOut.length) {
+      head += `Our only spin, <b>${spinOut.map(esc).join(', ')}</b>, is out &mdash; ${esc(OUTA[spinOut[0]])}. ` +
+        `So this is an all-pace attack for now, in a league that was almost entirely pace in 2025 anyway.`;
     } else if (!spin.bowlers) {
       head += `No spin option yet &mdash; in a league this pace-heavy, that is the gap worth filling.`;
     }
@@ -1885,8 +1892,10 @@ if (OURS) {
     (function(){
       const sp = OURS.attack.rows[2], lg = PH && PH.bowlTypes;
       if (!sp || !sp.bowlers || !lg || !lg.spin || !lg.pace) return;
+      const OUTP = (DATA.squad && DATA.squad.unavailable) || {};
+      if (!sp.names.some(n => !OUTP[n])) return;   // the only spinner is out: no item
       const share = Math.round(lg.spin.n / (lg.spin.n + lg.pace.n) * 100);
-      items.push([`Bowl ${esc(sp.names[0])} in the middle &mdash; nobody here has faced spin`,
+      items.push([`Bowl ${esc(sp.names.filter(n => !OUTP[n])[0])} in the middle &mdash; nobody here has faced spin`,
         `Of the sampled 2025 overs whose type we could read, only <b>${share}%</b> were spin ` +
         `(${lg.spin.n} overs against ${lg.pace.n} of pace). This is a pace league, and sides have ` +
         `barely practised against turn. We have ${sp.bowlers === 1 ? 'one spinner' : sp.bowlers + ' spinners'}: ` +
