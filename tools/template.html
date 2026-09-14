@@ -1557,13 +1557,18 @@ if (OURS) {
   // our own habits.
   const F = R.friendlies;
   const leagueStarted = R.scope === 'league';
+  // Say "ball by ball" only while it is true: a match can arrive from the
+  // harvest at scorecard level and wait for its commentary to be read.
+  const noBB = (OURS.all && OURS.all.withoutBallByBall) || 0;
   $('ours-lede').innerHTML = leagueStarted
-    ? `Our league record, and every match read ball by ball. <b>${R.played} league ` +
+    ? `Our league record${noBB ? ', reconciled against every scorecard' : ', and every match read ball by ball'}. <b>${R.played} league ` +
       `${R.played === 1 ? 'match' : 'matches'} so far</b>` +
       (F ? `, on top of ${F.played} pre-season ${F.played === 1 ? 'friendly' : 'friendlies'} against ` +
            `${esc(F.opponents[0])} that we count as practice, not as our record` : '') +
       `. The phase tables below read across everything we have played &mdash; who bowls a dot, ` +
-      `who wastes a ball, where we leak &mdash; and say when they lean on the friendlies.`
+      `who wastes a ball, where we leak &mdash; and say when they lean on the friendlies.` +
+      (noBB ? ` <b>${noBB} ${noBB === 1 ? 'match is' : 'matches are'} still waiting for ball-by-ball</b>, so ` +
+              `${noBB === 1 ? 'it counts' : 'they count'} in the record and every career but not yet in the phase tables.` : '')
     : `Every match we have played, read ball by ball and reconciled against the scorecard. ` +
       `<b>${R.played} matches, all of them friendlies against ${R.oppCount === 1 ? esc(R.opponents[0]) : R.oppCount + ' sides'}</b>, ` +
       `across three different formats. That is enough to say something about our own habits &mdash; who bowls a ` +

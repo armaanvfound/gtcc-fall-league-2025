@@ -1,0 +1,175 @@
+{
+  "mid": "26972449",
+  "date": "2026-09-13",
+  "opp": "South Warriors",
+  "venue": "Stone Street Park",
+  "competition": "GTCC Fall League 2026",
+  "isLeague": true,
+  "quota": 15,
+  "phaseBounds": [
+    5,
+    10
+  ],
+  "toss": "Royal Challenger Blaster won the toss and chose to bat",
+  "result": "lost",
+  "margin": "5 wickets",
+  "url": "https://cricheroes.com/scorecard/26972449/gtcc-fall-league-2026/royal-challenger-blaster-vs-south-warriors-fall26/scorecard",
+  "phaseSource": "scorecard only - phases fill in when tools/capture_commentary.js reads the ball-by-ball",
+  "ourInnings": {
+    "order": 1,
+    "runs": 86,
+    "wkts": 10,
+    "oversText": "14.4",
+    "balls": 88,
+    "wideRuns": 16,
+    "noBalls": 2,
+    "byeRuns": 4,
+    "allOut": true,
+    "phases": null,
+    "batting": [
+      [
+        "Jaykumar Patel",
+        5,
+        4,
+        1,
+        0,
+        true
+      ],
+      [
+        "Armaan Wadhwa",
+        23,
+        25,
+        0,
+        1,
+        true
+      ],
+      [
+        "Nikhil Das T",
+        0,
+        5,
+        0,
+        0,
+        true
+      ],
+      [
+        "Patel Happy",
+        10,
+        11,
+        1,
+        0,
+        true
+      ],
+      [
+        "Pankhil Patel",
+        9,
+        13,
+        0,
+        0,
+        true
+      ],
+      [
+        "Yash Chauhan",
+        0,
+        3,
+        0,
+        0,
+        true
+      ],
+      [
+        "Kalpesh Saraiya",
+        0,
+        1,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jeetmanyu Bawra",
+        8,
+        11,
+        1,
+        0,
+        true
+      ],
+      [
+        "Jay Vasani",
+        1,
+        4,
+        0,
+        0,
+        true
+      ],
+      [
+        "Saurabh Patel",
+        6,
+        8,
+        0,
+        0,
+        true
+      ],
+      [
+        "Rudresh Bhanushali",
+        2,
+        5,
+        0,
+        0,
+        false
+      ]
+    ],
+    "battingPhases": {}
+  },
+  "theirInnings": {
+    "order": 2,
+    "runs": 87,
+    "wkts": 5,
+    "oversText": "10.5",
+    "balls": 65,
+    "wideRuns": 3,
+    "noBalls": 1,
+    "byeRuns": 0,
+    "allOut": false,
+    "phases": null,
+    "ourBowling": {
+      "Jeetmanyu Bawra": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 25,
+        "w": 2,
+        "dots": 8,
+        "ph": null
+      },
+      "Patel Happy": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 21,
+        "w": 1,
+        "dots": 10,
+        "ph": null
+      },
+      "Kalpesh Saraiya": {
+        "o": 2.0,
+        "balls": 12,
+        "r": 19,
+        "w": 1,
+        "dots": 5,
+        "ph": null
+      },
+      "Armaan Wadhwa": {
+        "o": 2.0,
+        "balls": 12,
+        "r": 16,
+        "w": 0,
+        "dots": 5,
+        "ph": null
+      },
+      "Yash Chauhan": {
+        "o": 0.5,
+        "balls": 5,
+        "r": 6,
+        "w": 1,
+        "dots": 3,
+        "ph": null
+      }
+    }
+  }
+}

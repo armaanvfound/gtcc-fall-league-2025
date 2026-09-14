@@ -159,8 +159,40 @@ def renumber(section_html, n):
                   section_html, count=1)
 
 
+def _gate_record(payload):
+    """Refuse to build pages that disagree about our own record.
+
+    Our form reads our-matches/, The season reads the harvest. They drifted
+    once - Our form said 1-0 and +1.39 for a week while The season said 1-2 and
+    -1.70 - so a build now fails outright rather than publish the contradiction.
+    """
+    rec = (payload.get("ours") or {}).get("record") or {}
+    st = payload.get("standings2026")
+    if rec.get("scope") != "league" or not st:
+        return
+    row = next((r for g in st["groups"].values() for r in g
+                if r["team"] == "Royal Challenger Blaster"), None)
+    if not row:
+        return
+    diffs = [k for k in ("played", "won", "lost", "tied") if rec.get(k) != row.get(k)]
+    if rec.get("nrr") is None or row.get("nrr") is None or abs(rec["nrr"] - row["nrr"]) > 0.011:
+        diffs.append("nrr")
+    if diffs:
+        sys.exit("REFUSED: Our form and The season disagree about our record (%s)\n"
+                 "  our-matches/: P%s W%s L%s T%s NRR %s\n"
+                 "  harvest:      P%s W%s L%s T%s NRR %s"
+                 % (", ".join(diffs), rec.get("played"), rec.get("won"), rec.get("lost"),
+                    rec.get("tied"), rec.get("nrr"), row["played"], row["won"],
+                    row["lost"], row["tied"], row["nrr"]))
+
+
 def main():
+    # Our own match files must never lag the season harvest: derive any missing
+    # RCB league match at scorecard level before anything is built.
+    from ourmatch_from_harvest import ensure_our_matches
+    ensure_our_matches()
     payload = build_payload()
+    _gate_record(payload)
     tpl = (HERE / "template.html").read_text(encoding="utf-8")
     style, topnav, header, sections, jshead, blocks, footer, tip = split_template(tpl)
 

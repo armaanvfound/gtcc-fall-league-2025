@@ -89,6 +89,15 @@ def load():
     return out
 
 
+def _ob_balls(overs):
+    """'2.4' -> 16, '0.5' -> 5. O.B notation: the decimal counts balls."""
+    s = str(overs)
+    if "." not in s:
+        return int(float(s)) * 6
+    o, b = s.split(".")
+    return int(o) * 6 + int(b)
+
+
 def _overs_to_float(txt):
     """'13.4' -> 13.6667. Cricket notation: the decimal is balls, not tenths."""
     s = str(txt)
@@ -219,26 +228,30 @@ def bowler_table(matches):
             a = agg.setdefault(name, dict(name=name, matches=0, overs=0.0, runs=0,
                                           wkts=0, ph=_blank()))
             a["matches"] += 1
-            a["overs"] += float(d["o"])
             a["runs"] += d["r"]
             a["wkts"] += d["w"]
             if d.get("ph"):
                 _add(a["ph"], d["ph"])
             else:
-                # No split for this spell, but its overs and dots are known and
-                # belong in the career totals - only the phase columns lose it.
-                a["noSplitBalls"] = a.get("noSplitBalls", 0) + int(round(float(d["o"]) * 6))
+                # A scorecard-only spell has no phase split, but its balls and
+                # dots are known and belong in the career; only the phase columns
+                # go without. These used to be accumulated and then never read,
+                # so a phase-less match vanished from strike rate and dot %.
+                a["noSplitBalls"] = a.get("noSplitBalls", 0) + (
+                    d["balls"] if d.get("balls") is not None else _ob_balls(d["o"]))
                 a["noSplitDots"] = a.get("noSplitDots", 0) + (d.get("dots") or 0)
     out = []
     for a in agg.values():
-        balls = sum(a["ph"][p][BALLS] for p in PHASES)
-        dots = sum(a["ph"][p][DOTS] for p in PHASES)
+        # Overs are summed as balls: adding '0.5' and '2.4' as decimals gives
+        # 2.9, which is not a number of overs.
+        balls = sum(a["ph"][p][BALLS] for p in PHASES) + a.get("noSplitBalls", 0)
+        dots = sum(a["ph"][p][DOTS] for p in PHASES) + a.get("noSplitDots", 0)
         arm, typ = bowl_cat(bowl_style(a["name"]))
         out.append(dict(
-            name=a["name"], matches=a["matches"], overs=round(a["overs"], 1),
+            name=a["name"], matches=a["matches"], overs=float(_overs_str(balls)),
             runs=a["runs"], wkts=a["wkts"],
             style=bowl_style(a["name"]), arm=arm, type=typ,
-            econ=_rate(a["runs"], a["overs"]),
+            econ=_rate(a["runs"], balls / 6) if balls else None,
             avg=round(a["runs"] / a["wkts"], 1) if a["wkts"] else None,
             sr=round(balls / a["wkts"], 1) if a["wkts"] else None,
             balls=balls, dots=dots, dotPct=_pct(dots, balls),

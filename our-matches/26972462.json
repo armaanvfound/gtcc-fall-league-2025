@@ -1,0 +1,183 @@
+{
+  "mid": "26972462",
+  "date": "2026-09-12",
+  "opp": "Durham United",
+  "venue": "GTCC Ajax Cricket Ground",
+  "competition": "GTCC Fall League 2026",
+  "isLeague": true,
+  "quota": 15,
+  "phaseBounds": [
+    5,
+    10
+  ],
+  "toss": "Royal Challenger Blaster won the toss and chose to field",
+  "result": "lost",
+  "margin": "62 runs",
+  "url": "https://cricheroes.com/scorecard/26972462/gtcc-fall-league-2026/durham-united-vs-royal-challenger-blaster/scorecard",
+  "phaseSource": "scorecard only - phases fill in when tools/capture_commentary.js reads the ball-by-ball",
+  "ourInnings": {
+    "order": 2,
+    "runs": 62,
+    "wkts": 10,
+    "oversText": "12.1",
+    "balls": 73,
+    "wideRuns": 3,
+    "noBalls": 1,
+    "byeRuns": 0,
+    "allOut": true,
+    "phases": null,
+    "batting": [
+      [
+        "Jaykumar Patel",
+        0,
+        3,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jay",
+        7,
+        7,
+        0,
+        0,
+        true
+      ],
+      [
+        "Armaan Wadhwa",
+        10,
+        12,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jeetmanyu Bawra",
+        0,
+        3,
+        0,
+        0,
+        true
+      ],
+      [
+        "Pankhil Patel",
+        12,
+        13,
+        0,
+        0,
+        true
+      ],
+      [
+        "Patel Happy",
+        2,
+        4,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jemish Virendra Patel",
+        3,
+        6,
+        0,
+        0,
+        true
+      ],
+      [
+        "Nikhil Das T",
+        14,
+        12,
+        1,
+        0,
+        true
+      ],
+      [
+        "Yash Chauhan",
+        0,
+        1,
+        0,
+        0,
+        true
+      ],
+      [
+        "Kalpesh Saraiya",
+        4,
+        8,
+        0,
+        0,
+        true
+      ],
+      [
+        "Jay Vasani",
+        6,
+        5,
+        0,
+        0,
+        false
+      ]
+    ],
+    "battingPhases": {}
+  },
+  "theirInnings": {
+    "order": 1,
+    "runs": 124,
+    "wkts": 5,
+    "oversText": "15.0",
+    "balls": 90,
+    "wideRuns": 9,
+    "noBalls": 0,
+    "byeRuns": 2,
+    "allOut": false,
+    "phases": null,
+    "ourBowling": {
+      "Jeetmanyu Bawra": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 20,
+        "w": 0,
+        "dots": 8,
+        "ph": null
+      },
+      "Patel Happy": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 30,
+        "w": 0,
+        "dots": 3,
+        "ph": null
+      },
+      "Jemish Virendra Patel": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 15,
+        "w": 1,
+        "dots": 8,
+        "ph": null
+      },
+      "Armaan Wadhwa": {
+        "o": 3.0,
+        "balls": 18,
+        "r": 28,
+        "w": 0,
+        "dots": 9,
+        "ph": null
+      },
+      "Kalpesh Saraiya": {
+        "o": 2.0,
+        "balls": 12,
+        "r": 13,
+        "w": 1,
+        "dots": 7,
+        "ph": null
+      },
+      "Pankhil Patel": {
+        "o": 1.0,
+        "balls": 6,
+        "r": 16,
+        "w": 1,
+        "dots": 1,
+        "ph": null
+      }
+    }
+  }
+}

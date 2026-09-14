@@ -20,14 +20,19 @@ word mean the same thing in a session that has never seen the conversation.
    repeats to "(1).tsv"), validates every row shape including the I-row
    all-out flag, refuses a harvest with fewer matches than installed, rebuilds
    all pages + `facts.json`, prints Group 5 as a sanity check.
-3. **If a new RCB match is in the harvest**: add `our-matches/<id>.json`. Its
-   scorecard half comes from the harvest; its **phase splits need the
-   commentary rendered** — Chrome in the FOREGROUND for ~30 s. Use
-   `tools/capture_commentary.js` (run once per innings, then `__rcb.emit(15)`),
-   reconcile every line against the scorecard, set `allOut`, write the file.
-   Ask the user to bring Chrome forward; do everything else first. The pipeline
-   tolerates a match without phases (it counts in the record/NRR/careers and is
-   labelled as awaiting its split) so a sync never blocks on this.
+3. **Our own match files follow automatically.** Every build runs
+   `tools/ourmatch_from_harvest.py`, which writes a scorecard-level
+   `our-matches/<id>.json` for any RCB league match in the harvest - totals,
+   all-out state, extras split, every batter and bowler - and refuses any file
+   that does not reconcile to the card. `build.py` then **refuses to publish if
+   Our form's record disagrees with the standings** (they drifted once: Our
+   form said 1-0 +1.39 for a week while The season said 1-2 -1.70). What still
+   needs a person is the **phase split**: the commentary only renders with
+   Chrome in the FOREGROUND (~30 s). Use `tools/capture_commentary.js` (once
+   per innings, then `__rcb.emit(15)`), reconcile against the card, and fill
+   the file's `phases`, `battingPhases` and each `ourBowling[...].ph`. Ask the
+   user to bring Chrome forward after everything else is published; until
+   then the form page says that match is waiting for ball-by-ball.
 4. `git add -A && git commit && git push`, wait for Pages, then
    `python3 tools/eval_assistant.py` against the live chatbot. **A sync is not
    done until the eval passes.** Report the Group 5 table and eval result.
@@ -60,8 +65,10 @@ page is pure ASCII, self-contained, no fetch at read time.
 - **Record and NRR are league-only.** The FERAL games were pre-season
   friendlies; they feed phase habits (labelled) but never the record.
 - **NRR all-out rule**: a side bowled out counts its full quota of overs.
-  Use CricHeroes' `is_allout` flag, never `wkts >= 10` — 10-a-side teams are all
-  out at 9 down, and the inference once handed NRR to the wrong team.
+  All out = CricHeroes' `is_allout` flag **or** ten wickets down. Neither alone
+  is safe: 10-a-side teams are all out at 9 down (the flag catches that; a
+  wickets rule once handed NRR to the wrong team), and CricHeroes left the flag
+  unset on our own 86/10 (the ten-down rule catches that).
 - **Key players on `player_id`, never name.** `Kushal Reddy  (c)` and
   `Kushal Reddy` are one person; keying on name split 61 players.
 - **Team aliases** in `tools/results2026.py` (`Durham Strikers - T15`, `YRICA`,
