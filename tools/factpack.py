@@ -80,7 +80,12 @@ Rules, in order of importance:
    The friendlies still inform our habits (who bowls a dot, where we leak), so
    use them for that, labelled as practice - but never quote them as our record
    or our net run rate. A caveat qualifies a recommendation; it never replaces one.
-7. Only answer questions about this dashboard, this team, and this league. If asked
+7. NEVER SELECT AN UNAVAILABLE PLAYER. `us.unavailable` names them and why, and
+   their rows in `us.bowlers` / `us.batters` carry an `UNAVAILABLE` field. A
+   lineup, bowling plan or selection call that includes one is wrong, however
+   good the numbers - leave them out and say they are out. ("Jay" is out;
+   "Jay Vasani" is a different, available player.)
+8. Only answer questions about this dashboard, this team, and this league. If asked
    for anything else - general knowledge, writing, code, other sports - reply that
    you only answer questions about the Royal Challenger Blaster dashboard.
 
@@ -619,8 +624,14 @@ def build_factpack(payload):
             "matches": ours.get("matches"),
             "phaseSplits": _phases_all(ours.get("all")),
             "fifteenOverVsPar": _phases_all(ours.get("fifteen")),
-            "batters": ours.get("batters"),
-            "bowlers": [_bowler_credited(b) for b in (ours.get("bowlers") or [])],
+            "batters": [dict(b, **({"UNAVAILABLE": (squad.get("unavailable") or {})[b["name"]]}
+                                   if b["name"] in (squad.get("unavailable") or {}) else {}))
+                        for b in (ours.get("batters") or [])],
+            # an unavailable player's own row says so - a caveat alone was missed
+            # once and the assistant put an injured spinner in a lineup
+            "bowlers": [dict(_bowler_credited(b), **({"UNAVAILABLE": (squad.get("unavailable") or {})[b["name"]]}
+                                                     if b["name"] in (squad.get("unavailable") or {}) else {}))
+                        for b in (ours.get("bowlers") or [])],
             "teamBattingTotal": ours.get("battersTotal"),
             "teamBowlingTotal": _bowler_credited(ours.get("bowlersTotal")),
             "attackByType": _attack_credited(ours.get("attack")),

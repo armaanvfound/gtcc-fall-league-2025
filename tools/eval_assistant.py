@@ -231,7 +231,12 @@ def main():
         unknown = [n for n in re.findall(r"\d+(?:\.\d+)?", plain)
                    if float(n) not in nums and float(n) not in STRUCTURAL]
         if unknown:
-            problems.append("numbers not in facts.json: " + ", ".join(unknown))
+            # quote where it appeared: a bare "450" once cost four re-runs that
+            # never reproduced it, and the sentence is what says how it was made
+            where = [re.sub(r"\s+", " ", sent).strip()[:140] for sent in re.split(r"(?<=[.!?])\s+", plain)
+                     if any(re.search(r"(?<![\d.])%s(?![\d.])" % re.escape(n), sent) for n in unknown)]
+            problems.append("numbers not in facts.json: " + ", ".join(unknown) +
+                            (" | in: " + " / ".join(repr(w) for w in where[:2]) if where else ""))
 
         # 2. markdown must never reach the page
         if "**" in text or re.search(r"^[ \t]*#{1,6}[ \t]+", text, re.M):
