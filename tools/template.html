@@ -521,6 +521,7 @@
   .pl-n span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--muted);margin-top:2px;}
   .pl-ph b{font-family:var(--serif);font-size:15px;font-weight:400;}
   .pl-ph span{display:block;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
+  .pltbl th.pl-lg,.pltbl td.pl-lg{border-left:2px solid var(--rule-2);border-right:2px solid var(--rule-2);}
   .pl-none{color:var(--rule);}
   .pltbl .good{color:var(--good);} .pltbl .bad{color:var(--bad);}
   .recs{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule);
@@ -1667,7 +1668,18 @@ if (OURS) {
   const bowlHead = `<thead><tr><th>Bowler</th>` +
     hd('Ov', 'overs') + hd('R', 'runs') + hd('W', 'wickets') + hd('Econ', 'runs per over') +
     hd('Avg', 'runs per wkt') + hd('SR', 'balls per wkt') + hd('Dot%', 'dot-ball %') +
+    `<th class="pl-lg">League<span>econ &middot; ov, r-w</span></th>` +
     PHK.map(p => `<th>${PLBL[p]}<span>econ / dot%</span></th>`).join('') + `</tr></thead>`;
+  // The headline columns include the friendlies; this one is the league only.
+  const lgBowl = l => l
+    ? `<td class="pl-ph pl-lg"><b class="${eClass(l.econ)}">${l.econ}</b>` +
+      `<span>${l.overs}ov &middot; ${l.runs}-${l.wkts} &middot; ${pc(l.dotPct)}</span></td>`
+    : `<td class="pl-ph pl-lg pl-none">&mdash;</td>`;
+  const lgBat = l => l
+    ? `<td class="pl-ph pl-lg"><b class="${srClass(l.sr)}">${l.sr}</b>` +
+      `<span>${l.runs} (${l.balls}b) &middot; ${l.inns} inn${l.inns > 1 ? 's' : ''} &middot; avg ${l.avg === null ? 'n/o' : l.avg}</span></td>`
+    : `<td class="pl-ph pl-lg pl-none">&mdash;</td>`;
+  const lgSum = (rows, f) => rows.reduce((s, r) => r.league ? s + (r.league[f] || 0) : s, 0);
   const bowlPhase = d => d.balls
     ? `<td class="pl-ph"><b class="${eClass(d.econ)}">${d.econ}</b>` +
       `<span>${pc(d.dotPct)} &middot; ${d.balls}b${d.wkts ? ' &middot; ' + d.wkts + 'w' : ''}</span></td>`
@@ -1680,19 +1692,28 @@ if (OURS) {
       `<td class="${eClass(b.econ)}">${b.econ}</td>` +
       `<td>${b.avg === null ? '&mdash;' : b.avg}</td>` +
       `<td>${b.sr === null ? '&mdash;' : b.sr}</td>` +
-      `<td>${pc(b.dotPct)}</td>` +
+      `<td>${pc(b.dotPct)}</td>` + lgBowl(b.league) +
       PHK.map(p => bowlPhase(b.ph[p])).join('') + `</tr>`).join('') +
     `</tbody><tfoot>` + (function(){
       const T = OURS.bowlersTotal;
+      const lb = lgSum(OURS.bowlers, 'balls'), lr = lgSum(OURS.bowlers, 'runs'), lw = lgSum(OURS.bowlers, 'wkts');
+      const lgTot = lb ? { econ: Math.round(lr / (lb / 6) * 100) / 100, overs: Math.floor(lb / 6) + (lb % 6) / 10,
+                           runs: lr, wkts: lw, dotPct: null } : null;
       return `<tr class="pl-total"><td class="pl-n">All bowlers<span>whole team</span></td>` +
         `<td>${T.overs}</td><td>${T.runs}</td><td><b>${T.wkts}</b></td>` +
         `<td class="${eClass(T.econ)}">${T.econ}</td>` +
         `<td>${T.avg === null ? '&mdash;' : T.avg}</td><td>${T.sr === null ? '&mdash;' : T.sr}</td>` +
         `<td>${pc(T.dotPct)}</td>` +
+        (lgTot ? `<td class="pl-ph pl-lg"><b class="${eClass(lgTot.econ)}">${lgTot.econ}</b>` +
+                 `<span>${lgTot.overs}ov &middot; ${lgTot.runs}-${lgTot.wkts}</span></td>`
+               : `<td class="pl-ph pl-lg pl-none">&mdash;</td>`) +
         PHK.map(p => bowlPhase(T.ph[p])).join('') + `</tr>`;
     })() + `</tfoot></table></div>` +
-    `<div class="pl-key">The total row sums the bowlers, so wickets are bowler-credited &mdash; run outs ` +
-    `and byes sit with the fielders, not the attack. Under each name: <b>RA</b>/<b>LA</b> = right/left-arm.</div>`;
+    `<div class="pl-key">Two scopes on this table. <b>Ov</b> to <b>Dot%</b> are every match we have played, ` +
+    `friendlies included; the <b>League</b> column is league matches only, which is the number that matters ` +
+    `for the season. The phase columns come only from matches read ball by ball. The total row sums the ` +
+    `bowlers, so wickets are bowler-credited &mdash; run outs and byes sit with the fielders, not the attack. ` +
+    `Under each name: <b>RA</b>/<b>LA</b> = right/left-arm.</div>`;
 
   // ---- pace vs spin, and by type
   (function(){
@@ -1748,6 +1769,7 @@ if (OURS) {
     `<div class="scroll"><table class="pltbl"><thead><tr><th>Batter</th>` +
     hd('Inns', 'innings') + hd('R', 'runs') + hd('B', 'balls') + hd('Avg', 'runs per out') +
     hd('SR', 'runs per 100') + hd('HS', 'best') + hd('4s/6s', 'boundaries') + hd('Bdry%', 'runs in bndry') +
+    `<th class="pl-lg">League<span>SR &middot; runs, avg</span></th>` +
     PHK.map(p => `<th>${PLBL[p]}<span>SR / dot%</span></th>`).join('') +
     `</tr></thead><tbody>` +
     OURS.batters.map(b => `<tr><td class="pl-n">${esc(b.name)}` +
@@ -1755,7 +1777,7 @@ if (OURS) {
       `<td>${b.inns}</td><td><b>${b.runs}</b></td><td>${b.balls}</td>` +
       `<td>${b.avg === null ? 'n/o' : b.avg}</td>` +
       `<td class="${srClass(b.sr)}">${b.sr}</td>` +
-      `<td>${b.best}</td><td>${b.f4}/${b.f6}</td><td>${pc(b.bdryPct)}</td>` +
+      `<td>${b.best}</td><td>${b.f4}/${b.f6}</td><td>${pc(b.bdryPct)}</td>` + lgBat(b.league) +
       PHK.map(p => {
         const d = b.ph[p];
         if (!d.balls) return `<td class="pl-ph pl-none">&mdash;</td>`;
@@ -1768,15 +1790,22 @@ if (OURS) {
         `<td>${T.inns}</td><td><b>${T.runs}</b></td><td>${T.balls}</td>` +
         `<td>${T.avg === null ? 'n/o' : T.avg}</td><td class="${srClass(T.sr)}">${T.sr}</td>` +
         `<td>${T.best}</td><td>${T.f4}/${T.f6}</td><td>${pc(T.bdryPct)}</td>` +
+        (function(){
+          const r = lgSum(OURS.batters, 'runs'), bl = lgSum(OURS.batters, 'balls'), o = lgSum(OURS.batters, 'outs');
+          return bl ? `<td class="pl-ph pl-lg"><b class="${srClass(Math.round(r / bl * 1000) / 10)}">${Math.round(r / bl * 1000) / 10}</b>` +
+                      `<span>${r} (${bl}b) &middot; avg ${o ? Math.round(r / o * 10) / 10 : 'n/o'}</span></td>`
+                    : `<td class="pl-ph pl-lg pl-none">&mdash;</td>`;
+        })() +
         PHK.map(p => {
           const d = T.ph[p];
           return `<td class="pl-ph"><b class="${srClass(d.sr)}">${d.sr}</b>` +
             `<span>${pc(d.dotPct)} &middot; ${d.balls}b</span></td>`;
         }).join('') + `</tr>`;
     })() + `</tfoot></table></div>` +
-    `<div class="pl-key">A not-out never counts toward the average, so a batter who has never been out shows ` +
-    `<b>n/o</b>. <b>LHB</b>/<b>RHB</b> under each name is the batting hand. The total row is runs off the ` +
-    `bat, so it trails the match-log totals by the extras we were given.</div>`;
+    `<div class="pl-key">Two scopes here too: <b>Inns</b> to <b>Bdry%</b> are every match, friendlies included; ` +
+    `the <b>League</b> column is league matches only. A not-out never counts toward the average, so a batter ` +
+    `who has never been out shows <b>n/o</b>. <b>LHB</b>/<b>RHB</b> under each name is the batting hand. The ` +
+    `total row is runs off the bat, so it trails the match-log totals by the extras we were given.</div>`;
 
   // ---- batting by hand
   (function(){

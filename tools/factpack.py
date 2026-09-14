@@ -135,6 +135,8 @@ def _bowler_credited(obj):
         out["wktsBowler"] = out.pop("wkts")
     if isinstance(out.get("ph"), dict):
         out["ph"] = _rename_wkts(out["ph"], "wktsBowler")
+    if isinstance(out.get("league"), dict) and "wkts" in out["league"]:
+        out["league"]["wktsBowler"] = out["league"].pop("wkts")
     return out
 
 def _attack_credited(attack):
@@ -541,6 +543,14 @@ def build_factpack(payload):
             "bowler-credited and exclude byes and leg byes, while team phase blocks "
             "include them. So teamBowlingTotal can trail phaseSplits.bowl by a few "
             "runs; the gap is byes, recorded per innings as byeRuns.",
+            "Every row in us.bowlers and us.batters carries TWO scopes: the top-level "
+            "figures are all our matches INCLUDING the FERAL friendlies, and the "
+            "`league` sub-record is league matches only. A player's economy, average "
+            "or strike rate must be quoted with its scope named, and when the two "
+            "differ, give both (a teammate once read 7.73 off the page while the "
+            "answer said 5.8 - both were right, one was league-only). The phase "
+            "splits (pp/mid/death) come only from matches read ball by ball, so "
+            "say how many matches they rest on.",
             "Recommendations are wanted, including on selection and on who bowls "
             "when. Make the call from these numbers and say how strongly the data "
             "supports it. The captain decides in the end, but never withhold a view "

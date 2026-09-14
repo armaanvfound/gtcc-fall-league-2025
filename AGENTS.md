@@ -108,7 +108,7 @@ page is pure ASCII, self-contained, no fetch at read time.
 `leaders2026.py`, `opponents2026.py`, `grounds2026.py`, `qualify2026.py` (all
 derive from the one TSV) · `ourmatches.py` (our record, phases, careers) ·
 `league_players.py` (2025 player stats from `league-raw/scorecards.tsv`) ·
-`factpack.py` (chatbot facts) · `eval_assistant.py` (24-question grounding
+`factpack.py` (chatbot facts) · `eval_assistant.py` (25-question grounding
 check against the live chatbot; `--selftest` runs its two text rules offline:
 bowling first is flagged only when framed as advice, so an honest account of
 our field-first toss against Durham passes, and any toss count must equal

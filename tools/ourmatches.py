@@ -486,6 +486,21 @@ def build_ours():
     m15 = [m for m in matches if int(float(m["quota"])) == 15]
     bowlers = bowler_table(matches)
     batters = batter_table(matches)
+    # Every career row also carries the league-only view. The headline figures
+    # include the FERAL friendlies, and a bowler quoted at 5.8 (league) was
+    # challenged by a teammate reading 7.73 (all games) off this page - both
+    # were right, and the page should show both so nobody has to ask.
+    league = [m for m in matches if m["isLeague"]]
+    lb = {b["name"]: b for b in bowler_table(league)}
+    for b in bowlers:
+        l = lb.get(b["name"])
+        b["league"] = dict(matches=l["matches"], overs=l["overs"], balls=l["balls"], runs=l["runs"],
+                           wkts=l["wkts"], econ=l["econ"], dotPct=l["dotPct"]) if l else None
+    lt = {b["name"]: b for b in batter_table(league)}
+    for b in batters:
+        l = lt.get(b["name"])
+        b["league"] = dict(inns=l["inns"], runs=l["runs"], balls=l["balls"], outs=l["outs"],
+                           avg=l["avg"], sr=l["sr"], best=l["best"]) if l else None
     return dict(
         record=record(matches),
         matches=match_rows(matches),
