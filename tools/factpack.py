@@ -572,6 +572,8 @@ def build_factpack(payload):
             "answer said 5.8 - both were right, one was league-only). The phase "
             "splits (pp/mid/death) come only from matches read ball by ball, so "
             "say how many matches they rest on.",
+            "Jonty Patel and Jaykumar Patel are ONE player (CricHeroes spells him "
+            "Jaykumar on league scorecards); the pack files him as Jonty Patel.",
             "`us.unavailable` lists players who cannot be picked and why. Never "
             "name one in a lineup, a bowling plan or any selection call - say they "
             "are out if asked. Their past figures stay in the careers and are fine "

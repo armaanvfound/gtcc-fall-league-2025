@@ -71,6 +71,9 @@ page is pure ASCII, self-contained, no fetch at read time.
   is safe: 10-a-side teams are all out at 9 down (the flag catches that; a
   wickets rule once handed NRR to the wrong team), and CricHeroes left the flag
   unset on our own 86/10 (the ten-down rule catches that).
+- **Our own players' spellings** are merged by `PLAYER_ALIASES` in
+  `tools/ourmatches.py` (Jaykumar Patel = Jonty Patel). Our match files keep
+  the card's spelling; `load()` canonicalises.
 - **Key players on `player_id`, never name.** `Kushal Reddy  (c)` and
   `Kushal Reddy` are one person; keying on name split 61 players.
 - **Team aliases** in `tools/results2026.py` (`Durham Strikers - T15`, `YRICA`,

@@ -81,10 +81,30 @@ def bowl_style(name):
     return st[1] if st else None
 
 
+# One player, two spellings on CricHeroes: the friendlies list him as Jonty
+# Patel (his registered squad name), the league scorecards as Jaykumar Patel.
+# Keyed on name, that split his career in half and the batting page read him
+# as two weak batters instead of one real opener.
+PLAYER_ALIASES = {"Jaykumar Patel": "Jonty Patel"}
+
+
+def _canon_names(m):
+    a = PLAYER_ALIASES
+    inn = m["ourInnings"]
+    for b in inn.get("batting") or []:
+        b[0] = a.get(b[0], b[0])
+    if inn.get("battingPhases"):
+        inn["battingPhases"] = {a.get(k, k): v for k, v in inn["battingPhases"].items()}
+    ob = m["theirInnings"].get("ourBowling")
+    if ob:
+        m["theirInnings"]["ourBowling"] = {a.get(k, k): v for k, v in ob.items()}
+    return m
+
+
 def load():
     out = []
     for f in sorted(DIR.glob("[0-9]*.json")):
-        out.append(json.loads(f.read_text()))
+        out.append(_canon_names(json.loads(f.read_text())))
     out.sort(key=lambda m: m["date"], reverse=True)
     return out
 
