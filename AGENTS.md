@@ -104,10 +104,11 @@ page is pure ASCII, self-contained, no fetch at read time.
 derive from the one TSV) · `ourmatches.py` (our record, phases, careers) ·
 `league_players.py` (2025 player stats from `league-raw/scorecards.tsv`) ·
 `factpack.py` (chatbot facts) · `eval_assistant.py` (23-question grounding
-check against the live chatbot; `--selftest` checks its bowl-first rule
-offline. That rule judges the words beside the phrase, so an honest account
-of our field-first toss against Durham is not flagged as advice, and a
-failure quotes the sentence that tripped it) · `collector.js` / `sync.py` (the 2025 archive harvest, rarely needed).
+check against the live chatbot; `--selftest` runs its two text rules offline:
+bowling first is flagged only when framed as advice, so an honest account of
+our field-first toss against Durham passes, and any toss count must equal
+`us.tossRecord`; a failure quotes the sentence that tripped it) ·
+`collector.js` / `sync.py` (the 2025 archive harvest, rarely needed).
 
 The chatbot proxy is a Cloudflare Worker in `worker/` (DeepSeek, reasoning
 off — measured; key is a Worker secret, never in the repo).
