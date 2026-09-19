@@ -14,7 +14,22 @@ word mean the same thing in a session that has never seen the conversation.
    from a tab on cricheroes.com. Fetches work from a background tab; only
    rendering does not. Tournament id **2167460** (share link
    chshare.link/tournament/54auYA). Concurrency 2–3 with a ~500 ms gap — faster
-   draws 429s.
+   draws 429s, and 4 workers silently lost two already-installed matches to
+   transient failures on 19 Sep.
+   Four things about harvesting, each of which cost a run on 19 Sep 2026:
+   - The tournament id is a **STRING** in the page: `"tournament_id":"2167460"`.
+     Filtering on the unquoted form matches nothing and harvests zero matches.
+   - **Match ids are not one contiguous block.** 19 Sep sat at 26972433-26972447
+     and 27188203, below and above the 26972448-26972500 block. The tournament
+     page embeds only 12 ids, so probe a wide range and filter by tournament id.
+   - **Chrome blocks this site's downloads**, with or without a click. Put the
+     TSV on the clipboard from a real click instead and `pbpaste > file`. macOS
+     pastes it as **MacRoman**, where `0xA0` is the `†` keeper marker: decode
+     `mac_roman`, never latin-1, or every "c †Name" dismissal loses its dagger.
+   - A match can **stop serving a scorecard** (26972452, a conceded game, went
+     blank). Keep the installed rows rather than dropping the match: a harvest
+     with more matches than installed still passes the count check while
+     silently losing one.
 2. **Install + rebuild**: `python3 tools/sync2026.py` — takes the newest
    `rcb-results-2026*.tsv` in `~/Downloads` BY MODIFIED TIME (browsers rename
    repeats to "(1).tsv"), validates every row shape including the I-row
@@ -98,6 +113,10 @@ page is pure ASCII, self-contained, no fetch at read time.
   bat; and "wide, 1 run" is booked as ONE wide plus a bye (the 13 Sep card's
   16 wides / 4 byes only add up that way). A bowler's card dots include byes;
   ours do not, so the check allows exactly that gap.
+- **A block whose name invites a comparison must ship the comparison.**
+  `us.fifteenOverVsPar` carries `parRpo` and `vsParRpo` per phase because the
+  model, asked how we compare to par, subtracted 7.13 from 8.58 and wrote
+  "about 1.5 runs an over under par" - a figure in no pack.
 - **The chatbot never calculates.** `tools/factpack.py` precomputes everything;
   `_prompt` in facts.json holds the rules. Standing toss call is BAT (from
   `tossPolicy`); the assistant quotes decisions the pack has made rather than

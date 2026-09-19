@@ -509,6 +509,40 @@ def _ground_phase_block(gp):
     return out
 
 
+def _vs_par(block, ph):
+    """Attach the gap to 2025 par per phase, batting and bowling.
+
+    The name of this block invites a comparison, and the model made it the only
+    way it could: it subtracted 7.13 from 8.58 and wrote "about 1.5 runs an over
+    under par" - a figure that exists nowhere in the pack. Every comparison the
+    block's own name implies is now precomputed, so the answer is a quote.
+    """
+    if not isinstance(block, dict):
+        return block
+    # the same numbers phasePar2025.all publishes, from the same helpers - the
+    # raw payload block has no per-over rate, which is what a gap needs
+    par = _with_rpo(_phase_block((ph or {}).get("all", {}))) or {}
+    for side in ("bat", "bowl"):
+        cells = block.get(side)
+        if not isinstance(cells, dict):
+            continue
+        for phase in ("pp", "mid", "death"):
+            c, p = cells.get(phase), par.get(phase) or {}
+            rpo, ppo = (c or {}).get("rpo"), p.get("perOver")
+            if not isinstance(c, dict) or rpo is None or ppo is None:
+                continue
+            gap = round(rpo - ppo, 2)
+            c["parRpo"] = ppo
+            c["vsParRpo"] = gap
+            c["vsPar"] = ("%+.2f an over %s 2025 league par (%s)"
+                          % (gap, "above" if gap >= 0 else "below", ppo))
+    block["_vsParNote"] = ("parRpo is the 2025 league average for that phase and vsParRpo is "
+                           "our gap to it, already worked out. Quote vsParRpo; never subtract "
+                           "one rate from another. Batting above par is good; bowling above "
+                           "par means we conceded more than par, which is bad.")
+    return block
+
+
 def build_factpack(payload):
     lg = payload.get("league") or {}
     ph = payload.get("phases") or {}
@@ -625,7 +659,7 @@ def build_factpack(payload):
             "tossRecord": _toss_record(ours.get("matches")),
             "matches": ours.get("matches"),
             "phaseSplits": _phases_all(ours.get("all")),
-            "fifteenOverVsPar": _phases_all(ours.get("fifteen")),
+            "fifteenOverVsPar": _vs_par(_phases_all(ours.get("fifteen")), ph),
             "batters": [dict(b, **({"UNAVAILABLE": (squad.get("unavailable") or {})[b["name"]]}
                                    if b["name"] in (squad.get("unavailable") or {}) else {}))
                         for b in (ours.get("batters") or [])],

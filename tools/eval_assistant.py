@@ -42,6 +42,10 @@ HISTORY = re.compile(r"\b(chose|choosing|opted|opting|elected|decided) to\b|\bla
                      r"\bcost us\b|\bbackfired\b|\bwrong call\b|\bmistake\b|\bdid ?n[o'’]t work\b|"
                      r"\bleft us\b|\bthey (like|prefer|want|tend|usually|often|will|would|chose|choose)\b")
 AGAINST = re.compile(r"\b(not|never|don't|don’t|do not|avoid|rather than|instead of)\b")
+# "there is no ground in this competition where fielding first is the better bet"
+# is the policy agreeing, but the "no" sits further back than AGAINST's window.
+# Judged on the whole clause, and worded so a bare "No - we bowl first." still flags.
+NO_CASE = re.compile(r"\bno (ground|venue|pitch|case|reason|day|side|team|conditions?)\b|\bnowhere\b")
 ADVICE_WORD = re.compile(r"\b(we|i|rcb|you)\s+(should|would|will|must|need to|prefer to|are going to)\b|"
                          r"\b(we'll|we’ll|we're going to|we’re going to|i'd|i’d|we'd|we’d|"
                          r"let's|let’s|let us)\b|\b(should|recommend|suggest|advise|go with|opt to|"
@@ -68,6 +72,8 @@ def bowl_first_advice(plain):
                HISTORY.search(sl[max(0, m.start() - 40):m.end() + 30]):
                 continue                  # a report, or an argument against it
             clause = CLAUSE_BREAK.split(before)[-1][-40:]
+            if NO_CASE.search(before):
+                continue                  # says no ground favours it: agreement
             if ADVICE_WORD.search(clause) or ADVICE_LEADIN.search(before) or \
                VERDICT_AFTER.search(after) or (m.group(2) is None and IMPERATIVE.search(before)):
                 return re.sub(r"\s+", " ", sent).strip()
@@ -113,6 +119,9 @@ SELFTEST = [
     ("They like to bowl first, so take the bat.", False),
     ("Durham will want to bowl first.", False),
     ("We should bat first; bowling first would hand them the chase.", False),
+    ("Chasing reads low by construction, and there is no ground in this competition "
+     "where fielding first is the better bet.", False),
+    ("There is nowhere in this league where bowling first is the better bet.", False),
     ("We won the toss. Bowling looks good today, should we field first?", False),
     # real answers an earlier version of the rule failed (13 Sep 2026)
     ("Bowling first and keeping a side under 120 only works if we then chase it, "
