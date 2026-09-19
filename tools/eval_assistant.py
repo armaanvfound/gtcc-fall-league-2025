@@ -187,6 +187,22 @@ def fact_numbers():
     return {float(m) for m in re.findall(r"\d+(?:\.\d+)?", blob)}
 
 
+def traceable(tok, nums):
+    """Is this written figure in the pack, or a rounding of one?
+
+    "finishing around 123" where the pack says 122.8 is a rounded quote, not an
+    invented number, and failing it taught nobody anything. The tolerance is
+    exactly the precision the answer used - a figure written to no decimal
+    places must match some pack number rounded to no decimal places - so a
+    genuine fabrication still has to land within half a unit of a real figure.
+    """
+    v = float(tok)
+    if v in nums or v in STRUCTURAL:
+        return True
+    dp = len(tok.split(".")[1]) if "." in tok else 0
+    return any(round(x, dp) == v for x in nums)
+
+
 def ask(q, team_pass):
     body = json.dumps({"messages": [{"role": "user", "content": q}]})
     t0 = time.time()
@@ -238,7 +254,7 @@ def main():
 
         # 1. every figure must exist in the pack
         unknown = [n for n in re.findall(r"\d+(?:\.\d+)?", plain)
-                   if float(n) not in nums and float(n) not in STRUCTURAL]
+                   if not traceable(n, nums)]
         if unknown:
             # quote where it appeared: a bare "450" once cost four re-runs that
             # never reproduced it, and the sentence is what says how it was made

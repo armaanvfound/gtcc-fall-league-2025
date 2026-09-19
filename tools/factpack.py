@@ -536,10 +536,28 @@ def _vs_par(block, ph):
             c["vsParRpo"] = gap
             c["vsPar"] = ("%+.2f an over %s 2025 league par (%s)"
                           % (gap, "above" if gap >= 0 else "below", ppo))
+            # Runs here are the AGGREGATE over every innings in this block, while
+            # 2025 par is per innings. Asked to compare them the model scaled one
+            # to the other and invented a 210. Both sides now ship per innings.
+            inns, par_runs = block.get("matches"), p.get("runs")
+            if inns and par_runs is not None:
+                per = round((c.get("runs") or 0) / inns, 1)
+                c["innings"] = inns
+                c["ballsPerInnings"] = round((c.get("balls") or 0) / inns, 1)
+                c["runsPerInnings"] = per
+                c["parRunsPerInnings"] = par_runs
+                c["vsParRunsPerInnings"] = round(per - par_runs, 1)
     block["_vsParNote"] = ("parRpo is the 2025 league average for that phase and vsParRpo is "
                            "our gap to it, already worked out. Quote vsParRpo; never subtract "
-                           "one rate from another. Batting above par is good; bowling above "
-                           "par means we conceded more than par, which is bad.")
+                           "one rate from another. `runs` is the TOTAL across all `innings` in "
+                           "this block, not one innings, so never compare it with a par figure "
+                           "and never scale it: use runsPerInnings, parRunsPerInnings and "
+                           "vsParRunsPerInnings, which are already per innings. A phase's "
+                           "runsPerInnings is DEPRESSED when innings end early - all out, or a "
+                           "chase won - so read ballsPerInnings (a full phase is 30 balls, the "
+                           "death 30) before calling a shortfall a batting failure; the rate "
+                           "gap vsParRpo is the like-for-like comparison. Batting above par is "
+                           "good; bowling above par means we conceded more than par, which is bad.")
     return block
 
 
